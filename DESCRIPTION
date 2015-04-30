@@ -1,12 +1,14 @@
 Package: fbroc
 Type: Package
-Title: Implements fast algorithms to bootstrap Receiver Operating Curves (ROC) and derived performance measures.
+Title: Fast Algorithms To Bootstrap ROC Curves
 Version: 0.1
 Date: 2015-04-29
-Authors@R: c(person("Erik", "Peter", email = "jerikpeter@googlemail.com", role = c("aut", "cre")))
+Authors@R: c(person("Erik", "Peter", email = "jerikpeter@googlemail.com", 
+             role = c("aut", "cre")))
 Author: Erik Peter
 Maintainer: Erik Peter <jerikpeter@googlemail.com>
-Description: More about what it does (maybe more than one line)
+Description: This package implements a very fast algorithm to quickly bootstrap 
+    ROC Curves.
 License: What license is it under?
 Depends: R (>= 3.1.0), ggplot2, Rcpp
 Imports: 
