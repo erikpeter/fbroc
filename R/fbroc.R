@@ -23,67 +23,106 @@ calculate.thresholds <- function(pred, true.class) {
   return(thresholds)
 }
 
+#' Bootstrap ROC curve
+#'
+#' \code{boot.roc} calculates the ROC curve, initialises the settings for the
+#' bootstrap and calculates the bootstrap results for the true and false
+#' positive rate at every relevant threshold. Missing values are removed with 
+#' a warning prior to bootstrapping.
+#'
+#' @param pred A numeric vector. Contains predictions. \code{boot.roc} assumes
+#'   that a high prediction is evidence for the observation belonging to the
+#'   positive class.
+#' @param true.class A logical vector. TRUE indicates the sample belonging to the
+#'   positive class.
+#' @param stratify Logical. Indicates whether we use stratified boostrap.
+#'   Default to TRUE. Non-stratified bootstrap is not yet implemented.
+#' @param n.boot A number that will be coerced to integer. Specified the 
+#'   number of bootstrap replicates. Defaults to 1000.
+#' @param seed A number that will be coerced to integer. Used to initialise the
+#'   random number generator used. If not specified will be set to a random number
+#'   between 1 and 1e7.
+#' 
+#' @examples
+#' y <- rep(c(TRUE, FALSE), each = 500)
+#' x <- rnorm(1000) + y
+#' result.boot <- boot.roc(x, y)
+#' 
 #' @export
-boot.roc <- function(pred, true.class, n.boot = 1000, seed = 123) {
+boot.roc <- function(pred, true.class, stratify = TRUE, n.boot = 1000, seed = NULL) {
+  # validate input
+  if ((length(pred) != length(true.class)))
+    stop("Predictions and true classes need to have the same length")
+  if ((class(pred) != "numeric"))
+    stop("Predictions must be numeric")
+  if ((class(true.class) != "logical"))
+    stop("Classes must be logical")
+  if ((class(stratify) != "logical"))
+    stop("Classes must be logical")
+  
+  index.na <- is.na(pred) | is.na(true.class)
+  if (any(index.na)) {
+    n <- sum(index.na)
+    warning.msg <- 
+      paste(n, "observations had to be removed due to missing values")
+    warning(warning.msg)
+    true.class <- true.class[!index.na]
+    pred <- pred[!index.na]
+  }
+  
+  if (sum(true.class) == 0)
+    stop("No positive observations are included")
+  if (sum(!true.class) == 0)
+    stop("No negative observations are included")
+  
+  if (is.null(seed)) seed <- runif(1, 1, 1e7)
+  
+  n.boot <- as.integer(n.boot)
+  seed <- as.integer(seed)
+  if (length(n.boot) != 1)
+    stop("n.boot must have length 1")
+  if (length(seed) != 1)
+    stop("seed must have length 1")
+  if (length(stratify) != 1)
+    stop("stratify must have length 1")
+  
+  if (!stratify) stop("Non-stratified bootstrapping is not yet supported")
+  
   thresholds <- calculate.thresholds(pred, true.class)
   n.thresholds <- length(thresholds)  
-  tpr_fpr_boot(pred, as.integer(true.class), thresholds, n.boot, as.integer(seed))
-}
-
-
-# some example code
-#' @export
-test.fun <- function(n.boot = 1000) { 
-  y <- rep(c(TRUE, FALSE), each = 500)
-  x <- rnorm(1000) + y
-  calculate.thresholds(x, y)
-  boot.roc(x,y, n.boot = n.boot)
-}
-
-# some example code
-#' @export
-test.fun2 <- function(n.boot = 1000) { 
-  y <- rep(c(TRUE, FALSE), each = 500)
-  x <- rnorm(1000) + y
-  calculate.thresholds(x, y)
-  get_auc(boot.roc(x,y, n.boot = n.boot))
-}
-
-# some example code
-#' @export
-get.auc.only <- function(pred, true.class) {
-  thresholds <- calculate.thresholds(pred, true.class)
-  n.thresholds <- length(thresholds)  
-  vec <- true_tpr_fpr(pred, as.integer(true.class), thresholds)
-  auc <- get_auc(matrix(vec, nrow = 1))
-  return(auc)
-}
-
-# some example code
-#' @export
-test.auc <- function() {
-  y <- rep(c(TRUE, FALSE), each = 500)
-  x <- rnorm(1000) + y
-  auc.fbroc <- get.auc.only(x, y)
-  require(ROCR)
-  pred.obj <- prediction(x,y)
-  auc.rocr <- performance(pred.obj, "auc")@y.values[[1]]
-  print(auc.fbroc - auc.rocr)
-}
-
-# some example code
-#' @export
-test.boot.auc <- function(n, n.boot) {
-  y <- rep(c(TRUE, FALSE), each = n)
-  x <- rnorm(n) + y
-  require(pROC)
-  # check time
-  print(system.time(get_auc(boot.roc(x,y, n.boot = n.boot))))
   
+  bench <- system.time(tpr.fpr.boot <- 
+                         tpr_fpr_boot(pred, as.integer(true.class),
+                                      thresholds, n.boot, seed))[1]
+  tpr.fpr <- true_tpr_fpr(pred, as.integer(true.class), thresholds)
   
+  auc <- get_auc(matrix(tpr.fpr, nrow = 1))
   
-  aucs.fbroc <- get_auc(boot.roc(x,y, n.boot = n.boot))
-  print(quantile(aucs.fbroc, c(0.025, 0.975)))
-  print(system.time(ergebnis <- ci(roc(y~x), method = "bootstrap", progress = "none", boot.n = n.boot, algorithm = 3)))
-  print(ergebnis)
+  output <- list(predictions = pred,
+                 true.classes = true.class,
+                 thresholds = thresholds,
+                 n.thresholds = n.thresholds,
+                 seed = seed,
+                 n.boot = n.boot,
+                 n.pos = sum(true.class),
+                 n.neg = sum(!true.class),
+                 tpr.fpr = tpr.fpr,
+                 time.used = bench,
+                 auc = auc,
+                 tpr.fpr.boot.matrix = tpr.fpr.boot)  
+  class(output) <- append(class(output), "fbroc.roc")
+  return(output)
 }
+
+#' @export
+print.fbroc.roc <- function(roc) {
+  mem.roc <- round(as.numeric(object.size(roc)/(1024*1024)), 1) 
+  time = "not yet calculated"
+  cat(paste("Bootstraped ROC Curve with ", roc$n.pos, " positive and ", roc$n.neg,
+            " negative samples. \n \n", "The AUC is ", roc$auc,".\n \n", 
+            roc$n.boot, " bootstrap samples have been calculated with seed ", 
+            roc$seed, ". \n", "The calculation took ", roc$time.used, 
+            " seconds and the results use up ", mem.roc, " MB of memory.", sep = ""))
+  invisible(NULL)
+}
+
