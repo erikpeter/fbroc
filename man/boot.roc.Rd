@@ -4,7 +4,7 @@
 \alias{boot.roc}
 \title{Bootstrap ROC curve}
 \usage{
-boot.roc(pred, true.class, stratify = TRUE, n.boot = 1000, seed = NULL)
+boot.roc(pred, true.class, stratify = TRUE, n.boot = 1000)
 }
 \arguments{
 \item{pred}{A numeric vector. Contains predictions. \code{boot.roc} assumes
@@ -19,10 +19,6 @@ Default to TRUE. Non-stratified bootstrap is not yet implemented.}
 
 \item{n.boot}{A number that will be coerced to integer. Specified the
 number of bootstrap replicates. Defaults to 1000.}
-
-\item{seed}{A number that will be coerced to integer. Used to initialise the
-random number generator used. If not specified will be set to a random number
-between 1 and 1e7.}
 }
 \value{
 A list of class \code{fbroc.roc}, containing the elements:
@@ -30,7 +26,6 @@ A list of class \code{fbroc.roc}, containing the elements:
 \item{true.class}{Input classes}
 \item{thresholds}{Thresholds. Calculated by \code{calculate.thresholds}}
 \item{n.thresholds}{Number of thresholds}
-\item{seed}{Seed used for random number generation}
 \item{n.boot}{Number of bootstrap replicates}
 \item{n.pos}{Number of positive observations}
 \item{n.neg}{Number of negative observations}

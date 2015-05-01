@@ -1,7 +1,4 @@
 #include <Rcpp.h>
-#include "randomc.h"
-#include "sfmt.h"
-
 using namespace Rcpp;
 
 //' generate
@@ -71,21 +68,23 @@ NumericVector build_tpr_fpr(IntegerVector tpr_fpr_index, int n_pos,
 }
 
 IntegerVector get_boot_tpr_fpr_index(IntegerVector pos_index, 
-                                     IntegerVector neg_index,
-                                     CRandomSFMT &random_gen) {
+                                     IntegerVector neg_index) {
   int n_pos = pos_index.size();
   int n_neg = neg_index.size();
   int n = n_pos + n_neg;
   IntegerVector boot_tpr_fpr_index(n);
   
   int j = 0;
- 
+  
+  NumericVector random_pos = runif(n_pos);
+  NumericVector random_neg = runif(n_neg);
+  
   for (int i = 0; i < n_pos; i++) {
-    int random_index = random_gen.IRandomX(0, n_pos - 1);
+    int random_index = (int)(n_pos * random_pos[i]);
     boot_tpr_fpr_index[j++] = pos_index[random_index];
   }
   for (int i = 0; i < n_neg; i++) {
-    int random_index = random_gen.IRandomX(0, n_neg - 1);
+    int random_index = (int)(n_neg * random_neg[i]);
     boot_tpr_fpr_index[j++] = neg_index[random_index];
   }
     
@@ -130,7 +129,7 @@ NumericVector true_tpr_fpr(NumericVector pred, IntegerVector true_class,
 //' @export
 // [[Rcpp::export]]
 NumericMatrix tpr_fpr_boot(NumericVector pred, IntegerVector true_class, 
-                           NumericVector thres, int n_boot, int seed) {
+                           NumericVector thres, int n_boot) {
   
   int n_thres = thres.size();
   int n = pred.size();
@@ -149,13 +148,12 @@ NumericMatrix tpr_fpr_boot(NumericVector pred, IntegerVector true_class,
   // generator
   IntegerVector pos_index = get_class_index(tpr_fpr_index, true_class, 1, n_pos);
   IntegerVector neg_index = get_class_index(tpr_fpr_index, true_class, 0, n_neg);
-  CRandomSFMT random_gen = CRandomSFMT(seed);
   
   for (int i = 0; i < n_boot; i++) {
     // shuffle first
     
     IntegerVector boot_tpr_fpr_index = 
-      get_boot_tpr_fpr_index(pos_index, neg_index, random_gen);
+      get_boot_tpr_fpr_index(pos_index, neg_index);
     NumericVector boot_tpr_fpr = 
       build_tpr_fpr(boot_tpr_fpr_index, n_pos, n_neg, n_thres);
     // copy into results matrix

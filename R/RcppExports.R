@@ -16,8 +16,8 @@ true_tpr_fpr <- function(pred, true_class, thres) {
 
 #' ok
 #' @export
-tpr_fpr_boot <- function(pred, true_class, thres, n_boot, seed) {
-    .Call('fbroc_tpr_fpr_boot', PACKAGE = 'fbroc', pred, true_class, thres, n_boot, seed)
+tpr_fpr_boot <- function(pred, true_class, thres, n_boot) {
+    .Call('fbroc_tpr_fpr_boot', PACKAGE = 'fbroc', pred, true_class, thres, n_boot)
 }
 
 #' @export

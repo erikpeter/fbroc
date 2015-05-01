@@ -53,15 +53,11 @@ calculate.thresholds <- function(pred, true.class) {
 #'   Default to TRUE. Non-stratified bootstrap is not yet implemented.
 #' @param n.boot A number that will be coerced to integer. Specified the 
 #'   number of bootstrap replicates. Defaults to 1000.
-#' @param seed A number that will be coerced to integer. Used to initialise the
-#'   random number generator used. If not specified will be set to a random number
-#'   between 1 and 1e7.
 #' @return A list of class \code{fbroc.roc}, containing the elements:
 #' \item{prediction}{Input predictions}
 #' \item{true.class}{Input classes}
 #' \item{thresholds}{Thresholds. Calculated by \code{calculate.thresholds}}
 #' \item{n.thresholds}{Number of thresholds}
-#' \item{seed}{Seed used for random number generation}
 #' \item{n.boot}{Number of bootstrap replicates}
 #' \item{n.pos}{Number of positive observations}
 #' \item{n.neg}{Number of negative observations}
@@ -78,7 +74,7 @@ calculate.thresholds <- function(pred, true.class) {
 #' result.boot <- boot.roc(x, y)
 #' @seealso \code{\link{plot.fbroc.roc}}, \code{\link{print.fbroc.roc}}
 #' @export
-boot.roc <- function(pred, true.class, stratify = TRUE, n.boot = 1000, seed = NULL) {
+boot.roc <- function(pred, true.class, stratify = TRUE, n.boot = 1000) {
   # validate input
   if ((length(pred) != length(true.class)))
     stop("Predictions and true classes need to have the same length")
@@ -104,14 +100,11 @@ boot.roc <- function(pred, true.class, stratify = TRUE, n.boot = 1000, seed = NU
   if (sum(!true.class) == 0)
     stop("No negative observations are included")
   
-  if (is.null(seed)) seed <- runif(1, 1, 1e7)
-  
   n.boot <- as.integer(n.boot)
-  seed <- as.integer(seed)
+
   if (length(n.boot) != 1)
     stop("n.boot must have length 1")
-  if (length(seed) != 1)
-    stop("seed must have length 1")
+
   if (length(stratify) != 1)
     stop("stratify must have length 1")
   
@@ -122,7 +115,7 @@ boot.roc <- function(pred, true.class, stratify = TRUE, n.boot = 1000, seed = NU
   
   bench <- system.time(tpr.fpr.boot <- 
                          tpr_fpr_boot(pred, as.integer(true.class),
-                                      thresholds, n.boot, seed))[1]
+                                      thresholds, n.boot))[1]
   bench <- round(bench, 1)
   tpr.fpr <- true_tpr_fpr(pred, as.integer(true.class), thresholds)
   auc <- get_auc(matrix(tpr.fpr, nrow = 1))
@@ -135,7 +128,6 @@ boot.roc <- function(pred, true.class, stratify = TRUE, n.boot = 1000, seed = NU
                  true.classes = true.class,
                  thresholds = thresholds,
                  n.thresholds = n.thresholds,
-                 seed = seed,
                  n.boot = n.boot,
                  n.pos = sum(true.class),
                  n.neg = sum(!true.class),

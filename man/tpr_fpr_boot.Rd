@@ -4,7 +4,7 @@
 \alias{tpr_fpr_boot}
 \title{ok}
 \usage{
-tpr_fpr_boot(pred, true_class, thres, n_boot, seed)
+tpr_fpr_boot(pred, true_class, thres, n_boot)
 }
 \description{
 ok

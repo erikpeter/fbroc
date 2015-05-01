@@ -32,8 +32,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // tpr_fpr_boot
-NumericMatrix tpr_fpr_boot(NumericVector pred, IntegerVector true_class, NumericVector thres, int n_boot, int seed);
-RcppExport SEXP fbroc_tpr_fpr_boot(SEXP predSEXP, SEXP true_classSEXP, SEXP thresSEXP, SEXP n_bootSEXP, SEXP seedSEXP) {
+NumericMatrix tpr_fpr_boot(NumericVector pred, IntegerVector true_class, NumericVector thres, int n_boot);
+RcppExport SEXP fbroc_tpr_fpr_boot(SEXP predSEXP, SEXP true_classSEXP, SEXP thresSEXP, SEXP n_bootSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
@@ -41,8 +41,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< IntegerVector >::type true_class(true_classSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type thres(thresSEXP);
     Rcpp::traits::input_parameter< int >::type n_boot(n_bootSEXP);
-    Rcpp::traits::input_parameter< int >::type seed(seedSEXP);
-    __result = Rcpp::wrap(tpr_fpr_boot(pred, true_class, thres, n_boot, seed));
+    __result = Rcpp::wrap(tpr_fpr_boot(pred, true_class, thres, n_boot));
     return __result;
 END_RCPP
 }
