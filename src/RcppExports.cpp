@@ -18,16 +18,42 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
-// tpr_fpr
-NumericVector tpr_fpr(NumericVector pred, IntegerVector true_class, NumericVector thres);
-RcppExport SEXP fbroc_tpr_fpr(SEXP predSEXP, SEXP true_classSEXP, SEXP thresSEXP) {
+// true_tpr_fpr
+NumericVector true_tpr_fpr(NumericVector pred, IntegerVector true_class, NumericVector thres);
+RcppExport SEXP fbroc_true_tpr_fpr(SEXP predSEXP, SEXP true_classSEXP, SEXP thresSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< NumericVector >::type pred(predSEXP);
     Rcpp::traits::input_parameter< IntegerVector >::type true_class(true_classSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type thres(thresSEXP);
-    __result = Rcpp::wrap(tpr_fpr(pred, true_class, thres));
+    __result = Rcpp::wrap(true_tpr_fpr(pred, true_class, thres));
+    return __result;
+END_RCPP
+}
+// tpr_fpr_boot
+NumericMatrix tpr_fpr_boot(NumericVector pred, IntegerVector true_class, NumericVector thres, int n_boot, int seed);
+RcppExport SEXP fbroc_tpr_fpr_boot(SEXP predSEXP, SEXP true_classSEXP, SEXP thresSEXP, SEXP n_bootSEXP, SEXP seedSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< NumericVector >::type pred(predSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type true_class(true_classSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type thres(thresSEXP);
+    Rcpp::traits::input_parameter< int >::type n_boot(n_bootSEXP);
+    Rcpp::traits::input_parameter< int >::type seed(seedSEXP);
+    __result = Rcpp::wrap(tpr_fpr_boot(pred, true_class, thres, n_boot, seed));
+    return __result;
+END_RCPP
+}
+// get_auc
+NumericVector get_auc(NumericMatrix tpr_fpr);
+RcppExport SEXP fbroc_get_auc(SEXP tpr_fprSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< NumericMatrix >::type tpr_fpr(tpr_fprSEXP);
+    __result = Rcpp::wrap(get_auc(tpr_fpr));
     return __result;
 END_RCPP
 }

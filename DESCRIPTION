@@ -9,7 +9,7 @@ Author: Erik Peter
 Maintainer: Erik Peter <jerikpeter@googlemail.com>
 Description: This package implements a very fast algorithm to quickly bootstrap 
     ROC Curves.
-License: What license is it under?
+License: GPL-3
 Depends: R (>= 3.1.0), ggplot2, Rcpp
 Imports: 
     ggplot2,

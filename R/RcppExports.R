@@ -10,7 +10,18 @@ get_tpr_fpr_index <- function(pred, true_class, thres) {
 
 #' ok
 #' @export
-tpr_fpr <- function(pred, true_class, thres) {
-    .Call('fbroc_tpr_fpr', PACKAGE = 'fbroc', pred, true_class, thres)
+true_tpr_fpr <- function(pred, true_class, thres) {
+    .Call('fbroc_true_tpr_fpr', PACKAGE = 'fbroc', pred, true_class, thres)
+}
+
+#' ok
+#' @export
+tpr_fpr_boot <- function(pred, true_class, thres, n_boot, seed) {
+    .Call('fbroc_tpr_fpr_boot', PACKAGE = 'fbroc', pred, true_class, thres, n_boot, seed)
+}
+
+#' @export
+get_auc <- function(tpr_fpr) {
+    .Call('fbroc_get_auc', PACKAGE = 'fbroc', tpr_fpr)
 }
 
