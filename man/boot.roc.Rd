@@ -31,6 +31,8 @@ A list of class \code{fbroc.roc}, containing the elements:
 \item{n.neg}{Number of negative observations}
 \item{tpr.fpr}{Vector containing true and false positve rates at
                      the different thresholds for the original predictions}
+\item{tpr.fpr.raw}{Vector containing raw results from C++ for later usage by
+ other packages in \code{fbroc}}
 \item{time.used}{Time in seconds used for the boostrap. Other steps are not
 included}
 \item{auc}{The AUC of the original ROC curve}

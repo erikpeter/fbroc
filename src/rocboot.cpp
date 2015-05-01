@@ -167,17 +167,35 @@ NumericMatrix tpr_fpr_boot(NumericVector pred, IntegerVector true_class,
 
 //' @export
 // [[Rcpp::export]]
-NumericVector get_auc(NumericMatrix tpr_fpr) {
-  int n_boot = tpr_fpr.nrow();
-  int n_thres = tpr_fpr.ncol()/2;
-  NumericVector auc (n_boot);
-  for (int i = 0; i < n_boot; i++) {
-    for (int j = 1; j < n_thres; j++) {
-      auc[i] += (tpr_fpr(i, j - 1) - tpr_fpr(i, j)) * (1 - tpr_fpr(i, n_thres + j - 1));
-    }
+double get_auc(NumericVector tpr_fpr) {
+  int n_thres = tpr_fpr.size()/2;
+  double auc = 0.;
+  
+  for (int j = 1; j < n_thres; j++) {
+    auc += (tpr_fpr[j - 1] - tpr_fpr[j]) * (1 - tpr_fpr[n_thres + j - 1]);
   }
   return auc;
 }
+
+//' @export
+// [[Rcpp::export]]
+NumericVector get_roc_perf(NumericMatrix tpr_fpr, int measure) {
+  double (*choosen_measure)(NumericVector);
+  int n_boot = tpr_fpr.nrow();
+  NumericVector roc_perf = NumericVector (n_boot);
+  
+  if (measure == 0) choosen_measure = &get_auc; 
+    
+  
+  for (int i = 0; i < n_boot; i++) {
+    NumericVector one_iteration = tpr_fpr(i, _);
+    double perf = choosen_measure(one_iteration);
+    roc_perf[i] = perf;
+  }
+  
+  return roc_perf;
+}
+
 
 //' @export
 // [[Rcpp::export]]

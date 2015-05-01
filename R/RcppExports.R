@@ -26,6 +26,11 @@ get_auc <- function(tpr_fpr) {
 }
 
 #' @export
+get_roc_perf <- function(tpr_fpr, measure) {
+    .Call('fbroc_get_roc_perf', PACKAGE = 'fbroc', tpr_fpr, measure)
+}
+
+#' @export
 get_tpr_matrix <- function(tpr_fpr, n_steps) {
     .Call('fbroc_get_tpr_matrix', PACKAGE = 'fbroc', tpr_fpr, n_steps)
 }

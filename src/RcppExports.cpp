@@ -46,13 +46,25 @@ BEGIN_RCPP
 END_RCPP
 }
 // get_auc
-NumericVector get_auc(NumericMatrix tpr_fpr);
+double get_auc(NumericVector tpr_fpr);
 RcppExport SEXP fbroc_get_auc(SEXP tpr_fprSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< NumericMatrix >::type tpr_fpr(tpr_fprSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type tpr_fpr(tpr_fprSEXP);
     __result = Rcpp::wrap(get_auc(tpr_fpr));
+    return __result;
+END_RCPP
+}
+// get_roc_perf
+NumericVector get_roc_perf(NumericMatrix tpr_fpr, int measure);
+RcppExport SEXP fbroc_get_roc_perf(SEXP tpr_fprSEXP, SEXP measureSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< NumericMatrix >::type tpr_fpr(tpr_fprSEXP);
+    Rcpp::traits::input_parameter< int >::type measure(measureSEXP);
+    __result = Rcpp::wrap(get_roc_perf(tpr_fpr, measure));
     return __result;
 END_RCPP
 }

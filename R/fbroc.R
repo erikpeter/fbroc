@@ -63,6 +63,8 @@ calculate.thresholds <- function(pred, true.class) {
 #' \item{n.neg}{Number of negative observations}
 #' \item{tpr.fpr}{Vector containing true and false positve rates at
 #'                      the different thresholds for the original predictions}
+#' \item{tpr.fpr.raw}{Vector containing raw results from C++ for later usage by
+#'  other packages in \code{fbroc}}                      
 #' \item{time.used}{Time in seconds used for the boostrap. Other steps are not
 #' included}
 #' \item{auc}{The AUC of the original ROC curve}   
@@ -118,7 +120,8 @@ boot.roc <- function(pred, true.class, stratify = TRUE, n.boot = 1000) {
                                       thresholds, n.boot))[1]
   bench <- round(bench, 1)
   tpr.fpr <- true_tpr_fpr(pred, as.integer(true.class), thresholds)
-  auc <- get_auc(matrix(tpr.fpr, nrow = 1))
+  tpr.fpr.raw <- tpr.fpr
+  auc <- get_auc(tpr.fpr)
   tpr.fpr <- data.frame(TPR = tpr.fpr[1:n.thresholds],
                         FPR = tpr.fpr[(n.thresholds + 1):(2 * n.thresholds)])
   
@@ -132,6 +135,7 @@ boot.roc <- function(pred, true.class, stratify = TRUE, n.boot = 1000) {
                  n.pos = sum(true.class),
                  n.neg = sum(!true.class),
                  tpr.fpr = tpr.fpr,
+                 tpr.fpr.raw = tpr.fpr.raw,
                  time.used = bench,
                  auc = auc,
                  tpr.fpr.boot.matrix = tpr.fpr.boot)  
@@ -163,4 +167,16 @@ test.code <- function() {
   ok <- conf.roc(result.boot)
   plot(result.boot)
   }
+}
+
+#' @export
+test.code2 <- function() {
+  for (i in 1:1) {
+    y <- rep(c(FALSE, TRUE), each = 250)
+    x <- c(runif(250, 1, 100), runif(250, 81, 180))
+    result.boot <- boot.roc(x, y)
+    result.perf <- perf.roc(result.boot, "auc")
+    plot(result.boot, show.metric = "auc")
+  }
+  return(result.perf)
 }
