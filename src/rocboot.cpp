@@ -181,4 +181,54 @@ NumericVector get_auc(NumericMatrix tpr_fpr) {
   return auc;
 }
 
+//' @export
+// [[Rcpp::export]]
+NumericVector get_tpr_matrix(NumericMatrix tpr_fpr, int n_steps) {
+  double step_size = (1.0 / n_steps);
+  NumericVector steps (n_steps + 1);
+  int n_boot = tpr_fpr.nrow();
+  int n_thres = tpr_fpr.ncol()/2;
+  
+  IntegerVector boot_index (n_boot);  
+  NumericMatrix tpr_matrix (n_boot, n_steps + 1);
+  
+  for (int i = 0; i <= n_steps; i++) steps[i] = 1. - i * step_size;
+  
+  for (int i = 0; i <= n_steps; i++) {
+    for (int j = 0; j < n_boot; j++) {
+      while ((boot_index[j] < n_thres) && 
+            (tpr_fpr(j, n_thres + boot_index[j]) >= steps[i])) {
+              boot_index[j] = boot_index[j] + 1;
+            }
+      tpr_matrix(j, i) = tpr_fpr(j, boot_index[j] - 1);
+    }
+  }
+  
+  return tpr_matrix;
+}
+
+//' @export
+// [[Rcpp::export]]
+IntegerVector find_thresholds(NumericVector pred, IntegerVector true_class) {
+  int n_pred = pred.size();
+  IntegerVector is_threshold (n_pred);
+  
+  
+  is_threshold[0] = 1;
+  is_threshold[n_pred - 1] = 1;
+
+  bool seen_pos = false;
+  bool seen_neg = false;
+
+  for (int i = 0; i < n_pred; i++) { 
+    if (true_class[i] == 1) seen_pos = true;
+      else seen_neg = true;
+    if (seen_pos && seen_neg) {
+      is_threshold[i] = 1;
+      if (true_class[i] == 1) seen_neg = false;
+        else seen_pos = false;
+    }
+  }
+  return is_threshold;
+}
 

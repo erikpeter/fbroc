@@ -57,3 +57,27 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// get_tpr_matrix
+NumericVector get_tpr_matrix(NumericMatrix tpr_fpr, int n_steps);
+RcppExport SEXP fbroc_get_tpr_matrix(SEXP tpr_fprSEXP, SEXP n_stepsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< NumericMatrix >::type tpr_fpr(tpr_fprSEXP);
+    Rcpp::traits::input_parameter< int >::type n_steps(n_stepsSEXP);
+    __result = Rcpp::wrap(get_tpr_matrix(tpr_fpr, n_steps));
+    return __result;
+END_RCPP
+}
+// find_thresholds
+IntegerVector find_thresholds(NumericVector pred, IntegerVector true_class);
+RcppExport SEXP fbroc_find_thresholds(SEXP predSEXP, SEXP true_classSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< NumericVector >::type pred(predSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type true_class(true_classSEXP);
+    __result = Rcpp::wrap(find_thresholds(pred, true_class));
+    return __result;
+END_RCPP
+}

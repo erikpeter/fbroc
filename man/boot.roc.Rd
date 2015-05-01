@@ -21,8 +21,26 @@ Default to TRUE. Non-stratified bootstrap is not yet implemented.}
 number of bootstrap replicates. Defaults to 1000.}
 
 \item{seed}{A number that will be coerced to integer. Used to initialise the
-  random number generator used. If not specified will be set to a random number
-  between 1 and 1e7.}
+random number generator used. If not specified will be set to a random number
+between 1 and 1e7.}
+}
+\value{
+A list of class \code{fbroc.roc}, containing the elements:
+\item{prediction}{Input predictions}
+\item{true.class}{Input classes}
+\item{thresholds}{Thresholds. Calculated by \code{calculate.thresholds}}
+\item{n.thresholds}{Number of thresholds}
+\item{seed}{Seed used for random number generation}
+\item{n.boot}{Number of bootstrap replicates}
+\item{n.pos}{Number of positive observations}
+\item{n.neg}{Number of negative observations}
+\item{tpr.fpr}{Vector containing true and false positve rates at
+                     the different thresholds for the original predictions}
+\item{time.used}{Time in seconds used for the boostrap. Other steps are not
+included}
+\item{auc}{The AUC of the original ROC curve}
+\item{tpr.fpr.boot.matrix}{Matrix containing TPR and FPR values at the
+thresholds for each bootstrap replicate.}
 }
 \description{
 \code{boot.roc} calculates the ROC curve, initialises the settings for the
@@ -34,5 +52,8 @@ a warning prior to bootstrapping.
 y <- rep(c(TRUE, FALSE), each = 500)
 x <- rnorm(1000) + y
 result.boot <- boot.roc(x, y)
+}
+\seealso{
+\code{\link{plot.fbroc.roc}}, \code{\link{print.fbroc.roc}}
 }
 

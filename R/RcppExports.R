@@ -25,3 +25,13 @@ get_auc <- function(tpr_fpr) {
     .Call('fbroc_get_auc', PACKAGE = 'fbroc', tpr_fpr)
 }
 
+#' @export
+get_tpr_matrix <- function(tpr_fpr, n_steps) {
+    .Call('fbroc_get_tpr_matrix', PACKAGE = 'fbroc', tpr_fpr, n_steps)
+}
+
+#' @export
+find_thresholds <- function(pred, true_class) {
+    .Call('fbroc_find_thresholds', PACKAGE = 'fbroc', pred, true_class)
+}
+

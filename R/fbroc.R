@@ -7,19 +7,33 @@ NULL
   library.dynam.unload("fbroc", libpath)
 }
 
+#' Calculates ROC curve thresholds
+#' 
+#' \code{calculate.thresholds} calculates the thresholds of the ROC curve
+#' at which the curve changes directions. 
+#' 
+#' @param A numeric vector. Contains predictions. \code{calculate.thresholds} 
+#'   assumes that a high prediction is evidence for the observation belonging 
+#'   to the positive class.
+#' @param true.class A logical vector. TRUE indicates the sample belonging to the
+#'   positive class.
+#' @return A numeric vector containing the thresholds. The length of the vector
+#'   depends on the data. The number of thresholds tends to go down as the
+#'   performance of the clasifier improves.   
+#' 
+#' @examples
+#' x <- 1:10
+#' y <- c(FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, TRUE, TRUE, TRUE, TRUE)
+#' calculate.thresholds(x, y) # relevant thresholds are 1, 4, 5, 7, 10
+#' 
+#' @export
 calculate.thresholds <- function(pred, true.class) {
-  thresholds <- sort(unique(pred)) # we do not need separate threshold for duplicate values
-  n.thresholds <- length(thresholds)
-  keep.in <- rep(TRUE, length(thresholds))
-  # turn this into C++ later
-  last.threshold <- thresholds[1]
-  for (i in 2:n.thresholds) {
-    classes.between <- true.class[(pred >= last.threshold ) & (pred <= thresholds[i])]
-    if (all(classes.between) | all(!classes.between)) keep.in[i] <- FALSE
-      else last.threshold <- thresholds[i]      
-    }
-  thresholds <- thresholds[keep.in]
-  thresholds <- c(thresholds, max(pred) + 1)
+  pred <- c(pred, max(pred) + 1)
+  index <- order(pred)
+  pred <- pred[index]
+  true.class <- true.class[index]
+  is.threshold <- find_thresholds(pred, true.class)
+  thresholds <- pred[as.logical(is.threshold)]
   return(thresholds)
 }
 
@@ -42,12 +56,27 @@ calculate.thresholds <- function(pred, true.class) {
 #' @param seed A number that will be coerced to integer. Used to initialise the
 #'   random number generator used. If not specified will be set to a random number
 #'   between 1 and 1e7.
-#' 
+#' @return A list of class \code{fbroc.roc}, containing the elements:
+#' \item{prediction}{Input predictions}
+#' \item{true.class}{Input classes}
+#' \item{thresholds}{Thresholds. Calculated by \code{calculate.thresholds}}
+#' \item{n.thresholds}{Number of thresholds}
+#' \item{seed}{Seed used for random number generation}
+#' \item{n.boot}{Number of bootstrap replicates}
+#' \item{n.pos}{Number of positive observations}
+#' \item{n.neg}{Number of negative observations}
+#' \item{tpr.fpr}{Vector containing true and false positve rates at
+#'                      the different thresholds for the original predictions}
+#' \item{time.used}{Time in seconds used for the boostrap. Other steps are not
+#' included}
+#' \item{auc}{The AUC of the original ROC curve}   
+#' \item{tpr.fpr.boot.matrix}{Matrix containing TPR and FPR values at the
+#' thresholds for each bootstrap replicate.}
 #' @examples
 #' y <- rep(c(TRUE, FALSE), each = 500)
 #' x <- rnorm(1000) + y
 #' result.boot <- boot.roc(x, y)
-#' 
+#' @seealso \code{\link{plot.fbroc.roc}}, \code{\link{print.fbroc.roc}}
 #' @export
 boot.roc <- function(pred, true.class, stratify = TRUE, n.boot = 1000, seed = NULL) {
   # validate input
@@ -94,9 +123,13 @@ boot.roc <- function(pred, true.class, stratify = TRUE, n.boot = 1000, seed = NU
   bench <- system.time(tpr.fpr.boot <- 
                          tpr_fpr_boot(pred, as.integer(true.class),
                                       thresholds, n.boot, seed))[1]
+  bench <- round(bench, 1)
   tpr.fpr <- true_tpr_fpr(pred, as.integer(true.class), thresholds)
-  
   auc <- get_auc(matrix(tpr.fpr, nrow = 1))
+  tpr.fpr <- data.frame(TPR = tpr.fpr[1:n.thresholds],
+                        FPR = tpr.fpr[(n.thresholds + 1):(2 * n.thresholds)])
+  
+
   
   output <- list(predictions = pred,
                  true.classes = true.class,
@@ -114,15 +147,28 @@ boot.roc <- function(pred, true.class, stratify = TRUE, n.boot = 1000, seed = NU
   return(output)
 }
 
+
+
 #' @export
-print.fbroc.roc <- function(roc) {
-  mem.roc <- round(as.numeric(object.size(roc)/(1024*1024)), 1) 
-  time = "not yet calculated"
-  cat(paste("Bootstraped ROC Curve with ", roc$n.pos, " positive and ", roc$n.neg,
-            " negative samples. \n \n", "The AUC is ", roc$auc,".\n \n", 
-            roc$n.boot, " bootstrap samples have been calculated with seed ", 
-            roc$seed, ". \n", "The calculation took ", roc$time.used, 
-            " seconds and the results use up ", mem.roc, " MB of memory.", sep = ""))
-  invisible(NULL)
+conf.roc <- function(roc, conf.level = 0.95, steps = 100) {
+  alpha <- 1 - conf.level
+  alpha.levels <- c(alpha, 1 - alpha)
+  steps = as.integer(steps)
+  rel.matrix <- get_tpr_matrix(roc$tpr.fpr.boot.matrix, steps)
+  conf.area <- t(apply(rel.matrix, 2, quantile, alpha.levels))
+  conf.area <- as.data.frame(conf.area)
+  names(conf.area) <- c("Lower.TPR", "Upper.TPR")
+  conf.area <- cbind(data.frame(FPR = 1 - seq(0, 1, by = (1 / steps))), conf.area)
+  return(conf.area)
 }
 
+#' @export
+test.code <- function() {
+  for (i in 1:1) {
+  y <- rep(c(FALSE, TRUE), each = 250)
+  x <- c(runif(250, 1, 100), runif(250, 81, 180))
+  result.boot <- boot.roc(x, y)
+  ok <- conf.roc(result.boot)
+  plot(result.boot)
+  }
+}
