@@ -79,6 +79,10 @@ boot.roc <- function(pred, true.class, stratify = TRUE, n.boot = 1000) {
   bench <- system.time(tpr.fpr.boot <- 
                          tpr_fpr_boot(pred, as.integer(true.class),
                                       thresholds, n.boot))[1]
+  column.names <- paste(rep(c("TPR.AT.T", "FPR.AT.T"), each = n.thresholds),
+                        rep(1:n.thresholds, 2), sep = "")
+  colnames(tpr.fpr.boot) <- column.names
+  
   bench <- round(bench, 1)
   tpr.fpr <- true_tpr_fpr(pred, as.integer(true.class), thresholds)
   tpr.fpr.raw <- tpr.fpr
@@ -131,6 +135,29 @@ conf.roc <- function(roc, conf.level = 0.95, steps = 100) {
   names(conf.area) <- c("Lower.TPR", "Upper.TPR")
   conf.area <- cbind(data.frame(FPR = 1 - seq(0, 1, by = (1 / steps))), conf.area)
   return(conf.area)
+}
+
+#' Process bootstrapped TPR/FPR at thresholds matrix into TPR at FPR matrix
+#' 
+#' Function \code{boot.roc} gives the TPR and FPR result at each threshold
+#' per bootstrap replicate. This is easy to calculate, but often not convenient
+#' to process further. Therefore \code{boot.tpr.at.fpr} transform that matrix
+#' so that in each column are the bootstrap results for the TPR at a specific
+#' FPR.
+#' @param roc Object of class \code{fbroc.roc}.
+#' @param steps Number of discrete steps for the FPR at which the TPR is 
+#' calculated. TPR confidence intervals are given for all FPRs in 
+#' \code{seq(0, 1, by = (1 / steps))}.
+#' @return Matrix containing the TPR bootstrap replicates for the discrete
+#' FPR steps
+#' @export
+#' @seealso \code{\link{boot.roc}}
+boot.tpr.at.fpr <- function(roc, steps) {
+  steps = as.integer(steps)
+  rel.matrix <- get_tpr_matrix(roc$tpr.fpr.boot.matrix, steps)
+  FPR.VEC = round(1 - seq(0, 1, by = (1 / steps),3))
+  colnames(rel.matrix) <- paste("TPR.AT.FPR.", FPR.VEC, sep = "")
+  return(rel.matrix)
 }
 
 #' Calculates ROC curve thresholds

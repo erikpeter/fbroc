@@ -1,6 +1,7 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 
+// Builds the original tpr_fpr index for later usage
 IntegerVector get_tpr_fpr_index(NumericVector pred, IntegerVector true_class, NumericVector thres) {
    int n = pred.size();
    int n_thres = thres.size();
@@ -15,6 +16,7 @@ IntegerVector get_tpr_fpr_index(NumericVector pred, IntegerVector true_class, Nu
    return out;
 }
 
+// Count new tprs and fpr at each threshold
 IntegerVector get_tpr_fpr_delta(IntegerVector tpr_fpr_delta_index, int n_thres, int n) {
    IntegerVector tpr_fpr_delta(2*n_thres);
      for (int i = 0; i < n; i++) {
@@ -23,6 +25,7 @@ IntegerVector get_tpr_fpr_delta(IntegerVector tpr_fpr_delta_index, int n_thres, 
   return tpr_fpr_delta;
 }
 
+// Count cumulative tprs and fpr at each threshold
 IntegerVector get_tpr_fpr(IntegerVector tpr_fpr_delta, int n_thres, int n_pos, int n_neg) {
   IntegerVector tpr_fpr(2*n_thres);
   tpr_fpr[0] = n_pos;
@@ -37,6 +40,7 @@ IntegerVector get_tpr_fpr(IntegerVector tpr_fpr_delta, int n_thres, int n_pos, i
 }
 
 
+// Divided by n_pos respectively n_neg to go from tpr_fpr to tpr_fpr_rate
 NumericVector get_tpr_fpr_rate(IntegerVector tpr_fpr, int n_thres, int n_pos, int n_neg) {
   double inv_pos = 1. / n_pos;
   double inv_neg = 1. / n_neg;
@@ -50,7 +54,7 @@ NumericVector get_tpr_fpr_rate(IntegerVector tpr_fpr, int n_thres, int n_pos, in
   return tpr_fpr_rate;
 }
 
-
+// calculate tpr_fpr from Index
 NumericVector build_tpr_fpr(IntegerVector tpr_fpr_index, int n_pos, 
                           int n_neg, int n_thres) {
   
@@ -63,6 +67,7 @@ NumericVector build_tpr_fpr(IntegerVector tpr_fpr_index, int n_pos,
   return tpr_fpr_rate;
 }
 
+// Directly resample the tpr_fpr_index to save time
 IntegerVector get_boot_tpr_fpr_index(IntegerVector pos_index, 
                                      IntegerVector neg_index) {
   int n_pos = pos_index.size();
@@ -74,7 +79,7 @@ IntegerVector get_boot_tpr_fpr_index(IntegerVector pos_index,
   
   NumericVector random_pos = runif(n_pos);
   NumericVector random_neg = runif(n_neg);
-  
+  // use stratified bootstrapping
   for (int i = 0; i < n_pos; i++) {
     int random_index = (int)(n_pos * random_pos[i]);
     boot_tpr_fpr_index[j++] = pos_index[random_index];
@@ -87,6 +92,7 @@ IntegerVector get_boot_tpr_fpr_index(IntegerVector pos_index,
   return boot_tpr_fpr_index;
 }
 
+// find which indices belong to a specific class
 IntegerVector get_class_index(IntegerVector index, IntegerVector true_class,
                               int which_class, int n_class) {
   IntegerVector class_index (n_class);
@@ -106,7 +112,7 @@ NumericVector true_tpr_fpr(NumericVector pred, IntegerVector true_class,
                            NumericVector thres) {
   int n_thres = thres.size();
   int n = pred.size();
-  
+  // do same as with bootstrap just don`t resample
   int n_pos = 0;
   int n_neg = 0;
   for (int i = 0; i < n; i++) {
@@ -163,7 +169,7 @@ NumericMatrix tpr_fpr_boot(NumericVector pred, IntegerVector true_class,
 double get_auc(NumericVector tpr_fpr) {
   int n_thres = tpr_fpr.size()/2;
   double auc = 0.;
-  
+  // Numerical integration of step functions is easy
   for (int j = 1; j < n_thres; j++) {
     auc += (tpr_fpr[j - 1] - tpr_fpr[j]) * (1 - tpr_fpr[n_thres + j - 1]);
   }
@@ -177,8 +183,7 @@ NumericVector get_roc_perf(NumericMatrix tpr_fpr, int measure) {
   NumericVector roc_perf = NumericVector (n_boot);
   
   if (measure == 0) choosen_measure = &get_auc; 
-    
-  
+  //iterate over bootstrap replicates and get performance for each   
   for (int i = 0; i < n_boot; i++) {
     NumericVector one_iteration = tpr_fpr(i, _);
     double perf = choosen_measure(one_iteration);
@@ -200,6 +205,8 @@ NumericVector get_tpr_matrix(NumericMatrix tpr_fpr, int n_steps) {
   
   for (int i = 0; i <= n_steps; i++) steps[i] = 1. - i * step_size;
   
+  // use the order of both TPR and FPR to find the relevant indices
+  // more quickly
   for (int i = 0; i <= n_steps; i++) {
     for (int j = 0; j < n_boot; j++) {
       while ((boot_index[j] < n_thres) && 
@@ -218,13 +225,16 @@ IntegerVector find_thresholds(NumericVector pred, IntegerVector true_class) {
   int n_pred = pred.size();
   IntegerVector is_threshold (n_pred);
   
-  
   is_threshold[0] = 1;
   is_threshold[n_pred - 1] = 1;
 
   bool seen_pos = false;
   bool seen_neg = false;
-
+  /* 
+  always use smallest and largest value of pred as threshold
+  thresholds happen when both positive and negative classes have been
+  observed since the last threshold
+  */
   for (int i = 0; i < n_pred; i++) { 
     if (true_class[i] == 1) seen_pos = true;
       else seen_neg = true;

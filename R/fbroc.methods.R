@@ -53,7 +53,7 @@ print.fbroc.roc <- function(x, ...) {
 #' can also be included. 
 #' @param x Object of class \code{fbroc.roc}.
 #' @param col Colour used for the curve. Defaults to blue.
-#' @param fill Colour used for the confidence region. Defaults to cyan.
+#' @param fill Colour used for the confidence region. Defaults to royalblue1.
 #' @param print.plot Logical specifying whether the plot should be printed.
 #' @param show.conf Logical specifying whether the confidence region should be
 #' plotted.
@@ -70,7 +70,7 @@ print.fbroc.roc <- function(x, ...) {
 #' plot(result.boot)
 #' @seealso \code{\link{boot.roc}}, \code{\link{perf.roc}}
 #' @export
-plot.fbroc.roc <- function(x, col = "blue", fill = "cyan", print.plot = TRUE,
+plot.fbroc.roc <- function(x, col = "blue", fill = "royalblue1", print.plot = TRUE,
                            show.conf = TRUE, conf.level = 0.95, 
                            show.metric = NULL, ...) {
   plot.frame = x$tpr.fpr
@@ -87,7 +87,7 @@ plot.fbroc.roc <- function(x, col = "blue", fill = "cyan", print.plot = TRUE,
   if (show.conf) {
     conf.frame <- conf.roc(x, conf.level = conf.level, steps = 2000)
     roc.plot <- roc.plot + 
-      geom_ribbon(data = conf.frame, fill = fill, alpha = 0.9,
+      geom_ribbon(data = conf.frame, fill = fill, alpha = 0.5,
                   aes(y = NULL, ymin = Lower.TPR, ymax = Upper.TPR))
   }
   if (!is.null(show.metric)) {

@@ -11,14 +11,19 @@ studies and shiny applications by using a fast
 algorithm where the cost of a single bootstrap replicate is \eqn{O(n)} when
 used with a total of n samples. The algorithm is implemented in C++ to further
 increase the efficiency. Currently 100000 bootstrap iterations for 500
-observations take about one second.
+observations take about one second. The ROC curve as used shows the dependency
+of the True Positive Rate (TPR) as a function of the False Positive Rate (FPR).
 }
 \section{Important fbroc functions}{
 
 \describe{
-\item{\code{\link{boot.roc}}}{Use \code{boot.roc} to bootstrap a ROC curve}
+\item{\code{\link{boot.roc}}}{Use \code{boot.roc} to bootstrap a ROC curve.}
+\item{\code{\link{conf.roc}}}{Calculate a confidence region for the ROC curve.}
 \item{\code{\link{perf.roc}}}{Estimate performance and calculate confidence
-intervals for a bootstrapped ROC curve}
+intervals.}
+\item{\code{\link{boot.tpr.at.fpr}}}{Transforms bootstrapped TPR/FPR at
+threshold matrix into a matrix containing bootstrapped TPRs at a range of
+different FPRs.}
 }
 }
 

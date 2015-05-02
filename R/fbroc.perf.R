@@ -44,7 +44,6 @@ perf.roc <- function(roc, metric = "auc", conf.level = 0.95) {
   ci <- as.numeric(quantile(perf.boot, alpha.levels))
   names(ci) <- NULL
   
-  
   perf <- list(Observed.Performance = observed.perf,
                CI.Performance = ci,
                conf.level = conf.level,

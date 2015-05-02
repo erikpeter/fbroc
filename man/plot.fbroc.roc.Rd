@@ -4,7 +4,7 @@
 \alias{plot.fbroc.roc}
 \title{Plots a \code{fbroc.roc} object}
 \usage{
-\method{plot}{fbroc.roc}(x, col = "blue", fill = "cyan",
+\method{plot}{fbroc.roc}(x, col = "blue", fill = "royalblue1",
   print.plot = TRUE, show.conf = TRUE, conf.level = 0.95,
   show.metric = NULL, ...)
 }
@@ -13,7 +13,7 @@
 
 \item{col}{Colour used for the curve. Defaults to blue.}
 
-\item{fill}{Colour used for the confidence region. Defaults to cyan.}
+\item{fill}{Colour used for the confidence region. Defaults to royalblue1.}
 
 \item{print.plot}{Logical specifying whether the plot should be printed.}
 
