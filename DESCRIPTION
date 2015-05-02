@@ -5,13 +5,11 @@ Version: 0.1.0
 Date: 2015-04-29
 Authors@R: c(person("Erik", "Peter", email = "jerikpeter@googlemail.com", 
              role = c("aut", "cre")))
-Author: Erik Peter
-Maintainer: Erik Peter <jerikpeter@googlemail.com>
 Description: Implements a very fast C++ algorithm to quickly bootstrap 
-    ROC Curves and derived performance metrics, e.g. AUC. 
-    Results can be plotted and confidence intervals calculated.
-    Currently 100000 bootstrap replicates for 500 observations take about
-    one second.
+    ROC Curves and derived performance metrics (e.g. AUC). You can also plot the
+    results and calculate confidence intervals.
+    Currently the calculation of 100000 bootstrap replicates for 500 observations 
+    takes about one second.
 License: GPL-2
 Depends: R (>= 3.1.0), ggplot2
 Imports: 

@@ -6,10 +6,10 @@
 \alias{fbroc-package}
 \title{fbroc: A package for fast bootstrap analysis of ROC curves}
 \description{
-The fbroc enables the fast boostrap analysis of ROC curves for simulation
+Fbroc enables the fast bootstrap analysis of ROC curves for simulation
 studies and shiny applications by using a fast
-algorithm where the cost of a single bootstrap replicate is \eqn{O(n)} when
-used with a total of n samples. The algorithm is implemented in C++ to further
+algorithm where the cost of a single bootstrap replicate is \eqn{O(n)}, with
+n denoting the number of observations. The algorithm is implemented in C++ to further
 increase the efficiency. Currently 100000 bootstrap iterations for 500
 observations take about one second. The ROC curve as used shows the dependency
 of the True Positive Rate (TPR) as a function of the False Positive Rate (FPR).
@@ -30,22 +30,22 @@ different FPRs.}
 \section{Details}{
 
 The algorithm works by first determining the critical thresholds of the ROC
-curve - cutoffs at which the curve changes directions. Each observation is linked
+curve - cutoffs at which the curve changes directions. Each observation is then linked
 to the specific thresholds at which they first cause a change in the TPR
-or FPR. Calculating this link and performing the bootstrap iteration on them
-allows us to bootstrap the link directly and construct the bootstrap ROC
+or FPR. Calculating this link and directly bootstrapping that link
+allows us to construct the bootstrapped ROC
 curve very quickly. Since multiple observation can be linked to the same
 threshold, it is difficult to implement the algorithm efficiently in R.
-Therefore \code{fbroc} implements it in C++.
+This is why \code{fbroc} implements it in C++.
 \cr \cr
 All bootstrap confidence interval are based on the percentile method.
 }
 
 \section{Notes}{
 
-Package \code{fbroc} is still in an early stage. In the future it will support
-more performance metrics based on ROC curves such as TPR at a fixed FPR,
-partial AUC and more. In addition, support for paired ROC curves and more
+Package \code{fbroc} is still in an early stage. It will support
+more performance metrics based on ROC curves such as TPR at a fixed FPR and
+partial AUC in the future. In addition, support for paired ROC curves and more
 sophisticated bootstrap confidence interval calculation will be added.
 }
 \examples{

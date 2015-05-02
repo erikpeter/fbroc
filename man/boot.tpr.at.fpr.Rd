@@ -15,10 +15,10 @@ calculated. TPR confidence intervals are given for all FPRs in
 }
 \value{
 Matrix containing the TPR bootstrap replicates for the discrete
-FPR steps
+FPR steps.
 }
 \description{
-Function \code{boot.roc} gives the TPR and FPR result at each threshold
+Function \code{boot.roc} contains the TPR and FPR result at each threshold
 per bootstrap replicate. This is easy to calculate, but often not convenient
 to process further. Therefore \code{boot.tpr.at.fpr} transform that matrix
 so that in each column are the bootstrap results for the TPR at a specific

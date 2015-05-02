@@ -24,7 +24,7 @@ number of bootstrap replicates. Defaults to 1000.}
 A list of class \code{fbroc.roc}, containing the elements:
 \item{prediction}{Input predictions.}
 \item{true.class}{Input classes.}
-\item{thresholds}{Thresholds. Calculated by \code{calculate.thresholds}.}
+\item{thresholds}{Thresholds.}
 \item{n.thresholds}{Number of thresholds.}
 \item{n.boot}{Number of bootstrap replicates.}
 \item{n.pos}{Number of positive observations.}
@@ -32,7 +32,7 @@ A list of class \code{fbroc.roc}, containing the elements:
 \item{tpr.fpr}{Vector containing true and false positve rates at
                      the different thresholds for the original predictions.}
 \item{tpr.fpr.raw}{Vector containing raw results from C++ for later usage by
- other packages in \code{fbroc}.}
+ other functions.}
 \item{time.used}{Time in seconds used for the boostrap. Other steps are not
 included.}
 \item{auc}{The AUC of the original ROC curve.}

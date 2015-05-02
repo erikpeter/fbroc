@@ -17,7 +17,7 @@
 #' @return A list of class \code{fbroc.roc}, containing the elements:
 #' \item{prediction}{Input predictions.}
 #' \item{true.class}{Input classes.}
-#' \item{thresholds}{Thresholds. Calculated by \code{calculate.thresholds}.}
+#' \item{thresholds}{Thresholds.}
 #' \item{n.thresholds}{Number of thresholds.}
 #' \item{n.boot}{Number of bootstrap replicates.}
 #' \item{n.pos}{Number of positive observations.}
@@ -25,7 +25,7 @@
 #' \item{tpr.fpr}{Vector containing true and false positve rates at
 #'                      the different thresholds for the original predictions.}
 #' \item{tpr.fpr.raw}{Vector containing raw results from C++ for later usage by
-#'  other packages in \code{fbroc}.}       
+#'  other functions.}       
 #' \item{time.used}{Time in seconds used for the boostrap. Other steps are not
 #' included.}
 #' \item{auc}{The AUC of the original ROC curve.}
@@ -111,9 +111,9 @@ boot.roc <- function(pred, true.class, stratify = TRUE, n.boot = 1000) {
 
 #' Generates confidence intervals for the TPR for a range of FPRs
 #' 
-#' Use this to get confidence intervals for the TPR at different values for the
-#' FPR. This function is also used to plot the confidence regions in the
-#' function \code{link{plot.fbroc.roc}}.
+#' Calculates confidence intervals for the TPR at different FPR values. 
+#' This function is also used to plot the confidence regions in the
+#' function \code{\link{plot.fbroc.roc}}.
 #' 
 #' @param roc Object of class \code{fbroc.roc}.
 #' @param conf.level Confidence level to be used for the confidence intervals.
@@ -139,7 +139,7 @@ conf.roc <- function(roc, conf.level = 0.95, steps = 100) {
 
 #' Process bootstrapped TPR/FPR at thresholds matrix into TPR at FPR matrix
 #' 
-#' Function \code{boot.roc} gives the TPR and FPR result at each threshold
+#' Function \code{boot.roc} contains the TPR and FPR result at each threshold
 #' per bootstrap replicate. This is easy to calculate, but often not convenient
 #' to process further. Therefore \code{boot.tpr.at.fpr} transform that matrix
 #' so that in each column are the bootstrap results for the TPR at a specific
@@ -149,7 +149,7 @@ conf.roc <- function(roc, conf.level = 0.95, steps = 100) {
 #' calculated. TPR confidence intervals are given for all FPRs in 
 #' \code{seq(0, 1, by = (1 / steps))}.
 #' @return Matrix containing the TPR bootstrap replicates for the discrete
-#' FPR steps
+#' FPR steps.
 #' @export
 #' @seealso \code{\link{boot.roc}}
 boot.tpr.at.fpr <- function(roc, steps) {

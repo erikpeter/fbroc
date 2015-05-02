@@ -20,9 +20,9 @@ A data.frame containing the FPR steps and the lower and upper bounds
 of the confidence interval for the TPR.
 }
 \description{
-Use this to get confidence intervals for the TPR at different values for the
-FPR. This function is also used to plot the confidence regions in the
-function \code{link{plot.fbroc.roc}}.
+Calculates confidence intervals for the TPR at different FPR values.
+This function is also used to plot the confidence regions in the
+function \code{\link{plot.fbroc.roc}}.
 }
 \seealso{
 \code{\link{boot.roc}}
