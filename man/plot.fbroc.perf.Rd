@@ -20,13 +20,13 @@ depending on number of bootstrap replicates.}
 
 \item{print.plot}{Logical specifying whether the plot should be printed.}
 
+\item{show.conf}{Logical specifying whether the confidence interval
+should be displayed.}
+
 \item{conf.text}{Logical specifying whether the confidence interval limits
 should also be displayed as text.}
 
 \item{...}{Further arguments passed to or from other methods.}
-
-\item{show.print}{Logical specifying whether the confidence interval
-should be displayed.}
 }
 \value{
 A ggplot, so that the user can customize the plot further.

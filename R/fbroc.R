@@ -37,6 +37,7 @@
 #' perf.roc(result.boot, "auc")
 #' perf.roc(result.boot, "auc", conf.level = 0.99)
 #' @useDynLib fbroc
+#' @import ggplot2
 #' @importFrom Rcpp sourceCpp
 #' @docType package
 #' @name fbroc
@@ -48,5 +49,8 @@ NULL
 }
 
 
+# hack recommend by Hadley Wickham to make CMD check issue no notes
+globalVariables(c("TPR", "FPR", "text.c", "Lower.TPR", "Upper.TPR",
+                  "Metric", "y.dummy", "..density.."))
 
 

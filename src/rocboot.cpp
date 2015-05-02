@@ -100,7 +100,7 @@ IntegerVector get_class_index(IntegerVector index, IntegerVector true_class,
   return class_index;
 }
 
-//' ok
+
 // [[Rcpp::export]]
 NumericVector true_tpr_fpr(NumericVector pred, IntegerVector true_class,
                            NumericVector thres) {
@@ -120,7 +120,7 @@ NumericVector true_tpr_fpr(NumericVector pred, IntegerVector true_class,
 }
 
 
-//' ok
+
 // [[Rcpp::export]]
 NumericMatrix tpr_fpr_boot(NumericVector pred, IntegerVector true_class, 
                            NumericVector thres, int n_boot) {

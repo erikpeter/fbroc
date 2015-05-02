@@ -105,8 +105,21 @@ boot.roc <- function(pred, true.class, stratify = TRUE, n.boot = 1000) {
 }
 
 
-
+#' Generates confidence intervals for the TPR for a range of FPRs
+#' 
+#' Use this to get confidence intervals for the TPR at different values for the
+#' FPR. This function is also used to plot the confidence regions in the
+#' function \code{link{plot.fbroc.roc}}.
+#' 
+#' @param roc Object of class \code{fbroc.roc}.
+#' @param conf.level Confidence level to be used for the confidence intervals.
+#' @param steps Number of discrete steps for the FPR at which the TPR is 
+#' calculated. TPR confidence intervals are given for all FPRs in 
+#' \code{seq(0, 1, by = (1 / steps))}.
+#' @return A data.frame containing the FPR steps and the lower and upper bounds
+#' of the confidence interval for the TPR.
 #' @export
+#' @seealso \code{\link{boot.roc}}
 conf.roc <- function(roc, conf.level = 0.95, steps = 100) {
   alpha <- 1 - conf.level
   alpha.levels <- c(alpha, 1 - alpha) 
