@@ -11,14 +11,14 @@ perf.roc(roc, metric = "auc", conf.level = 0.95)
 
 \item{metric}{A performance metric. Currently only "auc" is supported}
 
-\item{conf.level}{The confidence level of the confidence interval
-#'}
+\item{conf.level}{The confidence level of the confidence interval}
 }
 \value{
 A list of class \code{fbroc.perf}, containing the elements:
-\item{Observed Performance}{The observed performance}
+\item{Observed.Performance}{The observed performance}
 \item{CI.Performance}{Quantile based confidence interval for the performance}
 \item{conf.level}{Confidence level of the confidence interval}
+\item{metric}{Used performance metric}
 \item{n.boot}{Number of bootstrap replicates used}
 \item{boot.results}{Performance in each bootstrap replicate}
 }

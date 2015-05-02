@@ -1,5 +1,45 @@
+#' fbroc: A package for fast bootstrap analysis of ROC curves
+#' 
+#' The fbroc enables the fast boostrap analysis of ROC curves for simulation
+#' studies and shiny applications by using a fast
+#' algorithm where the cost of a single bootstrap replicate is \eqn{O(n)} when 
+#' used with a total of n samples. The algorithm is implemented in C++ to further
+#' increase the efficiency. Currently 100000 bootstrap iterations for 500
+#' observations take about one second.
+#' 
+#' @section Important fbroc functions:
+#' \describe{
+#' \item{\code{\link{boot.roc}}}{Use \code{boot.roc} to bootstrap a ROC curve}
+#' \item{\code{\link{perf.roc}}}{Estimate performance and calculate confidence
+#' intervals for a bootstrapped ROC curve}
+#' }
+#' @section Details:
+#' The algorithm works by first determining the critical thresholds of the ROC
+#' curve - cutoffs at which the curve changes directions. Each observation is linked
+#' to the specific thresholds at which they first cause a change in the TPR
+#' or FPR. Calculating this link and performing the bootstrap iteration on them
+#' allows us to bootstrap the link directly and construct the bootstrap ROC
+#' curve very quickly. Since multiple observation can be linked to the same
+#' threshold, it is difficult to implement the algorithm efficiently in R. 
+#' Therefore \code{fbroc} implements it in C++. 
+#' \cr \cr
+#' All bootstrap confidence interval are based on the percentile method.
+#' @section Notes:
+#' Package \code{fbroc} is still in an early stage. In the future it will support
+#' more performance metrics based on ROC curves such as TPR at a fixed FPR,
+#' partial AUC and more. In addition, support for paired ROC curves and more
+#' sophisticated bootstrap confidence interval calculation will be added.
+#' @examples
+#' y <- rep(c(TRUE, FALSE), each = 500)
+#' x <- rnorm(1000) + y
+#' result.boot <- boot.roc(x, y, n.boot = 100)
+#' plot(result.boot)
+#' perf.roc(result.boot, "auc")
+#' perf.roc(result.boot, "auc", conf.level = 0.99)
 #' @useDynLib fbroc
 #' @importFrom Rcpp sourceCpp
+#' @docType package
+#' @name fbroc
 NULL
 
 
@@ -7,163 +47,15 @@ NULL
   library.dynam.unload("fbroc", libpath)
 }
 
-#' Calculates ROC curve thresholds
-#' 
-#' \code{calculate.thresholds} calculates the thresholds of the ROC curve
-#' at which the curve changes directions. 
-#' 
-#' @param A numeric vector. Contains predictions. \code{calculate.thresholds} 
-#'   assumes that a high prediction is evidence for the observation belonging 
-#'   to the positive class.
-#' @param true.class A logical vector. TRUE indicates the sample belonging to the
-#'   positive class.
-#' @return A numeric vector containing the thresholds. The length of the vector
-#'   depends on the data. The number of thresholds tends to go down as the
-#'   performance of the clasifier improves.   
-#' 
-#' @examples
-#' x <- 1:10
-#' y <- c(FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, TRUE, TRUE, TRUE, TRUE)
-#' calculate.thresholds(x, y) # relevant thresholds are 1, 4, 5, 7, 10
-#' 
-#' @export
-calculate.thresholds <- function(pred, true.class) {
-  pred <- c(pred, max(pred) + 1)
-  index <- order(pred)
-  pred <- pred[index]
-  true.class <- true.class[index]
-  is.threshold <- find_thresholds(pred, true.class)
-  thresholds <- pred[as.logical(is.threshold)]
-  return(thresholds)
-}
-
-#' Bootstrap ROC curve
-#'
-#' \code{boot.roc} calculates the ROC curve, initialises the settings for the
-#' bootstrap and calculates the bootstrap results for the true and false
-#' positive rate at every relevant threshold. Missing values are removed with 
-#' a warning prior to bootstrapping.
-#'
-#' @param pred A numeric vector. Contains predictions. \code{boot.roc} assumes
-#'   that a high prediction is evidence for the observation belonging to the
-#'   positive class.
-#' @param true.class A logical vector. TRUE indicates the sample belonging to the
-#'   positive class.
-#' @param stratify Logical. Indicates whether we use stratified boostrap.
-#'   Default to TRUE. Non-stratified bootstrap is not yet implemented.
-#' @param n.boot A number that will be coerced to integer. Specified the 
-#'   number of bootstrap replicates. Defaults to 1000.
-#' @return A list of class \code{fbroc.roc}, containing the elements:
-#' \item{prediction}{Input predictions}
-#' \item{true.class}{Input classes}
-#' \item{thresholds}{Thresholds. Calculated by \code{calculate.thresholds}}
-#' \item{n.thresholds}{Number of thresholds}
-#' \item{n.boot}{Number of bootstrap replicates}
-#' \item{n.pos}{Number of positive observations}
-#' \item{n.neg}{Number of negative observations}
-#' \item{tpr.fpr}{Vector containing true and false positve rates at
-#'                      the different thresholds for the original predictions}
-#' \item{tpr.fpr.raw}{Vector containing raw results from C++ for later usage by
-#'  other packages in \code{fbroc}}                      
-#' \item{time.used}{Time in seconds used for the boostrap. Other steps are not
-#' included}
-#' \item{auc}{The AUC of the original ROC curve}   
-#' \item{tpr.fpr.boot.matrix}{Matrix containing TPR and FPR values at the
-#' thresholds for each bootstrap replicate.}
-#' @examples
-#' y <- rep(c(TRUE, FALSE), each = 500)
-#' x <- rnorm(1000) + y
-#' result.boot <- boot.roc(x, y)
-#' @seealso \code{\link{plot.fbroc.roc}}, \code{\link{print.fbroc.roc}}
-#' @export
-boot.roc <- function(pred, true.class, stratify = TRUE, n.boot = 1000) {
-  # validate input
-  if ((length(pred) != length(true.class)))
-    stop("Predictions and true classes need to have the same length")
-  if ((class(pred) != "numeric"))
-    stop("Predictions must be numeric")
-  if ((class(true.class) != "logical"))
-    stop("Classes must be logical")
-  if ((class(stratify) != "logical"))
-    stop("Classes must be logical")
-  
-  index.na <- is.na(pred) | is.na(true.class)
-  if (any(index.na)) {
-    n <- sum(index.na)
-    warning.msg <- 
-      paste(n, "observations had to be removed due to missing values")
-    warning(warning.msg)
-    true.class <- true.class[!index.na]
-    pred <- pred[!index.na]
-  }
-  
-  if (sum(true.class) == 0)
-    stop("No positive observations are included")
-  if (sum(!true.class) == 0)
-    stop("No negative observations are included")
-  
-  n.boot <- as.integer(n.boot)
-
-  if (length(n.boot) != 1)
-    stop("n.boot must have length 1")
-
-  if (length(stratify) != 1)
-    stop("stratify must have length 1")
-  
-  if (!stratify) stop("Non-stratified bootstrapping is not yet supported")
-  
-  thresholds <- calculate.thresholds(pred, true.class)
-  n.thresholds <- length(thresholds)  
-  
-  bench <- system.time(tpr.fpr.boot <- 
-                         tpr_fpr_boot(pred, as.integer(true.class),
-                                      thresholds, n.boot))[1]
-  bench <- round(bench, 1)
-  tpr.fpr <- true_tpr_fpr(pred, as.integer(true.class), thresholds)
-  tpr.fpr.raw <- tpr.fpr
-  auc <- get_auc(tpr.fpr)
-  tpr.fpr <- data.frame(TPR = tpr.fpr[1:n.thresholds],
-                        FPR = tpr.fpr[(n.thresholds + 1):(2 * n.thresholds)])
-  
-
-  
-  output <- list(predictions = pred,
-                 true.classes = true.class,
-                 thresholds = thresholds,
-                 n.thresholds = n.thresholds,
-                 n.boot = n.boot,
-                 n.pos = sum(true.class),
-                 n.neg = sum(!true.class),
-                 tpr.fpr = tpr.fpr,
-                 tpr.fpr.raw = tpr.fpr.raw,
-                 time.used = bench,
-                 auc = auc,
-                 tpr.fpr.boot.matrix = tpr.fpr.boot)  
-  class(output) <- append(class(output), "fbroc.roc")
-  return(output)
-}
 
 
-
-#' @export
-conf.roc <- function(roc, conf.level = 0.95, steps = 100) {
-  alpha <- 1 - conf.level
-  alpha.levels <- c(alpha, 1 - alpha)
-  steps = as.integer(steps)
-  rel.matrix <- get_tpr_matrix(roc$tpr.fpr.boot.matrix, steps)
-  conf.area <- t(apply(rel.matrix, 2, quantile, alpha.levels))
-  conf.area <- as.data.frame(conf.area)
-  names(conf.area) <- c("Lower.TPR", "Upper.TPR")
-  conf.area <- cbind(data.frame(FPR = 1 - seq(0, 1, by = (1 / steps))), conf.area)
-  return(conf.area)
-}
 
 #' @export
 test.code <- function() {
   for (i in 1:1) {
   y <- rep(c(FALSE, TRUE), each = 250)
   x <- c(runif(250, 1, 100), runif(250, 81, 180))
-  result.boot <- boot.roc(x, y)
+  result.boot <- boot.roc(x, y, n.boot = 100000)
   ok <- conf.roc(result.boot)
   plot(result.boot)
   }
