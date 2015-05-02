@@ -7,12 +7,12 @@
 calculate.thresholds(pred, true.class)
 }
 \arguments{
-\item{true.class}{A logical vector. TRUE indicates the sample belonging to the
-positive class.}
-
-\item{A}{numeric vector. Contains predictions. \code{calculate.thresholds}
+\item{pred}{A numeric vector. Contains predictions. \code{calculate.thresholds}
 assumes that a high prediction is evidence for the observation belonging
 to the positive class.}
+
+\item{true.class}{A logical vector. TRUE indicates the sample belonging to the
+positive class.}
 }
 \value{
 A numeric vector containing the thresholds. The length of the vector

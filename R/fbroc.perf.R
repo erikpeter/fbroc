@@ -4,16 +4,16 @@
 #' results saved in an object of class \code{fbroc.roc}. Confidence intervals
 #' are included.
 #'
-#' @param roc An object of class \code{fbroc.roc}
-#' @param metric A performance metric. Currently only "auc" is supported
-#' @param conf.level The confidence level of the confidence interval
+#' @param roc An object of class \code{fbroc.roc}.
+#' @param metric A performance metric. Currently only "auc" is supported.
+#' @param conf.level The confidence level of the confidence interval.
 #' @return A list of class \code{fbroc.perf}, containing the elements:
-#' \item{Observed.Performance}{The observed performance}
-#' \item{CI.Performance}{Quantile based confidence interval for the performance}
-#' \item{conf.level}{Confidence level of the confidence interval}
-#' \item{metric}{Used performance metric}
-#' \item{n.boot}{Number of bootstrap replicates used}
-#' \item{boot.results}{Performance in each bootstrap replicate}
+#' \item{Observed.Performance}{The observed performance.}
+#' \item{CI.Performance}{Quantile based confidence interval for the performance.}
+#' \item{conf.level}{Confidence level of the confidence interval.}
+#' \item{metric}{Used performance metric.}
+#' \item{n.boot}{Number of bootstrap replicates used.}
+#' \item{boot.results}{Performance in each bootstrap replicate.}
 #' @seealso \code{\link{boot.roc}}, \code{\link{print.fbroc.perf}}, 
 #'   \code{\link{plot.fbroc.perf}}
 #' @examples

@@ -50,25 +50,3 @@ NULL
 
 
 
-#' @export
-test.code <- function() {
-  for (i in 1:1) {
-  y <- rep(c(FALSE, TRUE), each = 250)
-  x <- c(runif(250, 1, 100), runif(250, 81, 180))
-  result.boot <- boot.roc(x, y, n.boot = 100000)
-  ok <- conf.roc(result.boot)
-  plot(result.boot)
-  }
-}
-
-#' @export
-test.code2 <- function() {
-  for (i in 1:1) {
-    y <- rep(c(FALSE, TRUE), each = 250)
-    x <- c(runif(250, 1, 100), runif(250, 81, 180))
-    result.boot <- boot.roc(x, y)
-    result.perf <- perf.roc(result.boot, "auc")
-    plot(result.boot, show.metric = "auc")
-  }
-  return(result.perf)
-}

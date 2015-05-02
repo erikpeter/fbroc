@@ -1,10 +1,6 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 
-//' generate
-//'
-//' @export
-// [[Rcpp::export]]
 IntegerVector get_tpr_fpr_index(NumericVector pred, IntegerVector true_class, NumericVector thres) {
    int n = pred.size();
    int n_thres = thres.size();
@@ -105,7 +101,6 @@ IntegerVector get_class_index(IntegerVector index, IntegerVector true_class,
 }
 
 //' ok
-//' @export
 // [[Rcpp::export]]
 NumericVector true_tpr_fpr(NumericVector pred, IntegerVector true_class,
                            NumericVector thres) {
@@ -126,7 +121,6 @@ NumericVector true_tpr_fpr(NumericVector pred, IntegerVector true_class,
 
 
 //' ok
-//' @export
 // [[Rcpp::export]]
 NumericMatrix tpr_fpr_boot(NumericVector pred, IntegerVector true_class, 
                            NumericVector thres, int n_boot) {
@@ -165,7 +159,6 @@ NumericMatrix tpr_fpr_boot(NumericVector pred, IntegerVector true_class,
   return tpr_fpr_matrix;
 }
 
-//' @export
 // [[Rcpp::export]]
 double get_auc(NumericVector tpr_fpr) {
   int n_thres = tpr_fpr.size()/2;
@@ -177,7 +170,6 @@ double get_auc(NumericVector tpr_fpr) {
   return auc;
 }
 
-//' @export
 // [[Rcpp::export]]
 NumericVector get_roc_perf(NumericMatrix tpr_fpr, int measure) {
   double (*choosen_measure)(NumericVector);
@@ -196,8 +188,6 @@ NumericVector get_roc_perf(NumericMatrix tpr_fpr, int measure) {
   return roc_perf;
 }
 
-
-//' @export
 // [[Rcpp::export]]
 NumericVector get_tpr_matrix(NumericMatrix tpr_fpr, int n_steps) {
   double step_size = (1.0 / n_steps);
@@ -223,7 +213,6 @@ NumericVector get_tpr_matrix(NumericMatrix tpr_fpr, int n_steps) {
   return tpr_matrix;
 }
 
-//' @export
 // [[Rcpp::export]]
 IntegerVector find_thresholds(NumericVector pred, IntegerVector true_class) {
   int n_pred = pred.size();

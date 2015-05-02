@@ -5,19 +5,6 @@
 
 using namespace Rcpp;
 
-// get_tpr_fpr_index
-IntegerVector get_tpr_fpr_index(NumericVector pred, IntegerVector true_class, NumericVector thres);
-RcppExport SEXP fbroc_get_tpr_fpr_index(SEXP predSEXP, SEXP true_classSEXP, SEXP thresSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< NumericVector >::type pred(predSEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type true_class(true_classSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type thres(thresSEXP);
-    __result = Rcpp::wrap(get_tpr_fpr_index(pred, true_class, thres));
-    return __result;
-END_RCPP
-}
 // true_tpr_fpr
 NumericVector true_tpr_fpr(NumericVector pred, IntegerVector true_class, NumericVector thres);
 RcppExport SEXP fbroc_true_tpr_fpr(SEXP predSEXP, SEXP true_classSEXP, SEXP thresSEXP) {
