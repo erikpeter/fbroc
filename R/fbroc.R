@@ -41,6 +41,8 @@
 #' plot(result.boot)
 #' perf.roc(result.boot, "auc")
 #' perf.roc(result.boot, "auc", conf.level = 0.99)
+#' @references Efron, B., & Tibshirani, R. (1998). \emph{An introduction to the bootstrap.}
+#' Boca Raton, Fla: Chapman & Hall/CRC. 
 #' @useDynLib fbroc
 #' @import ggplot2
 #' @importFrom Rcpp sourceCpp

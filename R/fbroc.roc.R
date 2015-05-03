@@ -125,7 +125,7 @@ boot.roc <- function(pred, true.class, stratify = TRUE, n.boot = 1000) {
 #' @export
 #' @seealso \code{\link{boot.roc}}
 conf.roc <- function(roc, conf.level = 0.95, steps = 100) {
-  alpha <- 1 - conf.level
+  alpha <- 0.5*(1 - conf.level)
   alpha.levels <- c(alpha, 1 - alpha) 
   steps = as.integer(steps)
   # translate tpr_fpr at threshold matrix into tpr at fpr matrix

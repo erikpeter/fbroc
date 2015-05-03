@@ -124,8 +124,42 @@ NumericVector true_tpr_fpr(NumericVector pred, IntegerVector true_class,
   
   return tpr_fpr;
 }
-
-
+/*
+//' @export
+// [[Rcpp::export]]
+IntegerMatrix test_random(NumericVector pred, IntegerVector true_class, 
+                           int n_boot) {
+  
+  int n = pred.size();
+  
+  int n_pos = 0;
+  int n_neg = 0;
+  for (int i = 0; i < n; i++) {
+    if (true_class[i] == 1) n_pos++;
+      else n_neg++;
+  }
+    
+  IntegerMatrix boot_matrix(n_boot, n);
+    
+  for (int i = 0; i < n_boot; i++) {
+    // shuffle first
+    
+  NumericVector random_pos = runif(n_pos);
+  NumericVector random_neg = runif(n_neg);
+  // use stratified bootstrapping
+  int k = 0;
+  for (int j = 0; j < n_pos; j++) {
+     boot_matrix(i, k++) = (int)(n_pos * random_pos[j]);
+  }
+  for (int j = 0; j < n_neg; j++) {
+     boot_matrix(i, k++) = (int) (n_neg*random_neg[j]);
+  }
+ 
+  }
+  
+  return boot_matrix;
+}
+*/
 
 // [[Rcpp::export]]
 NumericMatrix tpr_fpr_boot(NumericVector pred, IntegerVector true_class, 
@@ -193,6 +227,7 @@ NumericVector get_roc_perf(NumericMatrix tpr_fpr, int measure) {
   return roc_perf;
 }
 
+
 // [[Rcpp::export]]
 NumericVector get_tpr_matrix(NumericMatrix tpr_fpr, int n_steps) {
   double step_size = (1.0 / n_steps);
@@ -219,6 +254,9 @@ NumericVector get_tpr_matrix(NumericMatrix tpr_fpr, int n_steps) {
   
   return tpr_matrix;
 }
+
+
+
 
 // [[Rcpp::export]]
 IntegerVector find_thresholds(NumericVector pred, IntegerVector true_class) {

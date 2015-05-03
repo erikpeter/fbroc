@@ -39,7 +39,7 @@ perf.roc <- function(roc, metric = "auc", conf.level = 0.95) {
   perf.boot <- get_roc_perf(roc$tpr.fpr.boot.matrix, as.integer(metric.number))
   
   # Quantile based confidence interval
-  alpha <- 1 - conf.level
+  alpha <- 0.5 * (1 - conf.level)
   alpha.levels <- c(alpha, 1 - alpha) 
   ci <- as.numeric(quantile(perf.boot, alpha.levels))
   names(ci) <- NULL
