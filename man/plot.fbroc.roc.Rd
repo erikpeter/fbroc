@@ -11,9 +11,9 @@
 \arguments{
 \item{x}{Object of class \code{fbroc.roc}.}
 
-\item{col}{Colour used for the curve. Defaults to blue.}
+\item{col}{Color used for the curve. Defaults to blue.}
 
-\item{fill}{Colour used for the confidence region. Defaults to royalblue1.}
+\item{fill}{Color used for the confidence region. Defaults to royalblue1.}
 
 \item{print.plot}{Logical specifying whether the plot should be printed.}
 
@@ -32,9 +32,9 @@ that no metric is displayed.}
 A ggplot, so that the user can customize the plot further.
 }
 \description{
-Plot a \code{fbroc.roc} object. The plot shows the ROC curve. The confidence
+Plot a \code{fbroc.roc} object and shows the ROC curve. The confidence
 region for the ROC curve and the result for a specified performance metric
-can also be included.
+can also be included in the plot.
 }
 \examples{
 y <- rep(c(TRUE, FALSE), each = 500)

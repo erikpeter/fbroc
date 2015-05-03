@@ -1,7 +1,7 @@
 #' Bootstrap ROC curve
 #'
-#' \code{boot.roc} calculates the ROC curve, initialises the settings for the
-#' bootstrap and calculates the bootstrap results for the true and false
+#' \code{boot.roc} calculates the ROC curve, initializes the settings
+#' and calculates the bootstrap results for the true and false
 #' positive rate at every relevant threshold. Missing values are removed with 
 #' a warning prior to bootstrapping.
 #'
@@ -10,7 +10,7 @@
 #'   positive class.
 #' @param true.class A logical vector. TRUE indicates the sample belonging to the
 #'   positive class.
-#' @param stratify Logical. Indicates whether we use stratified boostrap.
+#' @param stratify Logical. Indicates whether we use stratified bootstrap.
 #'   Default to TRUE. Non-stratified bootstrap is not yet implemented.
 #' @param n.boot A number that will be coerced to integer. Specified the 
 #'   number of bootstrap replicates. Defaults to 1000.
@@ -22,11 +22,11 @@
 #' \item{n.boot}{Number of bootstrap replicates.}
 #' \item{n.pos}{Number of positive observations.}
 #' \item{n.neg}{Number of negative observations.}
-#' \item{tpr.fpr}{Vector containing true and false positve rates at
+#' \item{tpr.fpr}{Vector containing true and false positive rates at
 #'                      the different thresholds for the original predictions.}
 #' \item{tpr.fpr.raw}{Vector containing raw results from C++ for later usage by
 #'  other functions.}       
-#' \item{time.used}{Time in seconds used for the boostrap. Other steps are not
+#' \item{time.used}{Time in seconds used for the bootstrap. Other steps are not
 #' included.}
 #' \item{auc}{The AUC of the original ROC curve.}
 #' \item{tpr.fpr.boot.matrix}{Matrix containing TPR and FPR values at the
@@ -141,7 +141,7 @@ conf.roc <- function(roc, conf.level = 0.95, steps = 100) {
 #' 
 #' Function \code{boot.roc} contains the TPR and FPR result at each threshold
 #' per bootstrap replicate. This is easy to calculate, but often not convenient
-#' to process further. Therefore \code{boot.tpr.at.fpr} transform that matrix
+#' to work with. Therefore \code{boot.tpr.at.fpr} transform that matrix
 #' so that in each column are the bootstrap results for the TPR at a specific
 #' FPR.
 #' @param roc Object of class \code{fbroc.roc}.

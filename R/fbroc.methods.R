@@ -48,12 +48,12 @@ print.fbroc.roc <- function(x, ...) {
 
 #' Plots a \code{fbroc.roc} object
 #' 
-#' Plot a \code{fbroc.roc} object. The plot shows the ROC curve. The confidence
+#' Plot a \code{fbroc.roc} object and shows the ROC curve. The confidence
 #' region for the ROC curve and the result for a specified performance metric 
-#' can also be included. 
+#' can also be included in the plot. 
 #' @param x Object of class \code{fbroc.roc}.
-#' @param col Colour used for the curve. Defaults to blue.
-#' @param fill Colour used for the confidence region. Defaults to royalblue1.
+#' @param col Color used for the curve. Defaults to blue.
+#' @param fill Color used for the confidence region. Defaults to royalblue1.
 #' @param print.plot Logical specifying whether the plot should be printed.
 #' @param show.conf Logical specifying whether the confidence region should be
 #' plotted.
@@ -105,13 +105,17 @@ plot.fbroc.roc <- function(x, col = "blue", fill = "royalblue1", print.plot = TR
   invisible(roc.plot)
 }
 
-#' Plots performance
+#' Plots ROC based performance metric as histogram
+#' 
+#' Given an object of class \code{perf.roc} this function plots the results of
+#' the bootstrap as an histogram. The confidence interval is also included by
+#' default.
 #' 
 #' @param x Object of class \code{perf.roc} to be plotted.
 #' @param bins Number of bins for histogram. Defaults to between 20 and 60
 #' depending on number of bootstrap replicates.
-#' @param col Colour of outline of histogram bars. Defaults to white.
-#' @param fill Fill of histogram bars. Defaulst to lightblue.
+#' @param col Color of outline of histogram bars. Defaults to white.
+#' @param fill Fill of histogram bars. Defaults to lightblue.
 #' @param print.plot Logical specifying whether the plot should be printed.
 #' @param show.conf Logical specifying whether the confidence interval
 #' should be displayed.

@@ -14,7 +14,7 @@ positive class.}
 \item{true.class}{A logical vector. TRUE indicates the sample belonging to the
 positive class.}
 
-\item{stratify}{Logical. Indicates whether we use stratified boostrap.
+\item{stratify}{Logical. Indicates whether we use stratified bootstrap.
 Default to TRUE. Non-stratified bootstrap is not yet implemented.}
 
 \item{n.boot}{A number that will be coerced to integer. Specified the
@@ -29,19 +29,19 @@ A list of class \code{fbroc.roc}, containing the elements:
 \item{n.boot}{Number of bootstrap replicates.}
 \item{n.pos}{Number of positive observations.}
 \item{n.neg}{Number of negative observations.}
-\item{tpr.fpr}{Vector containing true and false positve rates at
+\item{tpr.fpr}{Vector containing true and false positive rates at
                      the different thresholds for the original predictions.}
 \item{tpr.fpr.raw}{Vector containing raw results from C++ for later usage by
  other functions.}
-\item{time.used}{Time in seconds used for the boostrap. Other steps are not
+\item{time.used}{Time in seconds used for the bootstrap. Other steps are not
 included.}
 \item{auc}{The AUC of the original ROC curve.}
 \item{tpr.fpr.boot.matrix}{Matrix containing TPR and FPR values at the
 thresholds for each bootstrap replicate.}
 }
 \description{
-\code{boot.roc} calculates the ROC curve, initialises the settings for the
-bootstrap and calculates the bootstrap results for the true and false
+\code{boot.roc} calculates the ROC curve, initializes the settings
+and calculates the bootstrap results for the true and false
 positive rate at every relevant threshold. Missing values are removed with
 a warning prior to bootstrapping.
 }

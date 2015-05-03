@@ -15,9 +15,10 @@ output:
 ------------------------------------------------
 
 fbroc is intended for the *fast* bootstrapping of ROC curves, so that the
-package can be used for simulation studies and shiny applications. On my machine
-fbroc is capable of calculating about 100000 bootstrap replicates for a ROC
-curves constructed from 500 observations in about one second.
+package can be used for simulation studies and shiny applications. To achieve
+the necessary performance all critical algorithms are implemented in C++.
+On my machine fbroc is capable of calculating about 100000 bootstrap replicates 
+for a ROC curves constructed from 500 observations in about one second.
 
 To install:
 

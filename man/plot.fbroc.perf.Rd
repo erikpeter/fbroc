@@ -2,7 +2,7 @@
 % Please edit documentation in R/fbroc.methods.R
 \name{plot.fbroc.perf}
 \alias{plot.fbroc.perf}
-\title{Plots performance}
+\title{Plots ROC based performance metric as histogram}
 \usage{
 \method{plot}{fbroc.perf}(x, bins = NULL, col = "white",
   fill = "lightblue", print.plot = TRUE, show.conf = TRUE,
@@ -14,9 +14,9 @@
 \item{bins}{Number of bins for histogram. Defaults to between 20 and 60
 depending on number of bootstrap replicates.}
 
-\item{col}{Colour of outline of histogram bars. Defaults to white.}
+\item{col}{Color of outline of histogram bars. Defaults to white.}
 
-\item{fill}{Fill of histogram bars. Defaulst to lightblue.}
+\item{fill}{Fill of histogram bars. Defaults to lightblue.}
 
 \item{print.plot}{Logical specifying whether the plot should be printed.}
 
@@ -32,7 +32,9 @@ should also be displayed as text.}
 A ggplot, so that the user can customize the plot further.
 }
 \description{
-Plots performance
+Given an object of class \code{perf.roc} this function plots the results of
+the bootstrap as an histogram. The confidence interval is also included by
+default.
 }
 \examples{
 y <- rep(c(TRUE, FALSE), each = 500)
