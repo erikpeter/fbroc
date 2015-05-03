@@ -130,6 +130,7 @@ conf.roc <- function(roc, conf.level = 0.95, steps = 100) {
   steps = as.integer(steps)
   # translate tpr_fpr at threshold matrix into tpr at fpr matrix
   rel.matrix <- get_tpr_matrix(roc$tpr.fpr.boot.matrix, steps)
+  rm(roc)
   conf.area <- t(apply(rel.matrix, 2, quantile, alpha.levels))
   conf.area <- as.data.frame(conf.area)
   names(conf.area) <- c("Lower.TPR", "Upper.TPR")

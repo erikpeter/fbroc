@@ -18,7 +18,8 @@ print.fbroc.perf <- function(x, ...) {
                 "Std. Error: ", round(sd(x$boot.results), 3), "\n", 
                 conf.level,"% confidence interval:", "\n",
                 round(x$CI.Performance[1], 2)," ",
-                round(x$CI.Performance[2], 2), sep = "")
+                round(x$CI.Performance[2], 2), "\n", "\n",
+                sep = "")
   cat(text)
   invisible(text)
 }
@@ -41,7 +42,7 @@ print.fbroc.roc <- function(x, ...) {
             " negative samples. \n \n", "The AUC is ", round(x$auc, 2),".\n \n", 
             x$n.boot, " bootstrap samples have been calculated. \n", "The calculation took ", x$time.used, 
             " seconds and the results use up ", x.mem, " MB of memory.", 
-            "\n", sep = ""))
+            "\n", "\n", sep = ""))
   cat(text)
   invisible(text)
 }
