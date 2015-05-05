@@ -1,6 +1,6 @@
 Package: fbroc
 Type: Package
-Title: Fast Algorithms To Bootstrap ROC Curves
+Title: Fast Algorithms to Bootstrap ROC Curves
 Version: 0.1.0
 Date: 2015-04-29
 Authors@R: c(person("Erik", "Peter", email = "jerikpeter@googlemail.com", 
