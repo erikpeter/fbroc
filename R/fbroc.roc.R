@@ -178,7 +178,7 @@ boot.tpr.at.fpr <- function(roc, steps) {
 #' @examples
 #' x <- 1:10
 #' y <- c(FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, TRUE, TRUE, TRUE, TRUE)
-#' calculate.thresholds(x, y) # relevant thresholds are 1, 4, 5, 7, 10
+#' calculate.thresholds(x, y) # relevant thresholds are 1, 4, 5, 7, 11
 #' 
 #' @export
 calculate.thresholds <- function(pred, true.class) {
