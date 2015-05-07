@@ -87,7 +87,7 @@ plot.fbroc.roc <- function(x, col = "blue", fill = "royalblue1", print.plot = TR
           axis.text.y = element_text(size = 16))
   
   if (show.conf) {
-    conf.frame <- conf.roc(x, conf.level = conf.level, steps = 2000)
+    conf.frame <- conf.roc(x, conf.level = conf.level, steps = 1000)
     roc.plot <- roc.plot + 
       geom_ribbon(data = conf.frame, fill = fill, alpha = 0.5,
                   aes(y = NULL, ymin = Lower.TPR, ymax = Upper.TPR))

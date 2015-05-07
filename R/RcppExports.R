@@ -33,3 +33,7 @@ get_tpr_matrix <- function(tpr_fpr, n_steps) {
     .Call('fbroc_get_tpr_matrix', PACKAGE = 'fbroc', tpr_fpr, n_steps)
 }
 
+get_tpr_matrix_uncached <- function(pred, true_class, thres, n_boot, n_steps) {
+    .Call('fbroc_get_tpr_matrix_uncached', PACKAGE = 'fbroc', pred, true_class, thres, n_boot, n_steps)
+}
+

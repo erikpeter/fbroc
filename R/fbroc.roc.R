@@ -133,12 +133,20 @@ boot.roc <- function(pred, true.class, stratify = TRUE, n.boot = 1000,
 #' of the confidence interval for the TPR.
 #' @export
 #' @seealso \code{\link{boot.roc}}
-conf.roc <- function(roc, conf.level = 0.95, steps = 100) {
+conf.roc <- function(roc, conf.level = 0.95, steps = 200) {
   alpha <- 0.5*(1 - conf.level)
   alpha.levels <- c(alpha, 1 - alpha) 
   steps = as.integer(steps)
   # translate tpr_fpr at threshold matrix into tpr at fpr matrix
-  rel.matrix <- get_tpr_matrix(roc$tpr.fpr.boot.matrix, steps)
+  if (roc$use.cache) {
+    rel.matrix <- get_tpr_matrix(roc$tpr.fpr.boot.matrix, steps)
+  } else {
+    rel.matrix <- get_tpr_matrix_uncached(roc$predictions,
+                                          as.integer(roc$true.classes),
+                                          roc$thresholds,
+                                          roc$n.boot,
+                                          steps)
+  }
   rm(roc)
   conf.area <- t(apply(rel.matrix, 2, quantile, alpha.levels))
   conf.area <- as.data.frame(conf.area)
