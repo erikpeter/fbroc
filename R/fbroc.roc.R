@@ -14,20 +14,23 @@
 #'   Default to TRUE. Non-stratified bootstrap is not yet implemented.
 #' @param n.boot A number that will be coerced to integer. Specified the 
 #'   number of bootstrap replicates. Defaults to 1000.
+#' @param use.cache If true (default) the bootstrapping results for the
+#'   ROC curve will be pre-cached. This increases both speed and memory usage.   
 #' @return A list of class \code{fbroc.roc}, containing the elements:
 #' \item{prediction}{Input predictions.}
 #' \item{true.class}{Input classes.}
 #' \item{thresholds}{Thresholds.}
 #' \item{n.thresholds}{Number of thresholds.}
 #' \item{n.boot}{Number of bootstrap replicates.}
+#' \item{use.cache}{Indicates if cache is used for this ROC object}
 #' \item{n.pos}{Number of positive observations.}
 #' \item{n.neg}{Number of negative observations.}
 #' \item{tpr.fpr}{Vector containing true and false positive rates at
 #'                      the different thresholds for the original predictions.}
 #' \item{tpr.fpr.raw}{Vector containing raw results from C++ for later usage by
-#'  other functions.}       
+#'  other functions. Will be NULL if use.cache is FALSE.}       
 #' \item{time.used}{Time in seconds used for the bootstrap. Other steps are not
-#' included.}
+#' included. Will be NA if use.cache is FALSE.}
 #' \item{auc}{The AUC of the original ROC curve.}
 #' \item{tpr.fpr.boot.matrix}{Matrix containing TPR and FPR values at the
 #' thresholds for each bootstrap replicate.}
@@ -37,7 +40,8 @@
 #' result.boot <- boot.roc(x, y)
 #' @seealso \code{\link{plot.fbroc.roc}}, \code{\link{print.fbroc.roc}}
 #' @export
-boot.roc <- function(pred, true.class, stratify = TRUE, n.boot = 1000) {
+boot.roc <- function(pred, true.class, stratify = TRUE, n.boot = 1000,
+                     use.cache = TRUE) {
   # validate input
   if ((length(pred) != length(true.class)))
     stop("Predictions and true classes need to have the same length")
@@ -76,13 +80,17 @@ boot.roc <- function(pred, true.class, stratify = TRUE, n.boot = 1000) {
   thresholds <- calculate.thresholds(pred, true.class)
   n.thresholds <- length(thresholds)  
   # Let C++ do the actual work
-  bench <- system.time(tpr.fpr.boot <- 
-                         tpr_fpr_boot(pred, as.integer(true.class),
-                                      thresholds, n.boot))[1]
-  column.names <- paste(rep(c("TPR.AT.T", "FPR.AT.T"), each = n.thresholds),
-                        rep(1:n.thresholds, 2), sep = "")
-  colnames(tpr.fpr.boot) <- column.names
-  
+  if (use.cache) {
+    bench <- system.time(tpr.fpr.boot <- 
+                           tpr_fpr_boot(pred, as.integer(true.class),
+                                        thresholds, n.boot))[1]
+    column.names <- paste(rep(c("TPR.AT.T", "FPR.AT.T"), each = n.thresholds),
+                          rep(1:n.thresholds, 2), sep = "")
+    colnames(tpr.fpr.boot) <- column.names
+  } else {
+    bench <- as.numeric(NA)
+    tpr.fpr.boot <- NULL
+  }
   bench <- round(bench, 1)
   tpr.fpr <- true_tpr_fpr(pred, as.integer(true.class), thresholds)
   tpr.fpr.raw <- tpr.fpr
@@ -96,7 +104,8 @@ boot.roc <- function(pred, true.class, stratify = TRUE, n.boot = 1000) {
                  true.classes = true.class,
                  thresholds = thresholds,
                  n.thresholds = n.thresholds,
-                 n.boot = n.boot,
+                 n.boot = as.integer(n.boot),
+                 use.cache = use.cache,
                  n.pos = sum(true.class),
                  n.neg = sum(!true.class),
                  tpr.fpr = tpr.fpr,

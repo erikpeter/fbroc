@@ -37,8 +37,9 @@ print.fbroc.perf <- function(x, ...) {
 #' @export
 print.fbroc.roc <- function(x, ...) {
   x.mem <- round(as.numeric(object.size(x))/(1024*1024),0)
+  adj <- ifelse(x$use.cache, "cached", "uncached")
   text <- cat(paste("\n",
-              "Bootstraped ROC Curve with ", x$n.pos, " positive and ", x$n.neg,
+              "Bootstraped ",adj," ROC Curve with ", x$n.pos, " positive and ", x$n.neg,
             " negative samples. \n \n", "The AUC is ", round(x$auc, 2),".\n \n", 
             x$n.boot, " bootstrap samples have been calculated. \n", "The calculation took ", x$time.used, 
             " seconds and the results use up ", x.mem, " MB of memory.", 

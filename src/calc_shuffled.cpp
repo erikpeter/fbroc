@@ -3,6 +3,31 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 
+// Directly resample the tpr_fpr_index to save time
+IntegerVector get_boot_tpr_fpr_index(IntegerVector pos_index, 
+                                     IntegerVector neg_index) {
+  int n_pos = pos_index.size();
+  int n_neg = neg_index.size();
+  int n = n_pos + n_neg;
+  IntegerVector boot_tpr_fpr_index(n);
+  
+  int j = 0;
+  
+  NumericVector random_pos = runif(n_pos);
+  NumericVector random_neg = runif(n_neg);
+  // use stratified bootstrapping
+  for (int i = 0; i < n_pos; i++) {
+    int random_index = (int)(n_pos * random_pos[i]);
+    boot_tpr_fpr_index[j++] = pos_index[random_index];
+  }
+  for (int i = 0; i < n_neg; i++) {
+    int random_index = (int)(n_neg * random_neg[i]);
+    boot_tpr_fpr_index[j++] = neg_index[random_index];
+  }
+    
+  return boot_tpr_fpr_index;
+}
+
 // Divided by n_pos respectively n_neg to go from tpr_fpr to tpr_fpr_rate
 NumericVector get_tpr_fpr_rate(IntegerVector tpr_fpr, int n_thres, int n_pos, int n_neg) {
   double inv_pos = 1. / n_pos;
@@ -51,5 +76,19 @@ NumericVector build_tpr_fpr(IntegerVector tpr_fpr_index, int n_pos,
   NumericVector tpr_fpr_rate = get_tpr_fpr_rate(tpr_fpr, n_thres, n_pos, n_neg);
   
   return tpr_fpr_rate;
+}
+
+// [[Rcpp::export]]
+NumericVector tpr_fpr_boot_iterate(int n_thres, 
+                                   IntegerVector tpr_fpr_index,
+                                   IntegerVector pos_index,
+                                   IntegerVector neg_index) {
+  int n_pos = pos_index.size();
+  int n_neg = neg_index.size();
+  IntegerVector boot_tpr_fpr_index = 
+    get_boot_tpr_fpr_index(pos_index, neg_index);
+  NumericVector boot_tpr_fpr = 
+    build_tpr_fpr(boot_tpr_fpr_index, n_pos, n_neg, n_thres);
+  return boot_tpr_fpr;    
 }
 

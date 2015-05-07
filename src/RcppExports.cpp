@@ -28,6 +28,35 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// get_roc_perf_uncached
+NumericVector get_roc_perf_uncached(NumericVector pred, IntegerVector true_class, NumericVector thres, int measure, int n_boot);
+RcppExport SEXP fbroc_get_roc_perf_uncached(SEXP predSEXP, SEXP true_classSEXP, SEXP thresSEXP, SEXP measureSEXP, SEXP n_bootSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< NumericVector >::type pred(predSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type true_class(true_classSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type thres(thresSEXP);
+    Rcpp::traits::input_parameter< int >::type measure(measureSEXP);
+    Rcpp::traits::input_parameter< int >::type n_boot(n_bootSEXP);
+    __result = Rcpp::wrap(get_roc_perf_uncached(pred, true_class, thres, measure, n_boot));
+    return __result;
+END_RCPP
+}
+// tpr_fpr_boot_iterate
+NumericVector tpr_fpr_boot_iterate(int n_thres, IntegerVector tpr_fpr_index, IntegerVector pos_index, IntegerVector neg_index);
+RcppExport SEXP fbroc_tpr_fpr_boot_iterate(SEXP n_thresSEXP, SEXP tpr_fpr_indexSEXP, SEXP pos_indexSEXP, SEXP neg_indexSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< int >::type n_thres(n_thresSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type tpr_fpr_index(tpr_fpr_indexSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type pos_index(pos_indexSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type neg_index(neg_indexSEXP);
+    __result = Rcpp::wrap(tpr_fpr_boot_iterate(n_thres, tpr_fpr_index, pos_index, neg_index));
+    return __result;
+END_RCPP
+}
 // true_tpr_fpr
 NumericVector true_tpr_fpr(NumericVector pred, IntegerVector true_class, NumericVector thres);
 RcppExport SEXP fbroc_true_tpr_fpr(SEXP predSEXP, SEXP true_classSEXP, SEXP thresSEXP) {

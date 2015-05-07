@@ -4,7 +4,8 @@
 \alias{boot.roc}
 \title{Bootstrap ROC curve}
 \usage{
-boot.roc(pred, true.class, stratify = TRUE, n.boot = 1000)
+boot.roc(pred, true.class, stratify = TRUE, n.boot = 1000,
+  use.cache = TRUE)
 }
 \arguments{
 \item{pred}{A numeric vector. Contains predictions. \code{boot.roc} assumes
@@ -19,6 +20,9 @@ Default to TRUE. Non-stratified bootstrap is not yet implemented.}
 
 \item{n.boot}{A number that will be coerced to integer. Specified the
 number of bootstrap replicates. Defaults to 1000.}
+
+\item{use.cache}{If true (default) the bootstrapping results for the
+ROC curve will be pre-cached. This increases both speed and memory usage.}
 }
 \value{
 A list of class \code{fbroc.roc}, containing the elements:
@@ -27,14 +31,15 @@ A list of class \code{fbroc.roc}, containing the elements:
 \item{thresholds}{Thresholds.}
 \item{n.thresholds}{Number of thresholds.}
 \item{n.boot}{Number of bootstrap replicates.}
+\item{use.cache}{Indicates if cache is used for this ROC object}
 \item{n.pos}{Number of positive observations.}
 \item{n.neg}{Number of negative observations.}
 \item{tpr.fpr}{Vector containing true and false positive rates at
                      the different thresholds for the original predictions.}
 \item{tpr.fpr.raw}{Vector containing raw results from C++ for later usage by
- other functions.}
+ other functions. Will be NULL if use.cache is FALSE.}
 \item{time.used}{Time in seconds used for the bootstrap. Other steps are not
-included.}
+included. Will be NA if use.cache is FALSE.}
 \item{auc}{The AUC of the original ROC curve.}
 \item{tpr.fpr.boot.matrix}{Matrix containing TPR and FPR values at the
 thresholds for each bootstrap replicate.}

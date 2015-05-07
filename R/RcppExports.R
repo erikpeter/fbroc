@@ -9,6 +9,14 @@ get_roc_perf <- function(tpr_fpr, measure) {
     .Call('fbroc_get_roc_perf', PACKAGE = 'fbroc', tpr_fpr, measure)
 }
 
+get_roc_perf_uncached <- function(pred, true_class, thres, measure, n_boot) {
+    .Call('fbroc_get_roc_perf_uncached', PACKAGE = 'fbroc', pred, true_class, thres, measure, n_boot)
+}
+
+tpr_fpr_boot_iterate <- function(n_thres, tpr_fpr_index, pos_index, neg_index) {
+    .Call('fbroc_tpr_fpr_boot_iterate', PACKAGE = 'fbroc', n_thres, tpr_fpr_index, pos_index, neg_index)
+}
+
 true_tpr_fpr <- function(pred, true_class, thres) {
     .Call('fbroc_true_tpr_fpr', PACKAGE = 'fbroc', pred, true_class, thres)
 }

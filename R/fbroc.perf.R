@@ -36,8 +36,15 @@ perf.roc <- function(roc, metric = "auc", conf.level = 0.95) {
   # call C++ to calculate actual results
   observed.perf <- get_roc_perf(matrix(roc$tpr.fpr.raw, nrow = 1), 
                                 as.integer(metric.number))
-  perf.boot <- get_roc_perf(roc$tpr.fpr.boot.matrix, as.integer(metric.number))
-  
+  if (roc$use.cache) {
+    perf.boot <- get_roc_perf(roc$tpr.fpr.boot.matrix, as.integer(metric.number))
+  } else {
+    perf.boot <- get_roc_perf_uncached(roc$predictions,
+                                       as.integer(roc$true.classes),
+                                       roc$thresholds,
+                                       as.integer(metric.number),
+                                       roc$n.boot)
+  }
   # Quantile based confidence interval
   alpha <- 0.5 * (1 - conf.level)
   alpha.levels <- c(alpha, 1 - alpha) 

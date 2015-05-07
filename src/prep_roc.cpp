@@ -79,3 +79,11 @@ IntegerVector find_thresholds(NumericVector pred, IntegerVector true_class) {
   return is_threshold;
 }
 
+IntegerVector count_classes(IntegerVector true_class) {
+  IntegerVector n_class(2);
+  int n = true_class.size();
+    for (int i = 0; i < n; i++) {
+      n_class[true_class[i]]++;
+  }
+  return n_class;
+}
