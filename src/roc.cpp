@@ -19,6 +19,9 @@ ROC::ROC() {
   //do nothing
 }
 
+Shuffled_ROC::Shuffled_ROC(){
+  //do nothing
+}
 Shuffled_ROC::Shuffled_ROC(const ROC &roc, IntegerVector shuffle_pos, 
                            IntegerVector shuffle_neg):ROC(roc) 
 {

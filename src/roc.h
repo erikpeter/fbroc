@@ -26,6 +26,7 @@ public:
 
 class Shuffled_ROC : public ROC{
   public:
+  Shuffled_ROC();
   Shuffled_ROC(const ROC &roc, 
                IntegerVector shuffle_pos, 
                IntegerVector shuffle_neg);
