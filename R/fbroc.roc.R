@@ -40,6 +40,97 @@
 #' result.boot <- boot.roc(x, y)
 #' @seealso \code{\link{plot.fbroc.roc}}, \code{\link{print.fbroc.roc}}
 #' @export
+boot.roc2 <- function(pred, true.class, stratify = TRUE, n.boot = 1000,
+                     use.cache = TRUE) {
+  # validate input
+  if ((length(pred) != length(true.class)))
+    stop("Predictions and true classes need to have the same length")
+  if ((class(pred) != "numeric"))
+    stop("Predictions must be numeric")
+  if ((class(true.class) != "logical"))
+    stop("Classes must be logical")
+  if ((class(stratify) != "logical"))
+    stop("Classes must be logical")
+  
+  index.na <- is.na(pred) | is.na(true.class)
+  if (any(index.na)) {
+    n <- sum(index.na)
+    warning.msg <- 
+      paste(n, "observations had to be removed due to missing values")
+    warning(warning.msg)
+    true.class <- true.class[!index.na]
+    pred <- pred[!index.na]
+  }
+  
+  if (sum(true.class) == 0)
+    stop("No positive observations are included")
+  if (sum(!true.class) == 0)
+    stop("No negative observations are included")
+  
+  n.boot <- as.integer(n.boot)
+  
+  if (length(n.boot) != 1)
+    stop("n.boot must have length 1")
+  
+  if (length(stratify) != 1)
+    stop("stratify must have length 1")
+  
+  if (!stratify) stop("Non-stratified bootstrapping is not yet supported")
+  
+  new.order <- order(pred)
+  pred <- pred[new.order]
+  true.class <- true.class[new.order]
+  
+  #output <- original_tpr_fpr(pred, as.integer(true.class)) #THIS WORKS!
+  output <- test_fun(pred, as.integer(true.class), n.boot)
+  #output <- 0
+  #output <- tpr_fpr_boot2(pred, as.integer(true.class), n.boot)
+  return(output)
+}
+
+
+#' Bootstrap ROC curve
+#'
+#' \code{boot.roc} calculates the ROC curve, initializes the settings
+#' and calculates the bootstrap results for the true and false
+#' positive rate at every relevant threshold. Missing values are removed with 
+#' a warning prior to bootstrapping.
+#'
+#' @param pred A numeric vector. Contains predictions. \code{boot.roc} assumes
+#'   that a high prediction is evidence for the observation belonging to the
+#'   positive class.
+#' @param true.class A logical vector. TRUE indicates the sample belonging to the
+#'   positive class.
+#' @param stratify Logical. Indicates whether we use stratified bootstrap.
+#'   Default to TRUE. Non-stratified bootstrap is not yet implemented.
+#' @param n.boot A number that will be coerced to integer. Specified the 
+#'   number of bootstrap replicates. Defaults to 1000.
+#' @param use.cache If true (default) the bootstrapping results for the
+#'   ROC curve will be pre-cached. This increases both speed and memory usage.   
+#' @return A list of class \code{fbroc.roc}, containing the elements:
+#' \item{prediction}{Input predictions.}
+#' \item{true.class}{Input classes.}
+#' \item{thresholds}{Thresholds.}
+#' \item{n.thresholds}{Number of thresholds.}
+#' \item{n.boot}{Number of bootstrap replicates.}
+#' \item{use.cache}{Indicates if cache is used for this ROC object}
+#' \item{n.pos}{Number of positive observations.}
+#' \item{n.neg}{Number of negative observations.}
+#' \item{tpr.fpr}{Vector containing true and false positive rates at
+#'                      the different thresholds for the original predictions.}
+#' \item{tpr.fpr.raw}{Vector containing raw results from C++ for later usage by
+#'  other functions. Will be NULL if use.cache is FALSE.}       
+#' \item{time.used}{Time in seconds used for the bootstrap. Other steps are not
+#' included. Will be NA if use.cache is FALSE.}
+#' \item{auc}{The AUC of the original ROC curve.}
+#' \item{tpr.fpr.boot.matrix}{Matrix containing TPR and FPR values at the
+#' thresholds for each bootstrap replicate.}
+#' @examples
+#' y <- rep(c(TRUE, FALSE), each = 500)
+#' x <- rnorm(1000) + y
+#' result.boot <- boot.roc(x, y)
+#' @seealso \code{\link{plot.fbroc.roc}}, \code{\link{print.fbroc.roc}}
+#' @export
 boot.roc <- function(pred, true.class, stratify = TRUE, n.boot = 1000,
                      use.cache = TRUE) {
   # validate input
