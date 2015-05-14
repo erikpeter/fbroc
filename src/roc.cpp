@@ -55,7 +55,7 @@ IntegerVector ROC::get_positives_delta(IntegerVector index) const
 
 NumericVector ROC::get_rate(IntegerVector index) const
 {
-  NumericVector out(index.size());
+  NumericVector out(n_thresholds);
   
   double multiplier = 1. / index.size();
   IntegerVector delta = get_positives_delta(index);
@@ -68,13 +68,18 @@ NumericVector ROC::get_rate(IntegerVector index) const
   return out;
 }
 
-NumericVector ROC::tpr() const
+NumericVector ROC::get_thresholds() const 
+{
+  return thresholds;
+}
+
+NumericVector ROC::get_tpr() const
 {
   NumericVector out = get_rate(index_pos);
   return out;
 }
 
-NumericVector ROC::fpr() const
+NumericVector ROC::get_fpr() const
 {
   NumericVector out = get_rate(index_neg);
   return out;
@@ -128,7 +133,7 @@ void ROC::find_thresholds(NumericVector pred, IntegerVector true_class) {
       thres[j++] = pred[i];  
     }
   }
-  thres[n_thresholds] = pred[n - 1] + 1.;
+  thres[n_thresholds++] = pred[n - 1] + 1.;
   thresholds = thres;
 }
 

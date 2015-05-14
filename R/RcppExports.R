@@ -17,12 +17,8 @@ tpr_fpr_boot_iterate <- function(n_thres, tpr_fpr_index, pos_index, neg_index) {
     .Call('fbroc_tpr_fpr_boot_iterate', PACKAGE = 'fbroc', n_thres, tpr_fpr_index, pos_index, neg_index)
 }
 
-original_tpr_fpr <- function(pred, true_class) {
-    .Call('fbroc_original_tpr_fpr', PACKAGE = 'fbroc', pred, true_class)
-}
-
-test_fun <- function(pred, true_class, n_boot) {
-    .Call('fbroc_test_fun', PACKAGE = 'fbroc', pred, true_class, n_boot)
+roc_analysis <- function(pred, true_class) {
+    .Call('fbroc_roc_analysis', PACKAGE = 'fbroc', pred, true_class)
 }
 
 tpr_fpr_boot2 <- function(pred, true_class, n_boot) {

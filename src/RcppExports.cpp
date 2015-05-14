@@ -57,28 +57,15 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
-// original_tpr_fpr
-List original_tpr_fpr(NumericVector pred, IntegerVector true_class);
-RcppExport SEXP fbroc_original_tpr_fpr(SEXP predSEXP, SEXP true_classSEXP) {
+// roc_analysis
+List roc_analysis(NumericVector pred, IntegerVector true_class);
+RcppExport SEXP fbroc_roc_analysis(SEXP predSEXP, SEXP true_classSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< NumericVector >::type pred(predSEXP);
     Rcpp::traits::input_parameter< IntegerVector >::type true_class(true_classSEXP);
-    __result = Rcpp::wrap(original_tpr_fpr(pred, true_class));
-    return __result;
-END_RCPP
-}
-// test_fun
-IntegerVector test_fun(NumericVector pred, IntegerVector true_class, int n_boot);
-RcppExport SEXP fbroc_test_fun(SEXP predSEXP, SEXP true_classSEXP, SEXP n_bootSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< NumericVector >::type pred(predSEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type true_class(true_classSEXP);
-    Rcpp::traits::input_parameter< int >::type n_boot(n_bootSEXP);
-    __result = Rcpp::wrap(test_fun(pred, true_class, n_boot));
+    __result = Rcpp::wrap(roc_analysis(pred, true_class));
     return __result;
 END_RCPP
 }

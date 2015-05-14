@@ -18,8 +18,9 @@ protected:
   int n_neg;
 public:
   ROC(NumericVector pred, IntegerVector true_class);
-  NumericVector tpr() const;
-  NumericVector fpr() const;
+  NumericVector get_tpr() const;
+  NumericVector get_fpr() const;
+  NumericVector get_thresholds() const;
   ROC();
   ROC(const ROC &other);
 };

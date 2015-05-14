@@ -6,29 +6,24 @@ using namespace Rcpp;
 #include "bootstrapper.h"
 
 // [[Rcpp::export]]
-List original_tpr_fpr(NumericVector pred, IntegerVector true_class) {
+List roc_analysis(NumericVector pred, IntegerVector true_class) {
   ROC roc (pred, true_class);
-  NumericVector original_tpr = roc.tpr();
-  NumericVector original_fpr = roc.fpr();
-  List out(2);
-  
+  NumericVector original_tpr = roc.get_tpr();
+  NumericVector original_fpr = roc.get_fpr();
+  NumericVector thres = roc.get_thresholds();
+  List out(3);  
   out[0] = original_tpr;
   out[1] = original_fpr;
+  out[2] = thres;
   return out;
 }
 
-// [[Rcpp::export]]
-IntegerVector test_fun(NumericVector pred, IntegerVector true_class, int n_boot) {
-  Sampler_Stratified sampler (true_class);
-  sampler.generate();
-  return sampler.get_shuffled_index(true);
-}
 // [[Rcpp::export]]
 List tpr_fpr_boot2(NumericVector pred, IntegerVector true_class, int n_boot) {
   Sampler_base *sampler = new Sampler_Stratified(true_class);
   sampler->generate();
   //Bootstrapped_ROC boot_roc (pred, true_class);
-  NumericVector original_tpr = ROC(pred, true_class).tpr();
+  NumericVector original_tpr = ROC(pred, true_class).get_tpr();
   int n_thres = original_tpr.size();
   // NumericMatrix tpr (n_boot, n_thres);
   //NumericMatrix fpr (n_boot, n_thres);

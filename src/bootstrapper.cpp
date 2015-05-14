@@ -7,12 +7,12 @@ using namespace Rcpp;
 
 
 NumericVector Bootstrapped_ROC::get_tpr(){
-  NumericVector out = shuffled.tpr();
+  NumericVector out = shuffled.get_tpr();
   return out;
 }
 
 NumericVector Bootstrapped_ROC::get_fpr(){
-  NumericVector out = shuffled.fpr();
+  NumericVector out = shuffled.get_fpr();
   return out;
 }
 

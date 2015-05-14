@@ -81,11 +81,8 @@ boot.roc2 <- function(pred, true.class, stratify = TRUE, n.boot = 1000,
   pred <- pred[new.order]
   true.class <- true.class[new.order]
   
-  #output <- original_tpr_fpr(pred, as.integer(true.class)) #THIS WORKS!
-  output <- test_fun(pred, as.integer(true.class), n.boot)
-  #output <- 0
-  #output <- tpr_fpr_boot2(pred, as.integer(true.class), n.boot)
-  return(output)
+  original.roc <- roc_analysis(pred, as.integer(true.class))
+  return(original.roc)
 }
 
 
