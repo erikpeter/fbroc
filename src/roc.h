@@ -2,18 +2,24 @@ class ROC{
 private:
   void find_thresholds(NumericVector pred, IntegerVector true_class);
   void build_pred(NumericVector pred, IntegerVector true_class);
-  IntegerVector* build_index(NumericVector pred);
-  NumericVector get_rate(IntegerVector *index) const;
-  IntegerVector get_positives_delta(IntegerVector *index) const;
-  IntegerVector get_positives(IntegerVector delta, int index_size) const;
+  IntegerVector build_index(NumericVector pred);
+  void get_rate();
+  void get_positives_delta();
+  void get_positives();
 protected:
   NumericVector pred_pos;
   NumericVector pred_neg;
   NumericVector thresholds;
-  IntegerVector *index_pos;
-  IntegerVector *index_neg;
-  IntegerVector *new_index_pos;
-  IntegerVector *new_index_neg;
+  IntegerVector index_pos;
+  IntegerVector index_neg;
+  IntegerVector new_index_pos;
+  IntegerVector new_index_neg;
+  IntegerVector delta_pos;
+  IntegerVector delta_neg;
+  IntegerVector true_positives;
+  IntegerVector false_positives;
+  NumericVector tpr;
+  NumericVector fpr;
   int n;
   int n_thresholds;
   int n_pos;

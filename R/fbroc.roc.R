@@ -81,7 +81,7 @@ boot.roc2 <- function(pred, true.class, stratify = TRUE, n.boot = 1000,
   pred <- pred[new.order]
   true.class <- true.class[new.order]
   true.int <- as.integer(true.class)
-  
+
   original.roc <- roc_analysis(pred, true.int)
   auc <- original.roc[[4]]
   original.roc[[4]] <- NULL
