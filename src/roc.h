@@ -6,6 +6,7 @@ private:
   void get_rate();
   void get_positives_delta();
   void get_positives();
+  void reset_delta();
 protected:
   NumericVector pred_pos;
   NumericVector pred_neg;
@@ -26,7 +27,7 @@ protected:
   int n_neg;
 public:
   ROC(NumericVector pred, IntegerVector true_class);
-  //void shuffle(IntegerVector &shuffle_pos, IntegerVector &shuffle_neg); 
+  void shuffle(IntegerVector &shuffle_pos, IntegerVector &shuffle_neg); 
   void strat_shuffle(IntegerVector &shuffle_pos, IntegerVector &shuffle_neg);
   NumericVector get_tpr() const;
   NumericVector get_fpr() const;

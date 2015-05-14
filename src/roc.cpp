@@ -22,12 +22,13 @@ void ROC::strat_shuffle(IntegerVector &shuffle_pos, IntegerVector &shuffle_neg) 
   index_neg = new_index_neg;
   new_index_pos = temp;
   new_index_neg = temp2;  
-  
+  reset_delta();
   get_positives_delta();
   get_positives();
   get_rate();
 }
-/*
+
+
 void ROC::shuffle(IntegerVector &shuffle_pos, IntegerVector &shuffle_neg) {
   n_pos = shuffle_pos.size();
   n_neg = shuffle_neg.size();
@@ -37,12 +38,23 @@ void ROC::shuffle(IntegerVector &shuffle_pos, IntegerVector &shuffle_neg) {
   for (int i = 0; i < n_neg; i++) new_index_neg[i] = index_neg[shuffle_neg[i]];
   index_pos = new_index_pos;
   index_neg = new_index_neg;
+  reset_delta();
+  get_positives_delta();
+  get_positives();
+  get_rate();
 }
-*/
+
 void ROC::get_positives()  {  
   for (int i = 1; i < n_thresholds; i++) {
     true_positives[i] = true_positives[i - 1] - delta_pos[i];
     false_positives[i] = false_positives[i - 1] - delta_neg[i];
+  }
+}
+
+void ROC::reset_delta() {
+   for (int i = 0; i < n_thresholds; i++) {
+    delta_pos[i] = 0;
+    delta_neg[i] = 0;
   }
 }
 
