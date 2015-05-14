@@ -1,0 +1,1 @@
+double get_perf_auc(NumericVector tpr, NumericVector fpr);

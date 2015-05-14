@@ -3,39 +3,39 @@ using namespace Rcpp;
 
 #include "roc.h"
 
-ROC::ROC(const ROC &other) {
-  pred_pos = other.pred_pos;
-  pred_neg = other.pred_neg;
-  thresholds = other.thresholds;
-  index_pos = other.index_pos;
-  index_neg = other.index_neg;
-  n = other.n;
-  n_thresholds = other.n_thresholds;
-  n_pos = other.n_pos;
-  n_neg = other.n_neg;
-}
 
-ROC::ROC() {
-  //do nothing
+void ROC::strat_shuffle(IntegerVector &shuffle_pos, IntegerVector &shuffle_neg) {
+  IntegerVector *temp = index_pos;
+  IntegerVector *temp2 = index_neg;
+  
+  index_pos = new_index_pos;
+  index_neg = new_index_neg;
+  new_index_pos = temp;
+  new_index_neg = temp2;  
+  
+  
+  for (int i = 0; i < n_pos; i++) new_index_pos[i] = index_pos[shuffle_pos[i]];
+  for (int i = 0; i < n_neg; i++) new_index_neg[i] = index_neg[shuffle_neg[i]];
+  
+  temp = index_pos;
+  temp2 = index_neg;
+  index_pos = new_index_pos;
+  index_neg = new_index_neg;
+  new_index_pos = temp;
+  new_index_neg = temp2;  
 }
-
-Shuffled_ROC::Shuffled_ROC(){
-  //do nothing
-}
-Shuffled_ROC::Shuffled_ROC(const ROC &roc, IntegerVector shuffle_pos, 
-                           IntegerVector shuffle_neg):ROC(roc) 
-{
+/*
+void ROC::shuffle(IntegerVector &shuffle_pos, IntegerVector &shuffle_neg) {
   n_pos = shuffle_pos.size();
   n_neg = shuffle_neg.size();
-  
   IntegerVector new_index_pos(n_pos);
-  for (int i = 0; i < n_pos; i++) new_index_pos[i] = index_pos[shuffle_pos[i]];
   IntegerVector new_index_neg(n_neg);
+  for (int i = 0; i < n_pos; i++) new_index_pos[i] = index_pos[shuffle_pos[i]];
   for (int i = 0; i < n_neg; i++) new_index_neg[i] = index_neg[shuffle_neg[i]];
   index_pos = new_index_pos;
-  index_neg = new_index_neg;  
+  index_neg = new_index_neg;
 }
-
+*/
 IntegerVector ROC::get_positives(IntegerVector delta, int index_size) const {
   IntegerVector positives (n_thresholds);
   positives[0] = index_size;
@@ -44,22 +44,22 @@ IntegerVector ROC::get_positives(IntegerVector delta, int index_size) const {
   }
   return positives;
 }
-IntegerVector ROC::get_positives_delta(IntegerVector index) const
+IntegerVector ROC::get_positives_delta(IntegerVector *index) const
 {
   IntegerVector delta (n_thresholds);
-  for (int i = 0; i < index.size(); i++) {
-    delta[index[i]]++;
+  for (int i = 0; i < index->size(); i++) {
+    delta[index[i]] = delta[index[i]] + 1;
   }
   return delta;
 }
 
-NumericVector ROC::get_rate(IntegerVector index) const
+NumericVector ROC::get_rate(IntegerVector *index) const
 {
   NumericVector out(n_thresholds);
   
-  double multiplier = 1. / index.size();
+  double multiplier = 1. / index->size();
   IntegerVector delta = get_positives_delta(index);
-  IntegerVector positives = get_positives(delta, index.size());
+  IntegerVector positives = get_positives(delta, index->size());
   
   for (int i = 0; i < n_thresholds; i++) {
     out[i] = multiplier * positives[i];
@@ -86,9 +86,9 @@ NumericVector ROC::get_fpr() const
 }
 
 
-IntegerVector ROC::build_index(NumericVector pred)
+IntegerVector* ROC::build_index(NumericVector pred)
 {
-  IntegerVector index (pred.size());
+  IntegerVector* index = new IntegerVector(pred.size());
   for (int i = 0; i < pred.size(); i++) {
     int j = 0;
     while (pred[i] >= thresholds[j]) j++;
@@ -137,6 +137,10 @@ void ROC::find_thresholds(NumericVector pred, IntegerVector true_class) {
   thresholds = thres;
 }
 
+int ROC::get_n_thres() const {
+  return n_thresholds;
+}
+
 ROC::ROC(NumericVector pred, IntegerVector true_class)
 {
   n = pred.size();
@@ -150,5 +154,7 @@ ROC::ROC(NumericVector pred, IntegerVector true_class)
   build_pred(pred, true_class);
   index_pos = build_index(pred_pos);
   index_neg = build_index(pred_neg);
+  new_index_pos = build_index(pred_pos);
+  new_index_neg = build_index(pred_neg);
 }
 

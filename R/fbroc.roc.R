@@ -80,9 +80,36 @@ boot.roc2 <- function(pred, true.class, stratify = TRUE, n.boot = 1000,
   new.order <- order(pred)
   pred <- pred[new.order]
   true.class <- true.class[new.order]
+  true.int <- as.integer(true.class)
   
-  original.roc <- roc_analysis(pred, as.integer(true.class))
-  return(original.roc)
+  original.roc <- roc_analysis(pred, true.int)
+  auc <- original.roc[[4]]
+  original.roc[[4]] <- NULL
+  original.roc <- as.data.frame(original.roc)
+  names(original.roc) <- c("TPR", "FPR", "threshold")
+  if (use.cache) {
+    booted.roc <- tpr_fpr_boot2(pred, true.int, n.boot)
+    boot.tpr <- booted.roc[[1]]
+    boot.fpr <- booted.roc[[2]]
+    rm(booted.roc)
+  } else {
+    boot.tpr <- NULL
+    boot.fpr <- NULL
+  }
+  
+  output <- list(predictions = pred,
+                 true.classes = true.class,
+                 n.thresholds = nrow(original.roc),
+                 n.boot = as.integer(n.boot),
+                 use.cache = use.cache,
+                 n.pos = sum(true.class),
+                 n.neg = sum(!true.class),
+                 roc = original.roc,
+                 auc = auc,
+                 boot.tpr = boot.tpr,
+                 boot.fpr = boot.fpr)
+  class(output) <- append(class(output), "fbroc.roc")
+  return(output)
 }
 
 

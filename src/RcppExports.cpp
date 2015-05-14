@@ -82,6 +82,33 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// get_uncached_perf
+NumericVector get_uncached_perf(NumericVector pred, IntegerVector true_class, int n_boot, int measure);
+RcppExport SEXP fbroc_get_uncached_perf(SEXP predSEXP, SEXP true_classSEXP, SEXP n_bootSEXP, SEXP measureSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< NumericVector >::type pred(predSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type true_class(true_classSEXP);
+    Rcpp::traits::input_parameter< int >::type n_boot(n_bootSEXP);
+    Rcpp::traits::input_parameter< int >::type measure(measureSEXP);
+    __result = Rcpp::wrap(get_uncached_perf(pred, true_class, n_boot, measure));
+    return __result;
+END_RCPP
+}
+// get_cached_perf
+NumericVector get_cached_perf(NumericMatrix tpr, NumericMatrix fpr, int measure);
+RcppExport SEXP fbroc_get_cached_perf(SEXP tprSEXP, SEXP fprSEXP, SEXP measureSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< NumericMatrix >::type tpr(tprSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type fpr(fprSEXP);
+    Rcpp::traits::input_parameter< int >::type measure(measureSEXP);
+    __result = Rcpp::wrap(get_cached_perf(tpr, fpr, measure));
+    return __result;
+END_RCPP
+}
 // true_tpr_fpr
 NumericVector true_tpr_fpr(NumericVector pred, IntegerVector true_class, NumericVector thres);
 RcppExport SEXP fbroc_true_tpr_fpr(SEXP predSEXP, SEXP true_classSEXP, SEXP thresSEXP) {

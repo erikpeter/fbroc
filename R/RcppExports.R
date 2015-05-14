@@ -25,6 +25,14 @@ tpr_fpr_boot2 <- function(pred, true_class, n_boot) {
     .Call('fbroc_tpr_fpr_boot2', PACKAGE = 'fbroc', pred, true_class, n_boot)
 }
 
+get_uncached_perf <- function(pred, true_class, n_boot, measure) {
+    .Call('fbroc_get_uncached_perf', PACKAGE = 'fbroc', pred, true_class, n_boot, measure)
+}
+
+get_cached_perf <- function(tpr, fpr, measure) {
+    .Call('fbroc_get_cached_perf', PACKAGE = 'fbroc', tpr, fpr, measure)
+}
+
 true_tpr_fpr <- function(pred, true_class, thres) {
     .Call('fbroc_true_tpr_fpr', PACKAGE = 'fbroc', pred, true_class, thres)
 }
