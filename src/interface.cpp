@@ -67,3 +67,23 @@ NumericVector get_cached_perf(NumericMatrix tpr, NumericMatrix fpr, int measure)
   
   return roc_perf;
 }
+
+NumericVector get_steps(int n_steps) {
+  double step_size = (1.0 / n_steps);
+  NumericVector steps (n_steps + 1);
+  for (int i = 0; i <= n_steps; i++) steps[i] = 1. - i * step_size;
+  return steps;
+}
+
+// [[Rcpp::export]]
+NumericMatrix tpr_at_fpr_cached(NumericMatrix tpr, NumericMatrix fpr, int n_thres, int n_steps) {
+  NumericVector steps = get_steps(n_steps);
+  int n_boot = tpr.nrow();
+  NumericMatrix tpr_matrix (n_boot, n_steps + 1);
+  for (int j = 0; j < n_boot; j++) {
+     NumericVector tpr_v = tpr(j, _);
+     NumericVector fpr_v = fpr(j, _);
+     tpr_matrix(j, _) = ROC::get_tpr_at_fpr(tpr_v, fpr_v, steps);
+  }
+  return tpr_matrix;
+}

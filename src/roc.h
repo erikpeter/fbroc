@@ -33,7 +33,8 @@ public:
   NumericVector & get_tpr();
   NumericVector & get_fpr();
   NumericVector & get_thresholds();
-  //NumericVector & get_tpr_at_fpr() const;
+  NumericVector get_tpr_at_fpr(NumericVector &steps) const;
+  static NumericVector get_tpr_at_fpr(NumericVector &tpr_in, NumericVector &fpr_in, NumericVector &steps);
   int get_n_thres() const;
 };
 

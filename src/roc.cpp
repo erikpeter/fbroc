@@ -4,6 +4,37 @@ using namespace Rcpp;
 #include "roc.h"
 
 
+NumericVector ROC::get_tpr_at_fpr(NumericVector &tpr_in, NumericVector &fpr_in, NumericVector &steps)
+{
+  int n_steps = steps.size();
+  int n_thres = tpr_in.size();
+  NumericVector tpr_vec (n_steps + 1);
+  int j = 0;
+  for (int i = 0; i <= n_steps; i++) {
+    while ((j < n_thres) && 
+           (fpr_in[j] >= steps[i])) {
+             j++;
+           }
+    tpr_vec[i] = tpr_in[j];       
+  }
+  return tpr_vec;
+}
+
+NumericVector ROC::get_tpr_at_fpr(NumericVector &steps) const {
+  int n_steps = steps.size();
+  NumericVector tpr_vec (n_steps + 1);
+  int j = 0;
+  for (int i = 0; i <= n_steps; i++) {
+    while ((j < n_thresholds) && 
+           (fpr[j] >= steps[i])) {
+             j++;
+           }
+    tpr_vec[i] = tpr[j];       
+  }
+  return tpr_vec;
+  
+}
+
 void ROC::strat_shuffle(IntegerVector &shuffle_pos, IntegerVector &shuffle_neg) {
     
   for (int i = 0; i < n_pos; i++) index_pos[i] = original_index_pos[shuffle_pos[i]];

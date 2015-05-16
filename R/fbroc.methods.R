@@ -75,7 +75,7 @@ print.fbroc.roc <- function(x, ...) {
 plot.fbroc.roc <- function(x, col = "blue", fill = "royalblue1", print.plot = TRUE,
                            show.conf = TRUE, conf.level = 0.95, 
                            show.metric = NULL, ...) {
-  plot.frame = x$tpr.fpr
+  plot.frame = x$roc
   
   roc.plot <- ggplot(data = plot.frame, aes(x = FPR, y = TPR)) +               
     ggtitle("ROC Curve") + xlab("False Positive Rate") +

@@ -254,7 +254,7 @@ conf.roc <- function(roc, conf.level = 0.95, steps = 200) {
   steps = as.integer(steps)
   # translate tpr_fpr at threshold matrix into tpr at fpr matrix
   if (roc$use.cache) {
-    rel.matrix <- get_tpr_matrix(roc$tpr.fpr.boot.matrix, steps)
+    rel.matrix <- tpr_at_fpr_cached(roc$boot.tpr, roc$boot.fpr, roc$n.thresholds, steps)
   } else {
     rel.matrix <- get_tpr_matrix_uncached(roc$predictions,
                                           as.integer(roc$true.classes),

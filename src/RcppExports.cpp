@@ -109,6 +109,20 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// tpr_at_fpr_cached
+NumericMatrix tpr_at_fpr_cached(NumericMatrix tpr, NumericMatrix fpr, int n_thres, int n_steps);
+RcppExport SEXP fbroc_tpr_at_fpr_cached(SEXP tprSEXP, SEXP fprSEXP, SEXP n_thresSEXP, SEXP n_stepsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< NumericMatrix >::type tpr(tprSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type fpr(fprSEXP);
+    Rcpp::traits::input_parameter< int >::type n_thres(n_thresSEXP);
+    Rcpp::traits::input_parameter< int >::type n_steps(n_stepsSEXP);
+    __result = Rcpp::wrap(tpr_at_fpr_cached(tpr, fpr, n_thres, n_steps));
+    return __result;
+END_RCPP
+}
 // true_tpr_fpr
 NumericVector true_tpr_fpr(NumericVector pred, IntegerVector true_class, NumericVector thres);
 RcppExport SEXP fbroc_true_tpr_fpr(SEXP predSEXP, SEXP true_classSEXP, SEXP thresSEXP) {
