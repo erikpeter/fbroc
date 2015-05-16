@@ -128,7 +128,7 @@ boot.roc <- function(pred, true.class, stratify = TRUE, n.boot = 1000,
 #' of the confidence interval for the TPR.
 #' @export
 #' @seealso \code{\link{boot.roc}}
-conf.roc <- function(roc, conf.level = 0.95, steps = 200) {
+conf.roc <- function(roc, conf.level = 0.95, steps = 100) {
   alpha <- 0.5*(1 - conf.level)
   alpha.levels <- c(alpha, 1 - alpha) 
   steps = as.integer(steps)
@@ -151,11 +151,10 @@ conf.roc <- function(roc, conf.level = 0.95, steps = 200) {
 
 #' Process bootstrapped TPR/FPR at thresholds matrix into TPR at FPR matrix
 #' 
-#' Function \code{boot.roc} contains the TPR and FPR result at each threshold
-#' per bootstrap replicate. This is easy to calculate, but often not convenient
-#' to work with. Therefore \code{boot.tpr.at.fpr} transform that matrix
-#' so that in each column are the bootstrap results for the TPR at a specific
-#' FPR.
+#' Usually \code{fbroc} calculates the TPR and FPR at the thresholds of the ROC curve.
+#' per bootstrap replicate. This can be calculated quickly, but is often not convenient
+#' to work with. Therefore \code{boot.tpr.at.fpr} instead gets the TPR along a sequence
+#' of different values for the FPR.
 #' @param roc Object of class \code{fbroc.roc}.
 #' @param steps Number of discrete steps for the FPR at which the TPR is 
 #' calculated. TPR confidence intervals are given for all FPRs in 
@@ -164,10 +163,17 @@ conf.roc <- function(roc, conf.level = 0.95, steps = 200) {
 #' FPR steps.
 #' @export
 #' @seealso \code{\link{boot.roc}}
-boot.tpr.at.fpr <- function(roc, steps) {
+boot.tpr.at.fpr <- function(roc, steps = 100) {
   steps = as.integer(steps)
-  rel.matrix <- get_tpr_matrix(roc$tpr.fpr.boot.matrix, steps)
-  FPR.VEC = round(1 - seq(0, 1, by = (1 / steps),3))
+  if (roc$use.cache) {
+    rel.matrix <- tpr_at_fpr_cached(roc$boot.tpr, roc$boot.fpr, roc$n.thresholds, steps)
+  } else {
+    rel.matrix <- tpr_at_fpr_uncached(roc$predictions,
+                                      as.integer(roc$true.classes),
+                                      roc$n.boot,
+                                      steps)
+  }
+  FPR.VEC = round(1 - seq(0, 1, by = (1 / steps)), 3)
   colnames(rel.matrix) <- paste("TPR.AT.FPR.", FPR.VEC, sep = "")
   return(rel.matrix)
 }
