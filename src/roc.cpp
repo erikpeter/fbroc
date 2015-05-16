@@ -5,23 +5,10 @@ using namespace Rcpp;
 
 
 void ROC::strat_shuffle(IntegerVector &shuffle_pos, IntegerVector &shuffle_neg) {
-  IntegerVector temp = index_pos;
-  IntegerVector temp2 = index_neg;
-  
-  index_pos = new_index_pos;
-  index_neg = new_index_neg;
-  new_index_pos = temp;
-  new_index_neg = temp2;  
     
-  for (int i = 0; i < n_pos; i++) new_index_pos[i] = index_pos[shuffle_pos[i]];
-  for (int i = 0; i < n_neg; i++) new_index_neg[i] = index_neg[shuffle_neg[i]];
+  for (int i = 0; i < n_pos; i++) index_pos[i] = original_index_pos[shuffle_pos[i]];
+  for (int i = 0; i < n_neg; i++) index_neg[i] = original_index_neg[shuffle_neg[i]];
   
-  temp = index_pos;
-  temp2 = index_neg;
-  index_pos = new_index_pos;
-  index_neg = new_index_neg;
-  new_index_pos = temp;
-  new_index_neg = temp2;  
   reset_delta();
   get_positives_delta();
   get_positives();
@@ -32,12 +19,11 @@ void ROC::strat_shuffle(IntegerVector &shuffle_pos, IntegerVector &shuffle_neg) 
 void ROC::shuffle(IntegerVector &shuffle_pos, IntegerVector &shuffle_neg) {
   n_pos = shuffle_pos.size();
   n_neg = shuffle_neg.size();
-  IntegerVector new_index_pos(n_pos);
-  IntegerVector new_index_neg(n_neg);
-  for (int i = 0; i < n_pos; i++) new_index_pos[i] = index_pos[shuffle_pos[i]];
-  for (int i = 0; i < n_neg; i++) new_index_neg[i] = index_neg[shuffle_neg[i]];
-  index_pos = new_index_pos;
-  index_neg = new_index_neg;
+  index_pos = NumericVector (n_pos);
+  index_neg = NumericVector (n_neg);
+  for (int i = 0; i < n_pos; i++) index_pos[i] = original_index_pos[shuffle_pos[i]];
+  for (int i = 0; i < n_neg; i++) index_neg[i] = original_index_neg[shuffle_neg[i]];
+
   reset_delta();
   get_positives_delta();
   get_positives();
@@ -166,9 +152,9 @@ ROC::ROC(NumericVector pred, IntegerVector true_class)
   
   index_pos = build_index(pred_pos);
   index_neg = build_index(pred_neg);
-  new_index_pos = build_index(pred_pos);
-  new_index_neg = build_index(pred_neg);
-
+  original_index_pos = clone<IntegerVector> (index_pos);
+  original_index_neg = clone<IntegerVector> (index_neg);
+  
   delta_pos = IntegerVector (n_thresholds);
   delta_neg = IntegerVector (n_thresholds);
   true_positives = IntegerVector (n_thresholds);

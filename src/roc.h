@@ -1,3 +1,4 @@
+
 class ROC{
 private:
   void find_thresholds(NumericVector pred, IntegerVector true_class);
@@ -13,8 +14,8 @@ protected:
   NumericVector thresholds;
   IntegerVector index_pos;
   IntegerVector index_neg;
-  IntegerVector new_index_pos;
-  IntegerVector new_index_neg;
+  IntegerVector original_index_pos;
+  IntegerVector original_index_neg;
   IntegerVector delta_pos;
   IntegerVector delta_neg;
   IntegerVector true_positives;
