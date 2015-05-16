@@ -65,21 +65,19 @@ void ROC::get_rate()
   }
 }
 
-NumericVector ROC::get_thresholds() const 
+NumericVector & ROC::get_thresholds() 
 {
   return thresholds;
 }
 
-NumericVector ROC::get_tpr() const
+NumericVector & ROC::get_tpr() 
 {
-  NumericVector out = tpr;
-  return out;
+  return tpr;
 }
 
-NumericVector ROC::get_fpr() const
+NumericVector & ROC::get_fpr() 
 {
-  NumericVector out = fpr;
-  return out;
+  return fpr;
 }
 
 

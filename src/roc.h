@@ -30,9 +30,10 @@ public:
   ROC(NumericVector pred, IntegerVector true_class);
   void shuffle(IntegerVector &shuffle_pos, IntegerVector &shuffle_neg); 
   void strat_shuffle(IntegerVector &shuffle_pos, IntegerVector &shuffle_neg);
-  NumericVector get_tpr() const;
-  NumericVector get_fpr() const;
-  NumericVector get_thresholds() const;
+  NumericVector & get_tpr();
+  NumericVector & get_fpr();
+  NumericVector & get_thresholds();
+  //NumericVector & get_tpr_at_fpr() const;
   int get_n_thres() const;
 };
 
