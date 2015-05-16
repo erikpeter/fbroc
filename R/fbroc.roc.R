@@ -140,7 +140,6 @@ conf.roc <- function(roc, conf.level = 0.95, steps = 200) {
                                       as.integer(roc$true.classes),
                                       roc$n.boot,
                                       steps)
-
   }
   rm(roc)
   conf.area <- t(apply(rel.matrix, 2, quantile, alpha.levels))

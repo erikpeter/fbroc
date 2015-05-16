@@ -38,12 +38,12 @@ print.fbroc.perf <- function(x, ...) {
 print.fbroc.roc <- function(x, ...) {
   x.mem <- round(as.numeric(object.size(x))/(1024*1024),0)
   adj <- ifelse(x$use.cache, "cached", "uncached")
+  time <- ifelse(x$use.cache, "have been", "will be")
   text <- cat(paste("\n",
               "Bootstraped ",adj," ROC Curve with ", x$n.pos, " positive and ", x$n.neg,
             " negative samples. \n \n", "The AUC is ", round(x$auc, 2),".\n \n", 
-            x$n.boot, " bootstrap samples have been calculated. \n", "The calculation took ", x$time.used, 
-            " seconds and the results use up ", x.mem, " MB of memory.", 
-            "\n", "\n", sep = ""))
+            x$n.boot, " bootstrap samples ",time," calculated. \n",  "The results use up ", x.mem, 
+            " MB of memory.", "\n", "\n", sep = ""))
   cat(text)
   invisible(text)
 }
