@@ -136,11 +136,11 @@ conf.roc <- function(roc, conf.level = 0.95, steps = 200) {
   if (roc$use.cache) {
     rel.matrix <- tpr_at_fpr_cached(roc$boot.tpr, roc$boot.fpr, roc$n.thresholds, steps)
   } else {
-    rel.matrix <- get_tpr_matrix_uncached(roc$predictions,
-                                          as.integer(roc$true.classes),
-                                          roc$thresholds,
-                                          roc$n.boot,
-                                          steps)
+    rel.matrix <- tpr_at_fpr_uncached(roc$predictions,
+                                      as.integer(roc$true.classes),
+                                      roc$n.boot,
+                                      steps)
+
   }
   rm(roc)
   conf.area <- t(apply(rel.matrix, 2, quantile, alpha.levels))

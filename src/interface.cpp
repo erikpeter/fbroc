@@ -76,6 +76,18 @@ NumericVector get_steps(int n_steps) {
 }
 
 // [[Rcpp::export]]
+NumericMatrix tpr_at_fpr_uncached(NumericVector pred, IntegerVector true_class, int n_boot, int n_steps) {
+  Bootstrapped_ROC boot_roc (pred, true_class);
+  NumericVector steps = get_steps(n_steps);
+  NumericMatrix tpr_matrix (n_boot, n_steps + 1);
+  for (int j = 0; j < n_boot; j++) { 
+    boot_roc.bootstrap();
+    tpr_matrix(j, _) = boot_roc.get_tpr_at_fpr(steps);
+  }
+  return tpr_matrix;
+}
+
+// [[Rcpp::export]]
 NumericMatrix tpr_at_fpr_cached(NumericMatrix tpr, NumericMatrix fpr, int n_thres, int n_steps) {
   NumericVector steps = get_steps(n_steps);
   int n_boot = tpr.nrow();

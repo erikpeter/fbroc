@@ -17,6 +17,10 @@ get_cached_perf <- function(tpr, fpr, measure) {
     .Call('fbroc_get_cached_perf', PACKAGE = 'fbroc', tpr, fpr, measure)
 }
 
+tpr_at_fpr_uncached <- function(pred, true_class, n_boot, n_steps) {
+    .Call('fbroc_tpr_at_fpr_uncached', PACKAGE = 'fbroc', pred, true_class, n_boot, n_steps)
+}
+
 tpr_at_fpr_cached <- function(tpr, fpr, n_thres, n_steps) {
     .Call('fbroc_tpr_at_fpr_cached', PACKAGE = 'fbroc', tpr, fpr, n_thres, n_steps)
 }
