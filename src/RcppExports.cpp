@@ -5,58 +5,6 @@
 
 using namespace Rcpp;
 
-// get_auc
-double get_auc(NumericVector tpr_fpr);
-RcppExport SEXP fbroc_get_auc(SEXP tpr_fprSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< NumericVector >::type tpr_fpr(tpr_fprSEXP);
-    __result = Rcpp::wrap(get_auc(tpr_fpr));
-    return __result;
-END_RCPP
-}
-// get_roc_perf
-NumericVector get_roc_perf(NumericMatrix tpr_fpr, int measure);
-RcppExport SEXP fbroc_get_roc_perf(SEXP tpr_fprSEXP, SEXP measureSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< NumericMatrix >::type tpr_fpr(tpr_fprSEXP);
-    Rcpp::traits::input_parameter< int >::type measure(measureSEXP);
-    __result = Rcpp::wrap(get_roc_perf(tpr_fpr, measure));
-    return __result;
-END_RCPP
-}
-// get_roc_perf_uncached
-NumericVector get_roc_perf_uncached(NumericVector pred, IntegerVector true_class, NumericVector thres, int measure, int n_boot);
-RcppExport SEXP fbroc_get_roc_perf_uncached(SEXP predSEXP, SEXP true_classSEXP, SEXP thresSEXP, SEXP measureSEXP, SEXP n_bootSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< NumericVector >::type pred(predSEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type true_class(true_classSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type thres(thresSEXP);
-    Rcpp::traits::input_parameter< int >::type measure(measureSEXP);
-    Rcpp::traits::input_parameter< int >::type n_boot(n_bootSEXP);
-    __result = Rcpp::wrap(get_roc_perf_uncached(pred, true_class, thres, measure, n_boot));
-    return __result;
-END_RCPP
-}
-// tpr_fpr_boot_iterate
-NumericVector tpr_fpr_boot_iterate(int n_thres, IntegerVector tpr_fpr_index, IntegerVector pos_index, IntegerVector neg_index);
-RcppExport SEXP fbroc_tpr_fpr_boot_iterate(SEXP n_thresSEXP, SEXP tpr_fpr_indexSEXP, SEXP pos_indexSEXP, SEXP neg_indexSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< int >::type n_thres(n_thresSEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type tpr_fpr_index(tpr_fpr_indexSEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type pos_index(pos_indexSEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type neg_index(neg_indexSEXP);
-    __result = Rcpp::wrap(tpr_fpr_boot_iterate(n_thres, tpr_fpr_index, pos_index, neg_index));
-    return __result;
-END_RCPP
-}
 // roc_analysis
 List roc_analysis(NumericVector pred, IntegerVector true_class);
 RcppExport SEXP fbroc_roc_analysis(SEXP predSEXP, SEXP true_classSEXP) {
@@ -120,72 +68,6 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type n_thres(n_thresSEXP);
     Rcpp::traits::input_parameter< int >::type n_steps(n_stepsSEXP);
     __result = Rcpp::wrap(tpr_at_fpr_cached(tpr, fpr, n_thres, n_steps));
-    return __result;
-END_RCPP
-}
-// true_tpr_fpr
-NumericVector true_tpr_fpr(NumericVector pred, IntegerVector true_class, NumericVector thres);
-RcppExport SEXP fbroc_true_tpr_fpr(SEXP predSEXP, SEXP true_classSEXP, SEXP thresSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< NumericVector >::type pred(predSEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type true_class(true_classSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type thres(thresSEXP);
-    __result = Rcpp::wrap(true_tpr_fpr(pred, true_class, thres));
-    return __result;
-END_RCPP
-}
-// find_thresholds
-IntegerVector find_thresholds(NumericVector pred, IntegerVector true_class);
-RcppExport SEXP fbroc_find_thresholds(SEXP predSEXP, SEXP true_classSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< NumericVector >::type pred(predSEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type true_class(true_classSEXP);
-    __result = Rcpp::wrap(find_thresholds(pred, true_class));
-    return __result;
-END_RCPP
-}
-// tpr_fpr_boot
-NumericMatrix tpr_fpr_boot(NumericVector pred, IntegerVector true_class, NumericVector thres, int n_boot);
-RcppExport SEXP fbroc_tpr_fpr_boot(SEXP predSEXP, SEXP true_classSEXP, SEXP thresSEXP, SEXP n_bootSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< NumericVector >::type pred(predSEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type true_class(true_classSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type thres(thresSEXP);
-    Rcpp::traits::input_parameter< int >::type n_boot(n_bootSEXP);
-    __result = Rcpp::wrap(tpr_fpr_boot(pred, true_class, thres, n_boot));
-    return __result;
-END_RCPP
-}
-// get_tpr_matrix
-NumericMatrix get_tpr_matrix(NumericMatrix tpr_fpr, int n_steps);
-RcppExport SEXP fbroc_get_tpr_matrix(SEXP tpr_fprSEXP, SEXP n_stepsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< NumericMatrix >::type tpr_fpr(tpr_fprSEXP);
-    Rcpp::traits::input_parameter< int >::type n_steps(n_stepsSEXP);
-    __result = Rcpp::wrap(get_tpr_matrix(tpr_fpr, n_steps));
-    return __result;
-END_RCPP
-}
-// get_tpr_matrix_uncached
-NumericMatrix get_tpr_matrix_uncached(NumericVector pred, IntegerVector true_class, NumericVector thres, int n_boot, int n_steps);
-RcppExport SEXP fbroc_get_tpr_matrix_uncached(SEXP predSEXP, SEXP true_classSEXP, SEXP thresSEXP, SEXP n_bootSEXP, SEXP n_stepsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< NumericVector >::type pred(predSEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type true_class(true_classSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type thres(thresSEXP);
-    Rcpp::traits::input_parameter< int >::type n_boot(n_bootSEXP);
-    Rcpp::traits::input_parameter< int >::type n_steps(n_stepsSEXP);
-    __result = Rcpp::wrap(get_tpr_matrix_uncached(pred, true_class, thres, n_boot, n_steps));
     return __result;
 END_RCPP
 }
