@@ -11,6 +11,11 @@ output: html_document
 
 * Allow uncached bootstrap of the ROC curve to avoid memory issues
 
+## Other changes
+
+* Stand-alone function to find thresholds `calculate.thresholds` was removed. To calculate thresholds
+please call boot.roc and look at list item `roc` of the outpot
+
 ## Internal Changes
 
 * Completely refactored C++ code for improved maintability

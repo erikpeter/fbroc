@@ -179,33 +179,3 @@ boot.tpr.at.fpr <- function(roc, steps = 100) {
   colnames(rel.matrix) <- paste("TPR.AT.FPR.", FPR.VEC, sep = "")
   return(rel.matrix)
 }
-
-#' Calculates ROC curve thresholds
-#' 
-#' \code{calculate.thresholds} calculates the thresholds of the ROC curve
-#' at which the curve changes directions. 
-#' 
-#' @param pred A numeric vector. Contains predictions. \code{calculate.thresholds} 
-#'   assumes that a high prediction is evidence for the observation belonging 
-#'   to the positive class.
-#' @param true.class A logical vector. TRUE indicates the sample belonging to the
-#'   positive class.
-#' @return A numeric vector containing the thresholds. The length of the vector
-#'   depends on the data. The number of thresholds tends to go down as the
-#'   performance of the clasifier improves.   
-#' 
-#' @examples
-#' x <- 1:10
-#' y <- c(FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, TRUE, TRUE, TRUE, TRUE)
-#' calculate.thresholds(x, y) # relevant thresholds are 1, 4, 5, 7, 11
-#' 
-#' @export
-calculate.thresholds <- function(pred, true.class) {
-  pred <- c(pred, max(pred) + 1) # add one threshold since we use >
-  index <- order(pred)
-  pred <- pred[index]
-  true.class <- true.class[index]
-  is.threshold <- find_thresholds(pred, true.class) # use C++ to find thresholds
-  thresholds <- pred[as.logical(is.threshold)]
-  return(thresholds)
-}
