@@ -9,11 +9,11 @@ NumericVector ROC::get_tpr_at_fpr(NumericVector &tpr_in, NumericVector &fpr_in, 
   int n_steps = steps.size();
   int n_thres = tpr_in.size();
   NumericVector tpr_vec (n_steps + 1);
-  int j = 0;
+  int j = 0;  
   for (int i = 0; i <= n_steps; i++) {
-    while ((j < n_thres) && 
+    while ((j < n_thres) &&  
            (fpr_in[j] >= steps[i])) {
-             j++;
+             j++; // Use fact that TPR and FPR is a monotonely decreasing function of the thresholds index
            }
     tpr_vec[i] = tpr_in[j];       
   }
@@ -40,6 +40,7 @@ void ROC::strat_shuffle(IntegerVector &shuffle_pos, IntegerVector &shuffle_neg) 
   for (int i = 0; i < n_pos; i++) index_pos[i] = original_index_pos[shuffle_pos[i]];
   for (int i = 0; i < n_neg; i++) index_neg[i] = original_index_neg[shuffle_neg[i]];
   
+  // recalculate ROC after bootstrap
   reset_delta();
   get_positives_delta();
   get_positives();
@@ -54,7 +55,7 @@ void ROC::shuffle(IntegerVector &shuffle_pos, IntegerVector &shuffle_neg) {
   index_neg = NumericVector (n_neg);
   for (int i = 0; i < n_pos; i++) index_pos[i] = original_index_pos[shuffle_pos[i]];
   for (int i = 0; i < n_neg; i++) index_neg[i] = original_index_neg[shuffle_neg[i]];
-
+  // recalculate ROC after bootstrap
   reset_delta();
   get_positives_delta();
   get_positives();
@@ -62,6 +63,7 @@ void ROC::shuffle(IntegerVector &shuffle_pos, IntegerVector &shuffle_neg) {
 }
 
 void ROC::get_positives()  {  
+  // counts true and false positves
   for (int i = 1; i < n_thresholds; i++) {
     true_positives[i] = true_positives[i - 1] - delta_pos[i];
     false_positives[i] = false_positives[i - 1] - delta_neg[i];

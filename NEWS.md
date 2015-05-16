@@ -15,6 +15,10 @@ output: html_document
 
 * Completely refactored C++ code for improved maintability
 
+## Bugfixes
+
+* Function `boot.tpr.at.fpr` now works properly 
+
 # fbroc 0.1.0
 
 * Initial release

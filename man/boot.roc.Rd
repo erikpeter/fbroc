@@ -5,7 +5,7 @@
 \title{Bootstrap ROC curve}
 \usage{
 boot.roc(pred, true.class, stratify = TRUE, n.boot = 1000,
-  use.cache = TRUE)
+  use.cache = FALSE)
 }
 \arguments{
 \item{pred}{A numeric vector. Contains predictions. \code{boot.roc} assumes
@@ -21,34 +21,37 @@ Default to TRUE. Non-stratified bootstrap is not yet implemented.}
 \item{n.boot}{A number that will be coerced to integer. Specified the
 number of bootstrap replicates. Defaults to 1000.}
 
-\item{use.cache}{If true (default) the bootstrapping results for the
-ROC curve will be pre-cached. This increases both speed and memory usage.}
+\item{use.cache}{If true the bootstrapping results for the
+ROC curve will be pre-cached. This increases speed when the object is used often, but also
+takes up more memory.}
 }
 \value{
 A list of class \code{fbroc.roc}, containing the elements:
 \item{prediction}{Input predictions.}
 \item{true.class}{Input classes.}
-\item{thresholds}{Thresholds.}
+\item{roc}{A data.frame containing the thresholds of the ROC curve and the TPR and FPR at these
+thresholds.}
 \item{n.thresholds}{Number of thresholds.}
 \item{n.boot}{Number of bootstrap replicates.}
 \item{use.cache}{Indicates if cache is used for this ROC object}
 \item{n.pos}{Number of positive observations.}
 \item{n.neg}{Number of negative observations.}
-\item{tpr.fpr}{Vector containing true and false positive rates at
-                     the different thresholds for the original predictions.}
-\item{tpr.fpr.raw}{Vector containing raw results from C++ for later usage by
- other functions. Will be NULL if use.cache is FALSE.}
-\item{time.used}{Time in seconds used for the bootstrap. Other steps are not
-included. Will be NA if use.cache is FALSE.}
 \item{auc}{The AUC of the original ROC curve.}
-\item{tpr.fpr.boot.matrix}{Matrix containing TPR and FPR values at the
-thresholds for each bootstrap replicate.}
+\item{boot.tpr}{If the cache is enabled, a matrix containing the bootstrapped TPR at the thresholds.}
+\item{boot.fpr}{If the cache is enabled, a matrix containing the bootstrapped FPR at the thresholds.}
 }
 \description{
 \code{boot.roc} calculates the ROC curve, initializes the settings
 and calculates the bootstrap results for the true and false
 positive rate at every relevant threshold. Missing values are removed with
 a warning prior to bootstrapping.
+}
+\section{Caching}{
+
+If you enable caching, \code{boot.roc} calculates the requested number of bootstrap samples and
+saves the TPR and FPR values for each iteration. This can take up a sizable portion of memory,
+but it speeds up subsequent operations. This can be useful if you plan to use the ROC curve
+multiple \code{fbroc} functions.
 }
 \examples{
 y <- rep(c(TRUE, FALSE), each = 500)
