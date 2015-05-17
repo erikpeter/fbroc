@@ -3,7 +3,8 @@ using namespace Rcpp;
 
 #include "performance.h"
 
-double get_perf_auc(NumericVector &tpr, NumericVector &fpr, NumericVector &param) {
+double get_perf_auc(NumericVector &tpr, NumericVector &fpr, NumericVector &param) 
+{
   int n_thres = tpr.size();
   double auc = 0.;
   // Numerical integration of step functions is easy
@@ -11,4 +12,24 @@ double get_perf_auc(NumericVector &tpr, NumericVector &fpr, NumericVector &param
     auc += (tpr[j - 1] - tpr[j]) * (1 - fpr[j - 1]);
   }
   return auc;
+}
+
+double get_tpr_at_fixed_fpr(NumericVector &tpr, NumericVector &fpr, NumericVector &param) 
+{
+  double at = param[0];
+  if ((at == 0) || (at == 1)) return param[0];  
+  int i = 0;  
+  while (fpr[i++] >= at);
+  double out = tpr[i-1];    
+  return out;
+}
+
+double get_fpr_at_fixed_tpr(NumericVector &tpr, NumericVector &fpr, NumericVector &param) 
+{
+  double at = param[0];
+  if ((at == 0) || (at == 1)) return param[0];
+  int i = tpr.size();  
+  while (tpr[i--] <= at);
+  double out = fpr[i+1];  
+  return out;
 }

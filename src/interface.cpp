@@ -39,11 +39,18 @@ List tpr_fpr_boot2(NumericVector pred, IntegerVector true_class, int n_boot) {
   return out;
 }
 
+PerfFun pick_measure(Measure measure) {
+  PerfFun out;
+  if (measure == AUC) out = &get_perf_auc; 
+  if (measure == TPR_AT_FPR) out = &get_tpr_at_fixed_fpr; 
+  if (measure == FPR_AT_TPR) out = &get_fpr_at_fixed_tpr; 
+  return out;
+}
+
 // [[Rcpp::export]]
 NumericVector get_uncached_perf(NumericVector pred, IntegerVector true_class, NumericVector param,
                                 int n_boot, int measure) {
-  double (*choosen_measure)(NumericVector &, NumericVector &, NumericVector &);  
-  if (measure == 0) choosen_measure = &get_perf_auc; 
+  PerfFun choosen_measure = pick_measure(static_cast <Measure>(measure));                                
   Bootstrapped_ROC boot_roc (pred, true_class);
   NumericVector roc_perf = NumericVector (n_boot);
   for (int i = 0; i < n_boot; i++) {
@@ -55,11 +62,9 @@ NumericVector get_uncached_perf(NumericVector pred, IntegerVector true_class, Nu
 
 // [[Rcpp::export]]
 NumericVector get_cached_perf(NumericMatrix tpr, NumericMatrix fpr, NumericVector param, int measure) {
-  double (*choosen_measure)(NumericVector &, NumericVector &, NumericVector &);  
+  PerfFun choosen_measure = pick_measure(static_cast <Measure>(measure));
   int n_boot = tpr.nrow();
   NumericVector roc_perf = NumericVector (n_boot);
-  
-  if (measure == 0) choosen_measure = &get_perf_auc; 
   //iterate over bootstrap replicates and get performance for each   
   for (int i = 0; i < n_boot; i++) {
     NumericVector tpr_vec = tpr(i, _);
