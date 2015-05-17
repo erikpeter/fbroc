@@ -16,7 +16,8 @@ List roc_analysis(NumericVector pred, IntegerVector true_class) {
   out[0] = original_tpr;
   out[1] = original_fpr;
   out[2] = thres;
-  out[3] = get_perf_auc(original_tpr, original_fpr);
+  NumericVector dummy_param (0);
+  out[3] = get_perf_auc(original_tpr, original_fpr, dummy_param);
   return out;
 }
 
@@ -39,29 +40,31 @@ List tpr_fpr_boot2(NumericVector pred, IntegerVector true_class, int n_boot) {
 }
 
 // [[Rcpp::export]]
-NumericVector get_uncached_perf(NumericVector pred, IntegerVector true_class, 
+NumericVector get_uncached_perf(NumericVector pred, IntegerVector true_class, NumericVector param,
                                 int n_boot, int measure) {
-  double (*choosen_measure)(NumericVector , NumericVector );  
+  double (*choosen_measure)(NumericVector &, NumericVector &, NumericVector &);  
   if (measure == 0) choosen_measure = &get_perf_auc; 
   Bootstrapped_ROC boot_roc (pred, true_class);
   NumericVector roc_perf = NumericVector (n_boot);
   for (int i = 0; i < n_boot; i++) {
     boot_roc.bootstrap();
-    roc_perf[i] = choosen_measure(boot_roc.get_tpr(), boot_roc.get_fpr());
+    roc_perf[i] = choosen_measure(boot_roc.get_tpr(), boot_roc.get_fpr(), param);
   }
   return roc_perf;
 }
 
 // [[Rcpp::export]]
-NumericVector get_cached_perf(NumericMatrix tpr, NumericMatrix fpr, int measure) {
-  double (*choosen_measure)(NumericVector, NumericVector);
+NumericVector get_cached_perf(NumericMatrix tpr, NumericMatrix fpr, NumericVector param, int measure) {
+  double (*choosen_measure)(NumericVector &, NumericVector &, NumericVector &);  
   int n_boot = tpr.nrow();
   NumericVector roc_perf = NumericVector (n_boot);
   
   if (measure == 0) choosen_measure = &get_perf_auc; 
   //iterate over bootstrap replicates and get performance for each   
   for (int i = 0; i < n_boot; i++) {
-    double perf = choosen_measure(tpr(i, _), fpr(i, _));
+    NumericVector tpr_vec = tpr(i, _);
+    NumericVector fpr_vec = fpr(i, _);
+    double perf = choosen_measure(tpr_vec, fpr_vec, param);
     roc_perf[i] = perf;
   }
   

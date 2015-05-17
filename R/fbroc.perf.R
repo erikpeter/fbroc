@@ -37,13 +37,14 @@ perf.roc <- function(roc, metric = "auc", conf.level = 0.95) {
   tpr.m <- matrix(roc$roc$TPR, nrow = 1)
   fpr.m <- matrix(roc$roc$FPR, nrow = 1)
   
-  observed.perf <- get_cached_perf(tpr.m, fpr.m, 
+  observed.perf <- get_cached_perf(tpr.m, fpr.m, 0,
                                    as.integer(metric.number))
   if (roc$use.cache) {
-    perf.boot <- get_cached_perf(roc$boot.tpr, roc$boot.fpr, as.integer(metric.number))
+    perf.boot <- get_cached_perf(roc$boot.tpr, roc$boot.fpr, 0, as.integer(metric.number))
   } else {
     perf.boot <- get_uncached_perf(roc$predictions,
                                    as.integer(roc$true.classes),
+                                   0,
                                    roc$n.boot,
                                    as.integer(metric.number))
   }

@@ -1,1 +1,1 @@
-double get_perf_auc(NumericVector tpr, NumericVector fpr);
+double get_perf_auc(NumericVector &tpr, NumericVector &fpr, NumericVector &param);

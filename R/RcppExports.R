@@ -9,12 +9,12 @@ tpr_fpr_boot2 <- function(pred, true_class, n_boot) {
     .Call('fbroc_tpr_fpr_boot2', PACKAGE = 'fbroc', pred, true_class, n_boot)
 }
 
-get_uncached_perf <- function(pred, true_class, n_boot, measure) {
-    .Call('fbroc_get_uncached_perf', PACKAGE = 'fbroc', pred, true_class, n_boot, measure)
+get_uncached_perf <- function(pred, true_class, param, n_boot, measure) {
+    .Call('fbroc_get_uncached_perf', PACKAGE = 'fbroc', pred, true_class, param, n_boot, measure)
 }
 
-get_cached_perf <- function(tpr, fpr, measure) {
-    .Call('fbroc_get_cached_perf', PACKAGE = 'fbroc', tpr, fpr, measure)
+get_cached_perf <- function(tpr, fpr, param, measure) {
+    .Call('fbroc_get_cached_perf', PACKAGE = 'fbroc', tpr, fpr, param, measure)
 }
 
 tpr_at_fpr_uncached <- function(pred, true_class, n_boot, n_steps) {
