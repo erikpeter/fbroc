@@ -11,8 +11,8 @@
 \arguments{
 \item{x}{Object of class \code{perf.roc} to be plotted.}
 
-\item{bins}{Number of bins for histogram. Defaults to between 20 and 60
-depending on number of bootstrap replicates.}
+\item{bins}{Number of bins for histogram. Default value depends on the number of bootstrap
+values and the number of unique bootstrap performance values.}
 
 \item{col}{Color of outline of histogram bars. Defaults to white.}
 

@@ -26,7 +26,7 @@ plotted.}
 \code{\link{perf.roc}} for details. Defaults to \code{NULL}, which means
 that no metric is displayed.}
 
-\item{...}{further arguments passed to or from other methods.}
+\item{...}{further arguments passed to \code{\link{perf.roc}}.}
 }
 \value{
 A ggplot, so that the user can customize the plot further.

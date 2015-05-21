@@ -4,14 +4,14 @@
 \alias{boot.tpr.at.fpr}
 \title{Process bootstrapped TPR/FPR at thresholds matrix into TPR at FPR matrix}
 \usage{
-boot.tpr.at.fpr(roc, steps = 100)
+boot.tpr.at.fpr(roc, steps = roc$n.neg)
 }
 \arguments{
 \item{roc}{Object of class \code{fbroc.roc}.}
 
 \item{steps}{Number of discrete steps for the FPR at which the TPR is
 calculated. TPR confidence intervals are given for all FPRs in
-\code{seq(0, 1, by = (1 / steps))}.}
+\code{seq(0, 1, by = (1 / steps))}. Defaults to \code{n.neg}, thus covering all possible values.}
 }
 \value{
 Matrix containing the TPR bootstrap replicates for the discrete

@@ -4,14 +4,19 @@
 \alias{perf.roc}
 \title{Calculate performance for bootstrapped ROC curve}
 \usage{
-perf.roc(roc, metric = "auc", conf.level = 0.95)
+perf.roc(roc, metric = "auc", conf.level = 0.95, tpr = NULL, fpr = NULL)
 }
 \arguments{
 \item{roc}{An object of class \code{fbroc.roc}.}
 
-\item{metric}{A performance metric. Currently only "auc" is supported.}
+\item{metric}{A performance metric. Select "auc" for the AUC, "tpr" for the TPR at a fixed
+FPR and "fpr" for the FPR at a fixed TPR.}
 
 \item{conf.level}{The confidence level of the confidence interval.}
+
+\item{tpr}{The fixed TPR at which the FPR is to be evaluated when metric \code{fpr} is selected.}
+
+\item{fpr}{The fixed FPR at which the TPR is to be evaluated when metric \code{tpr} is selected.}
 }
 \value{
 A list of class \code{fbroc.perf}, containing the elements:
@@ -19,6 +24,7 @@ A list of class \code{fbroc.perf}, containing the elements:
 \item{CI.Performance}{Quantile based confidence interval for the performance.}
 \item{conf.level}{Confidence level of the confidence interval.}
 \item{metric}{Used performance metric.}
+\item{params}{Parameters used to further specifiy metric, i.e. fixed TPR.}
 \item{n.boot}{Number of bootstrap replicates used.}
 \item{boot.results}{Performance in each bootstrap replicate.}
 }
