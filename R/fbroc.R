@@ -57,7 +57,7 @@ NULL
 
 
 # hack recommend by Hadley Wickham to make CMD check issue no notes
-globalVariables(c("TPR", "FPR", "text.c", "Lower.TPR", "Upper.TPR",
+globalVariables(c("TPR", "FPR", "text.c", "Lower.TPR", "Upper.TPR", "lower", "upper",
                   "Metric", "y.dummy", "..density.."))
 
 

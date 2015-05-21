@@ -125,12 +125,12 @@ boot.roc <- function(pred, true.class, stratify = TRUE, n.boot = 1000,
 #' @param conf.level Confidence level to be used for the confidence intervals.
 #' @param steps Number of discrete steps for the FPR at which the TPR is 
 #' calculated. TPR confidence intervals are given for all FPRs in 
-#' \code{seq(0, 1, by = (1 / steps))}.
+#' \code{seq(0, 1, by = (1 / steps))}. Defaults to \code{n.neg}, thus covering all possible values.
 #' @return A data.frame containing the FPR steps and the lower and upper bounds
 #' of the confidence interval for the TPR.
 #' @export
 #' @seealso \code{\link{boot.roc}}
-conf.roc <- function(roc, conf.level = 0.95, steps = 100) {
+conf.roc <- function(roc, conf.level = 0.95, steps = roc$n.neg) {
   alpha <- 0.5*(1 - conf.level)
   alpha.levels <- c(alpha, 1 - alpha) 
   steps = as.integer(steps)
@@ -160,12 +160,12 @@ conf.roc <- function(roc, conf.level = 0.95, steps = 100) {
 #' @param roc Object of class \code{fbroc.roc}.
 #' @param steps Number of discrete steps for the FPR at which the TPR is 
 #' calculated. TPR confidence intervals are given for all FPRs in 
-#' \code{seq(0, 1, by = (1 / steps))}.
+#' \code{seq(0, 1, by = (1 / steps))}. Defaults to \code{n.neg}, thus covering all possible values.
 #' @return Matrix containing the TPR bootstrap replicates for the discrete
 #' FPR steps.
 #' @export
 #' @seealso \code{\link{boot.roc}}
-boot.tpr.at.fpr <- function(roc, steps = 100) {
+boot.tpr.at.fpr <- function(roc, steps = roc$n.neg) {
   steps = as.integer(steps)
   if (roc$use.cache) {
     rel.matrix <- tpr_at_fpr_cached(roc$boot.tpr, roc$boot.fpr, roc$n.thresholds, steps)
