@@ -63,7 +63,7 @@ print.fbroc.roc <- function(x, ...) {
 #' @param show.metric Character specifying which metric to display. See 
 #' \code{\link{perf.roc}} for details. Defaults to \code{NULL}, which means
 #' that no metric is displayed.
-#' @param ... further arguments passed to or from other methods.
+#' @param ... further arguments passed to \code{\link{perf.roc}}.
 #' @return A ggplot, so that the user can customize the plot further.
 #' @examples
 #' y <- rep(c(TRUE, FALSE), each = 500)
@@ -93,14 +93,25 @@ plot.fbroc.roc <- function(x, col = "blue", fill = "royalblue1", print.plot = TR
                   aes(y = NULL, ymin = Lower.TPR, ymax = Upper.TPR))
   }
   if (!is.null(show.metric)) {
-    perf <- perf.roc(x, metric = show.metric, conf.level = conf.level)
-    perf.text <- paste("AUC = ", round(perf$Observed.Performance, 2)," [",
+    perf <- perf.roc(x, metric = show.metric, conf.level = conf.level, ...)
+    perf.text <- paste(perf$metric ," = " , round(perf$Observed.Performance, 2)," [",
                        round(perf$CI.Performance[1], 2), ",",
                        round(perf$CI.Performance[2], 2), "]", sep = "")
-    if (show.metric == "auc") {
-      text.frame <- data.frame(text.c = perf.text, TPR = 0.5, FPR = 0.68)
-      roc.plot <- roc.plot + geom_text(size = 8, aes(label = text.c), data = text.frame)
+    if (show.metric == "tpr") {
+      extra.frame <- data.frame(FPR = perf$params, TPR = perf$Observed.Performance,
+                                lower = perf$CI.Performance[1], upper = perf$CI.Performance[2])
+      roc.plot <- roc.plot + geom_errorbar(data = extra.frame, width = 0.03, size = 1.5,
+                                             aes(ymin = lower, ymax = upper))
     }
+    if (show.metric == "fpr") {
+      extra.frame <- data.frame(TPR = perf$params, FPR = perf$Observed.Performance,
+                                lower = perf$CI.Performance[1], upper = perf$CI.Performance[2])
+      roc.plot <- roc.plot + geom_errorbarh(data = extra.frame, height = 0.03, size = 1.5,
+                                           aes(xmin = lower, xmax = upper))
+    }
+    text.frame <- data.frame(text.c = perf.text, TPR = 0.5, FPR = 0.68)
+    roc.plot <- roc.plot + geom_text(size = 8, aes(label = text.c), data = text.frame)
+    
   }
   roc.plot <- roc.plot + geom_path(size = 1.1, col = col)
   if (print.plot) print(roc.plot)
@@ -114,8 +125,8 @@ plot.fbroc.roc <- function(x, col = "blue", fill = "royalblue1", print.plot = TR
 #' default.
 #' 
 #' @param x Object of class \code{perf.roc} to be plotted.
-#' @param bins Number of bins for histogram. Defaults to between 20 and 60
-#' depending on number of bootstrap replicates.
+#' @param bins Number of bins for histogram. Default value depends on the number of bootstrap
+#' values and the number of unique bootstrap performance values. 
 #' @param col Color of outline of histogram bars. Defaults to white.
 #' @param fill Fill of histogram bars. Defaults to lightblue.
 #' @param print.plot Logical specifying whether the plot should be printed.
@@ -141,7 +152,10 @@ plot.fbroc.perf <- function(x, bins = NULL, col = "white",
   if (is.null(bins)) {
     bins <- floor(x$n.boot/200)
     bins <- max(bins, 20)
-    bins <- min(bins, 60)
+    unique.val <- length(unique(boot.frame$Metric))
+    bins <- min(bins, 60) 
+    bins <- round(min(bins, unique.val / 4), 0)
+    print(bins)
   }
   bw = round(diff(range(x$boot.results))/bins, 6)
   perf.plot <- ggplot(data = boot.frame, aes(x = Metric)) + 

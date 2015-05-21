@@ -1,3 +1,12 @@
+validate.single.numeric <- function(number, var.name) {
+  if (is.null(number)) stop(paste("Please pass ", var.name, " to perf.roc!", sep = ""))
+  if (class(number) != "numeric") stop(paste(var.name, " must be numeric!", sep = ""))
+  if (length(number) != 1) stop(paste(var.name, " must have length 1!", sep = ""))
+  if (is.na(number)) stop(paste(var.name, " is NA!", sep = ""))
+  if ((number < 0) | (number > 1)) stop(paste(var.name, " must be in [0, 1]!", sep = ""))
+  return(number)
+}
+
 #' Calculate performance for bootstrapped ROC curve
 #'
 #' Calculates different performance metric for ROC curves based on the bootstrap
@@ -5,13 +14,17 @@
 #' are included.
 #'
 #' @param roc An object of class \code{fbroc.roc}.
-#' @param metric A performance metric. Currently only "auc" is supported.
+#' @param metric A performance metric. Select "auc" for the AUC, "tpr" for the TPR at a fixed
+#' FPR and "fpr" for the FPR at a fixed TPR.
 #' @param conf.level The confidence level of the confidence interval.
+#' @param fpr The fixed FPR at which the TPR is to be evaluated when metric \code{tpr} is selected.
+#' @param tpr The fixed TPR at which the FPR is to be evaluated when metric \code{fpr} is selected.
 #' @return A list of class \code{fbroc.perf}, containing the elements:
 #' \item{Observed.Performance}{The observed performance.}
 #' \item{CI.Performance}{Quantile based confidence interval for the performance.}
 #' \item{conf.level}{Confidence level of the confidence interval.}
 #' \item{metric}{Used performance metric.}
+#' \item{params}{Parameters used to further specifiy metric, i.e. fixed TPR.}
 #' \item{n.boot}{Number of bootstrap replicates used.}
 #' \item{boot.results}{Performance in each bootstrap replicate.}
 #' @seealso \code{\link{boot.roc}}, \code{\link{print.fbroc.perf}}, 
@@ -23,30 +36,45 @@
 #' perf.roc(result.boot, "auc")
 #' perf.roc(result.boot, "auc", conf.level = 0.99)
 #' @export
-perf.roc <- function(roc, metric = "auc", conf.level = 0.95) {
+perf.roc <- function(roc, metric = "auc", conf.level = 0.95, tpr = NULL, fpr = NULL) {
   # start with data validation
   if (!is(roc, "fbroc.roc"))
     stop("roc must be of class fbroc.roc")
   if (length(metric) != 1 | class(metric) != "character")
     stop("metric must be character of length 1")
-  if (!(metric %in% c("auc")))
+  if (!(metric %in% c("auc", "tpr", "fpr")))
     stop(paste(metric,"is not a valid performance metric"))
-  # transform metric into number
-  metric.number <- 0
+  
+  if (metric == "auc") {
+    metric.text = "AUC"
+    metric.number <- as.integer(0)
+    param.vec <- 0
+  }
+  if (metric == "tpr") {
+    param.vec = validate.single.numeric(fpr, "FPR")
+    metric.text <- paste("TPR at a fixed FPR of", round(param.vec, 3))
+    metric.number <- as.integer(1)
+  }
+  if (metric == "fpr") {
+    param.vec = validate.single.numeric(tpr, "TPR")
+    metric.text <- paste("FPR at a fixed TPR of", round(param.vec, 3))
+    metric.number <- as.integer(2)
+  }
+  
+  
   # call C++ to calculate actual results
   tpr.m <- matrix(roc$roc$TPR, nrow = 1)
   fpr.m <- matrix(roc$roc$FPR, nrow = 1)
   
-  observed.perf <- get_cached_perf(tpr.m, fpr.m, 0,
-                                   as.integer(metric.number))
+  observed.perf <- get_cached_perf(tpr.m, fpr.m, param.vec, metric.number)
   if (roc$use.cache) {
-    perf.boot <- get_cached_perf(roc$boot.tpr, roc$boot.fpr, 0, as.integer(metric.number))
+    perf.boot <- get_cached_perf(roc$boot.tpr, roc$boot.fpr, param.vec, metric.number)
   } else {
     perf.boot <- get_uncached_perf(roc$predictions,
                                    as.integer(roc$true.classes),
-                                   0,
+                                   param.vec,
                                    roc$n.boot,
-                                   as.integer(metric.number))
+                                   metric.number)
   }
   # Quantile based confidence interval
   alpha <- 0.5 * (1 - conf.level)
@@ -57,7 +85,8 @@ perf.roc <- function(roc, metric = "auc", conf.level = 0.95) {
   perf <- list(Observed.Performance = observed.perf,
                CI.Performance = ci,
                conf.level = conf.level,
-               metric = metric,
+               metric = metric.text,
+               params = param.vec,
                n.boot = roc$n.boot,
                boot.results = perf.boot
   )
