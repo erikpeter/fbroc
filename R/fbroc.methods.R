@@ -100,14 +100,16 @@ plot.fbroc.roc <- function(x, col = "blue", fill = "royalblue1", print.plot = TR
     if (show.metric == "tpr") {
       extra.frame <- data.frame(FPR = perf$params, TPR = perf$Observed.Performance,
                                 lower = perf$CI.Performance[1], upper = perf$CI.Performance[2])
-      roc.plot <- roc.plot + geom_errorbar(data = extra.frame, width = 0.03, size = 1.5,
-                                             aes(ymin = lower, ymax = upper))
+      roc.plot <- roc.plot + geom_errorbar(data = extra.frame, width = 0.02, size = 1.25,
+                                             aes(ymin = lower, ymax = upper)) + 
+                                             geom_point(data = extra.frame, size = 4)
     }
     if (show.metric == "fpr") {
       extra.frame <- data.frame(TPR = perf$params, FPR = perf$Observed.Performance,
                                 lower = perf$CI.Performance[1], upper = perf$CI.Performance[2])
-      roc.plot <- roc.plot + geom_errorbarh(data = extra.frame, height = 0.03, size = 1.5,
-                                           aes(xmin = lower, xmax = upper))
+      roc.plot <- roc.plot + geom_errorbarh(data = extra.frame, height = 0.02, size = 1.25,
+                                           aes(xmin = lower, xmax = upper)) +
+                                           geom_point(data = extra.frame, size = 4)
     }
     text.frame <- data.frame(text.c = perf.text, TPR = 0.5, FPR = 0.68)
     roc.plot <- roc.plot + geom_text(size = 8, aes(label = text.c), data = text.frame)

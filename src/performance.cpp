@@ -31,7 +31,7 @@ double get_fpr_at_fixed_tpr(NumericVector &tpr, NumericVector &fpr, NumericVecto
 {
   double at = param[0];
   if ((at == 0) || (at == 1)) return param[0];
-  int i = tpr.size();  
+  int i = tpr.size() - 1;  
   while (tpr[i--] <= at);
   double out = fpr[i+1];  
   return out;
