@@ -26,7 +26,7 @@ NumericVector ROC::get_tpr_at_fpr(NumericVector &steps) const {
   int j = 0;
   for (int i = 0; i <= n_steps; i++) {
     while ((j < n_thresholds) && 
-           (fpr[j] >= steps[i])) {
+           (fpr[j] > steps[i])) {
              j++;
            }
     tpr_vec[i] = tpr[j];       
