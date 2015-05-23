@@ -26,6 +26,7 @@ please call boot.roc and look at list item `roc` of the outpot
 ### Bugfixes
 
 * Function `boot.tpr.at.fpr` now works properly 
+* For duplicated predictions not all relevant thresholds were found reliably, this was fixed
 
 ## fbroc 0.1.0
 

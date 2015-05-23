@@ -143,13 +143,15 @@ void ROC::find_thresholds(NumericVector pred, IntegerVector true_class) {
   bool seen_pos = false;
   bool seen_neg = false;
   n_thresholds = 1;
+  double last_threshold = pred[0] - 1.;
   
   for (int i = 0; i < n; i++) { 
     if (true_class[i] == 1) seen_pos = true;
       else seen_neg = true;
-    if (seen_pos && seen_neg) {
+    if (seen_pos && seen_neg && pred[i] != last_threshold) {
       is_threshold[i] = true;
       n_thresholds++;
+      last_threshold = pred[i];
       if (true_class[i] == 1) seen_neg = false;
         else seen_pos = false;
     }
