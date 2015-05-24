@@ -9,8 +9,9 @@ double get_perf_auc(NumericVector &tpr, NumericVector &fpr, NumericVector &param
   double auc = 0.;
   // Numerical integration of step functions is easy
   for (int j = 1; j < n_thres; j++) {
-    auc += (tpr[j - 1] - tpr[j]) * (1 - 0.5 * fpr[j - 1] - 0.5 * fpr[j]);
+    auc += (tpr[j - 1] - tpr[j]) * (2 - fpr[j - 1] - fpr[j]);
   }
+  auc = 0.5 * auc;
   return auc;
 }
 
