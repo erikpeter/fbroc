@@ -4,7 +4,7 @@
 \alias{conf.roc}
 \title{Generates confidence intervals for the TPR for a range of FPRs}
 \usage{
-conf.roc(roc, conf.level = 0.95, steps = roc$n.neg)
+conf.roc(roc, conf.level = 0.95, steps = max(roc$n.neg, 100))
 }
 \arguments{
 \item{roc}{Object of class \code{fbroc.roc}.}
@@ -13,7 +13,7 @@ conf.roc(roc, conf.level = 0.95, steps = roc$n.neg)
 
 \item{steps}{Number of discrete steps for the FPR at which the TPR is
 calculated. TPR confidence intervals are given for all FPRs in
-\code{seq(0, 1, by = (1 / steps))}. Defaults to \code{n.neg}, thus covering all possible values.}
+\code{seq(0, 1, by = (1 / steps))}. Defaults to \code{max(roc$n.neg, 100)}.}
 }
 \value{
 A data.frame containing the FPR steps and the lower and upper bounds

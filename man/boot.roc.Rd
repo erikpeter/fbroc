@@ -5,7 +5,7 @@
 \title{Bootstrap ROC curve}
 \usage{
 boot.roc(pred, true.class, stratify = TRUE, n.boot = 1000,
-  use.cache = FALSE)
+  use.cache = FALSE, tie.strategy = 2)
 }
 \arguments{
 \item{pred}{A numeric vector. Contains predictions. \code{boot.roc} assumes

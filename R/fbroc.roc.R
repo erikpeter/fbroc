@@ -43,7 +43,7 @@
 #' 
 #' @export
 boot.roc <- function(pred, true.class, stratify = TRUE, n.boot = 1000,
-                     use.cache = FALSE) {
+                     use.cache = FALSE, tie.strategy = 2) {
   # validate input
   if ((length(pred) != length(true.class)))
     stop("Predictions and true classes need to have the same length")
@@ -63,7 +63,7 @@ boot.roc <- function(pred, true.class, stratify = TRUE, n.boot = 1000,
     true.class <- true.class[!index.na]
     pred <- pred[!index.na]
   }
-  
+  if (!(tie.strategy %in% 1:2)) stop("tie.strategy must be 1 or 2")
   if (sum(true.class) == 0)
     stop("No positive observations are included")
   if (sum(!true.class) == 0)
@@ -104,6 +104,7 @@ boot.roc <- function(pred, true.class, stratify = TRUE, n.boot = 1000,
                  n.thresholds = nrow(original.roc),
                  n.boot = as.integer(n.boot),
                  use.cache = use.cache,
+                 tie.strategy = tie.strategy,
                  n.pos = sum(true.class),
                  n.neg = sum(!true.class),
                  roc = original.roc,
