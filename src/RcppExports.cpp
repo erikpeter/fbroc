@@ -5,6 +5,18 @@
 
 using namespace Rcpp;
 
+// add_roc_points
+List add_roc_points(NumericVector tpr, NumericVector fpr);
+RcppExport SEXP fbroc_add_roc_points(SEXP tprSEXP, SEXP fprSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< NumericVector >::type tpr(tprSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type fpr(fprSEXP);
+    __result = Rcpp::wrap(add_roc_points(tpr, fpr));
+    return __result;
+END_RCPP
+}
 // roc_analysis
 List roc_analysis(NumericVector pred, IntegerVector true_class);
 RcppExport SEXP fbroc_roc_analysis(SEXP predSEXP, SEXP true_classSEXP) {
