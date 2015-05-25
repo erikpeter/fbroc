@@ -19,9 +19,9 @@ double get_tpr_at_fixed_fpr(NumericVector &tpr, NumericVector &fpr, NumericVecto
 {
   double at = param[0];
   //double out = 0;
-  if ((at == 0) || (at == 1)) return param[0];  
+  if (at == 1) return param[0];  
   int i = 0;  
-  while (fpr[i++] >= at);
+  while (fpr[i++] > at);
   //if (fpr[i] == at) out = tpr[i];
   //else
   double out = tpr[i-1];    
@@ -31,9 +31,9 @@ double get_tpr_at_fixed_fpr(NumericVector &tpr, NumericVector &fpr, NumericVecto
 double get_fpr_at_fixed_tpr(NumericVector &tpr, NumericVector &fpr, NumericVector &param) 
 {
   double at = param[0];
-  if ((at == 0) || (at == 1)) return param[0];
+  if (at == 0) return param[0];
   int i = tpr.size() - 1;  
-  while (tpr[i--] <= at);
+  while (tpr[i--] < at);
   double out = fpr[i+1];  
   return out;
 }

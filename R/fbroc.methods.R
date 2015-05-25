@@ -14,11 +14,11 @@ print.fbroc.perf <- function(x, ...) {
                 Bootstrapped ROC performance metric", "\n", "\n",
                 "Metric: ", x$metric, "\n",
                 "Bootstrap replicates: ", x$n.boot, "\n", 
-                "Estimate: ", round(x$Observed.Performance, 2), "\n",
+                "Observed: ", round(x$Observed.Performance, 3), "\n",
                 "Std. Error: ", round(sd(x$boot.results), 3), "\n", 
                 conf.level,"% confidence interval:", "\n",
-                round(x$CI.Performance[1], 2)," ",
-                round(x$CI.Performance[2], 2), "\n", "\n",
+                round(x$CI.Performance[1], 3)," ",
+                round(x$CI.Performance[2], 3), "\n", "\n",
                 sep = "")
   cat(text)
   invisible(text)

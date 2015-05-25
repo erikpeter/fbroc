@@ -17,6 +17,7 @@
 #' @param use.cache If true the bootstrapping results for the
 #'   ROC curve will be pre-cached. This increases speed when the object is used often, but also
 #'   takes up more memory.
+#' @param tie.strategy See details WRITE LATER!!!
 #' @return A list of class \code{fbroc.roc}, containing the elements:
 #' \item{prediction}{Input predictions.}
 #' \item{true.class}{Input classes.}
@@ -43,10 +44,13 @@
 #' 
 #' @export
 boot.roc <- function(pred, true.class, stratify = TRUE, n.boot = 1000,
-                     use.cache = FALSE, tie.strategy = 2) {
+                     use.cache = FALSE, tie.strategy = NULL) {
   # validate input
   if ((length(pred) != length(true.class)))
     stop("Predictions and true classes need to have the same length")
+  if (class(pred) == "integer") {
+    pred <- as.numeric(pred)
+  }
   if ((class(pred) != "numeric"))
     stop("Predictions must be numeric")
   if ((class(true.class) != "logical"))
@@ -63,6 +67,11 @@ boot.roc <- function(pred, true.class, stratify = TRUE, n.boot = 1000,
     true.class <- true.class[!index.na]
     pred <- pred[!index.na]
   }
+  if (is.null(tie.strategy)) {
+    if (length(pred) == length(unique(pred))) tie.strategy <- 1 
+    else tie.strategy <- 2
+  }
+  
   if (!(tie.strategy %in% 1:2)) stop("tie.strategy must be 1 or 2")
   if (sum(true.class) == 0)
     stop("No positive observations are included")

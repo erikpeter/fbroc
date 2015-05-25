@@ -5,7 +5,7 @@
 \title{Bootstrap ROC curve}
 \usage{
 boot.roc(pred, true.class, stratify = TRUE, n.boot = 1000,
-  use.cache = FALSE, tie.strategy = 2)
+  use.cache = FALSE, tie.strategy = NULL)
 }
 \arguments{
 \item{pred}{A numeric vector. Contains predictions. \code{boot.roc} assumes
@@ -24,6 +24,8 @@ number of bootstrap replicates. Defaults to 1000.}
 \item{use.cache}{If true the bootstrapping results for the
 ROC curve will be pre-cached. This increases speed when the object is used often, but also
 takes up more memory.}
+
+\item{tie.strategy}{See details WRITE LATER!!!}
 }
 \value{
 A list of class \code{fbroc.roc}, containing the elements:
