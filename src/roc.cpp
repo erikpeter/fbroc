@@ -12,7 +12,7 @@ NumericVector ROC::get_tpr_at_fpr(NumericVector &tpr_in, NumericVector &fpr_in, 
   int j = 0;  
   for (int i = 0; i <= n_steps; i++) {
     while ((j < n_thres) &&  
-           (fpr_in[j] >= steps[i])) {
+           (fpr_in[j] > steps[i])) {
              j++; // Use fact that TPR and FPR is a monotonely decreasing function of the thresholds index
            }
     tpr_vec[i] = tpr_in[j];       

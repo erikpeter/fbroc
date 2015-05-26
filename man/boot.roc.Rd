@@ -25,7 +25,7 @@ number of bootstrap replicates. Defaults to 1000.}
 ROC curve will be pre-cached. This increases speed when the object is used often, but also
 takes up more memory.}
 
-\item{tie.strategy}{See details WRITE LATER!!!}
+\item{tie.strategy}{How to handle ties. See details below.}
 }
 \value{
 A list of class \code{fbroc.roc}, containing the elements:
@@ -55,12 +55,22 @@ saves the TPR and FPR values for each iteration. This can take up a sizable port
 but it speeds up subsequent operations. This can be useful if you plan to use the ROC curve
 multiple \code{fbroc} functions.
 }
+
+\section{Ties}{
+
+Without ties in your numerical predictor you can set this parameter to either 1 or 2. With ties
+the ROC curve can be different depending on whether you use strategy 1 or 2. Default is 2.
+If you set \code{tie.strategy} to 1 the ROC curve is built by connecting the TPR/FPR pairs for
+neighboring thresholds. A tie.strategy of 2 indicates that the TPR calculated at a specific FPR
+is the best TPR at a FPR smaller than or equal than the FPR specified.
+}
 \examples{
 y <- rep(c(TRUE, FALSE), each = 500)
 x <- rnorm(1000) + y
 result.boot <- boot.roc(x, y)
 }
 \seealso{
-\code{\link{plot.fbroc.roc}}, \code{\link{print.fbroc.roc}}
+\url{http://www.epeter-stats.de/roc-curves-and-ties/}, \code{\link{plot.fbroc.roc}},
+\code{\link{print.fbroc.roc}}
 }
 
