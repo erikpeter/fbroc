@@ -30,18 +30,21 @@ List add_roc_points(NumericVector tpr, NumericVector fpr) {
   int current_segment = 1;
   
   while (current_index_new < (n + (segments - 1))) {
-    while (in_segment[current_index_old] == current_segment) {
+    while ((in_segment[current_index_old] == current_segment) && 
+           (current_index_new < (n + (segments - 1)))) {
       tpr_new[current_index_new] = tpr[current_index_old];
       fpr_new[current_index_new] = fpr[current_index_old];
       in_segment_new[current_index_new] = in_segment[current_index_old];
       current_index_new++;
       current_index_old++;
     }
-    tpr_new[current_index_new] = tpr[current_index_old];
-    fpr_new[current_index_new] = fpr[current_index_old - 1];
-    in_segment_new[current_index_new] = current_segment + 1;
-    current_index_new++;
-    current_segment = in_segment[current_index_old];
+    if (current_index_new < (n + (segments - 1))) {
+      tpr_new[current_index_new] = tpr[current_index_old];
+      fpr_new[current_index_new] = fpr[current_index_old - 1];
+      in_segment_new[current_index_new] = current_segment + 1;
+      current_index_new++;
+      current_segment = in_segment[current_index_old];
+    }
   }
   
   out[0] = tpr_new;

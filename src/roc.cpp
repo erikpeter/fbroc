@@ -11,9 +11,9 @@ NumericVector ROC::get_tpr_at_fpr(NumericVector &tpr_in, NumericVector &fpr_in, 
   NumericVector tpr_vec (n_steps + 1);
   int j = 0;  
   for (int i = 0; i <= n_steps; i++) {
-    while ((j < n_thres) &&  
+    while ((j < (n_thres - 1)) &&  
            (fpr_in[j] > steps[i])) {
-             j++; // Use fact that TPR and FPR is a monotonely decreasing function of the thresholds index
+             j++; // Use fact that TPR and FPR are monotonely decreasing functions of the thresholds index
            }
     tpr_vec[i] = tpr_in[j];       
   }
@@ -25,7 +25,7 @@ NumericVector ROC::get_tpr_at_fpr(NumericVector &steps) const {
   NumericVector tpr_vec (n_steps + 1);
   int j = 0;
   for (int i = 0; i <= n_steps; i++) {
-    while ((j < n_thresholds) && 
+    while ((j < (n_thresholds - 1)) && 
            (fpr[j] > steps[i])) {
              j++;
            }
