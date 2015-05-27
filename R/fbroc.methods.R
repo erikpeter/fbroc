@@ -163,12 +163,13 @@ plot.fbroc.perf <- function(x, bins = NULL, col = "white",
   if (is.null(bins)) {
     bins <- floor(x$n.boot/200)
     bins <- max(bins, 20)
-    unique.val <- length(unique(boot.frame$Metric))
-    bins <- min(bins, 60) 
-    bins <- round(min(bins, unique.val / 4), 0)
-    print(bins)
+    bins <- min(bins, 60)
+    bw.min <- min(diff(sort(unique(boot.frame$Metric))))
+    bw = round(diff(range(x$boot.results))/bins, 6)
+    if (bw < bw.min) bw <- bw.min
   }
-  bw = round(diff(range(x$boot.results))/bins, 6)
+  else bw = round(diff(range(x$boot.results))/bins, 6)
+  
   perf.plot <- ggplot(data = boot.frame, aes(x = Metric)) + 
                xlab(toupper(x$metric)) + ylab("Density") + 
                ggtitle("Performance histogram") +
