@@ -11,8 +11,7 @@ Description: Implements a very fast C++ algorithm to quickly bootstrap
     Currently the calculation of 100000 bootstrap replicates for 500 observations 
     takes about one second.
 License: GPL-2
-URL: http://github.com/erikpeter/fbroc, http://www.epeter-stats.de:3838/fbroc.serv/, 
-    http://www.epeter-stats.de/roc-curve-analysis-with-fbroc/
+URL: http://github.com/erikpeter/fbroc, http://www.epeter-stats.de/roc-curve-analysis-with-fbroc/
 BugReports: http://github.com/erikpeter/fbroc/issues
 Depends: R (>= 3.1.0), ggplot2
 Imports: 
