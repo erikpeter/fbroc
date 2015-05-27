@@ -165,9 +165,10 @@ plot.fbroc.perf <- function(x, bins = NULL, col = "white",
     bins <- floor(x$n.boot/200)
     bins <- max(bins, 20)
     bins <- min(bins, 60)
-    bw.min <- min(diff(sort(unique(boot.frame$Metric))))
+    bw.min <- 0.99999*min(diff(sort(unique(boot.frame$Metric))))
     bw = round(diff(range(x$boot.results))/bins, 6)
-    if (bw < bw.min) bw <- bw.min
+    if ((bw < bw.min) | (5*bw.min > bw)) bw <- bw.min
+
   }
   else bw = round(diff(range(x$boot.results))/bins, 6)
   
