@@ -41,7 +41,7 @@ perf.roc <- function(roc, metric = "auc", conf.level = 0.95, tpr = NULL, fpr = N
   if (!is(roc, "fbroc.roc"))
     stop("roc must be of class fbroc.roc")
   if (length(metric) != 1 | class(metric) != "character")
-    stop("metric must be character of length 1")
+    stop("metric must be character")
   if (!(metric %in% c("auc", "tpr", "fpr")))
     stop(paste(metric,"is not a valid performance metric"))
   
