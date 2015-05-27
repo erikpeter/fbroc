@@ -107,7 +107,7 @@ plot.fbroc.roc <- function(x, col = "blue", fill = "royalblue1", print.plot = TR
                        round(perf$CI.Performance[1], 2), ",",
                        round(perf$CI.Performance[2], 2), "]", sep = "")
     if (show.metric == "tpr") {
-      extra.frame <- data.frame(FPR = perf$params, TPR = perf$Observed.Performance, , Segment = 1,
+      extra.frame <- data.frame(FPR = perf$params, TPR = perf$Observed.Performance, Segment = 1,
                                 lower = perf$CI.Performance[1], upper = perf$CI.Performance[2])
       roc.plot <- roc.plot + geom_errorbar(data = extra.frame, width = 0.02, size = 1.25,
                                              aes(ymin = lower, ymax = upper)) + 
