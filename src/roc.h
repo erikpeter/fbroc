@@ -29,6 +29,7 @@ protected:
   int n_neg; //number of negative samples
 public:
   ROC(NumericVector pred, IntegerVector true_class); //constructor
+  ROC(); // empty constructor
   void shuffle(IntegerVector &shuffle_pos, IntegerVector &shuffle_neg); //Shuffle (bootstrap)
   void strat_shuffle(IntegerVector &shuffle_pos, IntegerVector &shuffle_neg); //Stratified shuffle
   NumericVector & get_tpr(); // return TPR

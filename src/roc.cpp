@@ -171,6 +171,10 @@ int ROC::get_n_thres() const {
   return n_thresholds;
 }
 
+ROC::ROC() {
+  // do nothing
+}
+
 ROC::ROC(NumericVector pred, IntegerVector true_class)
 {
   n = pred.size();
