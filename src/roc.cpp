@@ -4,6 +4,64 @@ using namespace Rcpp;
 #include "roc.h"
 
 
+// ordering functions used as helper function in ROC, code taken from stackexchange
+// http://stackoverflow.com/questions/21609934/ordering-permutation-in-rcpp-i-e-baseorder
+
+typedef std::pair<int, double> paired_d;
+typedef std::pair<int, int> paired_i;
+
+template <typename t>
+bool cmp_second(const t & left, const t & right) {
+    return left.second < right.second;
+}
+
+IntegerVector cpp_order(const NumericVector & x) {
+    const size_t n = x.size();
+    std::vector<paired_d> pairs; pairs.reserve(n);
+
+    for(size_t i = 0; i < n; i++)
+        pairs.push_back(std::make_pair(i, x(i)));
+
+    std::sort(pairs.begin(), pairs.end(), cmp_second<paired_d>);
+
+    IntegerVector result(n);
+    for(size_t i = 0; i < n; i++)
+        result(i) = pairs[i].first;
+    return result;
+}
+
+IntegerVector cpp_order(const IntegerVector & x) {
+    const size_t n = x.size();
+    std::vector<paired_i> pairs; pairs.reserve(n);
+
+    for(size_t i = 0; i < n; i++)
+        pairs.push_back(std::make_pair(i, x(i)));
+
+    std::sort(pairs.begin(), pairs.end(), cmp_second<paired_i>);
+
+    IntegerVector result(n);
+    for(size_t i = 0; i < n; i++)
+        result(i) = pairs[i].first;
+    return result;
+}
+
+template <typename t>
+t extract(const t & in, const IntegerVector & index) {
+  int n = index.size();
+  t out (n);
+  for (int i = 0; i < n; i++) out[i] = in[index[i]];
+  return out;
+} 
+
+// [[Rcpp::export]]
+NumericVector test_sort(NumericVector input) {
+  IntegerVector order = cpp_order(input);
+  NumericVector out = extract(input, order);
+  return out;
+}
+
+// begin of class ROC
+
 NumericVector ROC::get_tpr_at_fpr(NumericVector &tpr_in, NumericVector &fpr_in, NumericVector &steps)
 {
   int n_steps = steps.size();
