@@ -5,8 +5,8 @@
 #' algorithm where the cost of a single bootstrap replicate is \eqn{O(n)}, with 
 #' n denoting the number of observations. The algorithm is implemented in C++ to further
 #' increase the efficiency. Currently 100000 bootstrap iterations for 500
-#' observations take about one second. The ROC curve as used shows the dependency
-#' of the True Positive Rate (TPR) as a function of the False Positive Rate (FPR).
+#' observations take about one second. The ROC curve as used shows
+#' the True Positive Rate (TPR) as a function of the False Positive Rate (FPR).
 #' 
 #' @section Important fbroc functions:
 #' \describe{
