@@ -37,11 +37,11 @@
 #' but it speeds up subsequent operations. This can be useful if you plan to use the ROC curve
 #' multiple \code{fbroc} functions.
 #' @section Ties:
-#' Without ties in your numerical predictor you can set this parameter to either 1 or 2. With ties
-#' the ROC curve can be different depending on whether you use strategy 1 or 2. Default is 2.
+#' You can set this parameter to either 1 or 2. If your numerical predictor has no ties, both settings
+#' will produce the same results. 
 #' If you set \code{tie.strategy} to 1 the ROC curve is built by connecting the TPR/FPR pairs for
 #' neighboring thresholds. A tie.strategy of 2 indicates that the TPR calculated at a specific FPR
-#' is the best TPR at a FPR smaller than or equal than the FPR specified. 
+#' is the best TPR at a FPR smaller than or equal than the FPR specified. Defaults to 2.
 #' @examples
 #' y <- rep(c(TRUE, FALSE), each = 500)
 #' x <- rnorm(1000) + y

@@ -14,9 +14,9 @@ FPR and "fpr" for the FPR at a fixed TPR.}
 
 \item{conf.level}{The confidence level of the confidence interval.}
 
-\item{tpr}{The fixed TPR at which the FPR is to be evaluated when metric \code{fpr} is selected.}
+\item{tpr}{The fixed TPR at which the FPR is to be evaluated when \code{fpr} is selected as metric.}
 
-\item{fpr}{The fixed FPR at which the TPR is to be evaluated when metric \code{tpr} is selected.}
+\item{fpr}{The fixed FPR at which the TPR is to be evaluated when \code{tpr} is selected as metric.}
 }
 \value{
 A list of class \code{fbroc.perf}, containing the elements:
@@ -24,7 +24,7 @@ A list of class \code{fbroc.perf}, containing the elements:
 \item{CI.Performance}{Quantile based confidence interval for the performance.}
 \item{conf.level}{Confidence level of the confidence interval.}
 \item{metric}{Used performance metric.}
-\item{params}{Parameters used to further specifiy metric, i.e. fixed TPR.}
+\item{params}{Parameters used to further specifiy metric, e.g. fixed TPR.}
 \item{n.boot}{Number of bootstrap replicates used.}
 \item{boot.results}{Performance in each bootstrap replicate.}
 }

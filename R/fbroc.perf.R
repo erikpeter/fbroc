@@ -17,14 +17,14 @@ validate.single.numeric <- function(number, var.name) {
 #' @param metric A performance metric. Select "auc" for the AUC, "tpr" for the TPR at a fixed
 #' FPR and "fpr" for the FPR at a fixed TPR.
 #' @param conf.level The confidence level of the confidence interval.
-#' @param fpr The fixed FPR at which the TPR is to be evaluated when metric \code{tpr} is selected.
-#' @param tpr The fixed TPR at which the FPR is to be evaluated when metric \code{fpr} is selected.
+#' @param fpr The fixed FPR at which the TPR is to be evaluated when \code{tpr} is selected as metric.
+#' @param tpr The fixed TPR at which the FPR is to be evaluated when \code{fpr} is selected as metric.
 #' @return A list of class \code{fbroc.perf}, containing the elements:
 #' \item{Observed.Performance}{The observed performance.}
 #' \item{CI.Performance}{Quantile based confidence interval for the performance.}
 #' \item{conf.level}{Confidence level of the confidence interval.}
 #' \item{metric}{Used performance metric.}
-#' \item{params}{Parameters used to further specifiy metric, i.e. fixed TPR.}
+#' \item{params}{Parameters used to further specifiy metric, e.g. fixed TPR.}
 #' \item{n.boot}{Number of bootstrap replicates used.}
 #' \item{boot.results}{Performance in each bootstrap replicate.}
 #' @seealso \code{\link{boot.roc}}, \code{\link{print.fbroc.perf}}, 

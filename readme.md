@@ -1,7 +1,7 @@
 ---
 title: "Readme for fbroc"
 author: "Erik Peter"
-date: "2015-05-03"
+date: "2015-06-05"
 output:
   md_document:
     variant: markdown_github
@@ -19,6 +19,9 @@ package can be used for simulation studies and shiny applications. To achieve
 the necessary performance all critical algorithms are implemented in C++.
 On my machine fbroc is capable of calculating about 100000 bootstrap replicates 
 for a ROC curves constructed from 500 observations in about one second.
+
+To try out the package you can visit the [package website](http://www.epeter-stats.de/roc-curve-analysis-with-fbroc/). 
+A shiny interface for this package is hosted there.
 
 To install:
 
