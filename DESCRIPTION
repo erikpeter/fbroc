@@ -6,7 +6,7 @@ Date: 2015-06-05
 Authors@R: c(person("Erik", "Peter", email = "jerikpeter@googlemail.com", 
              role = c("aut", "cre")))
 Description: Implements a very fast C++ algorithm to quickly bootstrap 
-    Receiver Operating Characteristics (ROC) curves and derived performance metrics, including the area under the 
+    receiver operating characteristics (ROC) curves and derived performance metrics, including the area under the 
     curve (AUC) as well as the true and false positive rate. 
     You can also plot the results and calculate confidence intervals.
     Currently the calculation of 100000 bootstrap replicates for 500 observations 
