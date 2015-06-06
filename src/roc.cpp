@@ -66,11 +66,9 @@ NumericVector ROC::get_tpr_at_fpr(NumericVector &tpr_in, NumericVector &fpr_in, 
 {
   int n_steps = steps.size();
   int n_thres = tpr_in.size();
-  Rcout << tpr_in.size();
-  Rcout << fpr_in.size();
-  NumericVector tpr_vec (n_steps + 1);
+  NumericVector tpr_vec (n_steps);
   int j = 0;  
-  for (int i = 0; i <= n_steps; i++) {
+  for (int i = 0; i < n_steps; i++) {
     while ((j < (n_thres - 2)) &&  
            (fpr_in[j] > steps[i])) {
              j++; // Use fact that TPR and FPR are monotonely decreasing functions of the thresholds index
@@ -82,9 +80,9 @@ NumericVector ROC::get_tpr_at_fpr(NumericVector &tpr_in, NumericVector &fpr_in, 
 
 NumericVector ROC::get_tpr_at_fpr(NumericVector &steps) const {
   int n_steps = steps.size();
-  NumericVector tpr_vec (n_steps + 1);
+  NumericVector tpr_vec (n_steps);
   int j = 0;
-  for (int i = 0; i <= n_steps; i++) {
+  for (int i = 0; i < n_steps; i++) {
     while ((j < (n_thresholds - 2)) && 
            (fpr[j] > steps[i])) {
              j++;
