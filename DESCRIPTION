@@ -2,7 +2,7 @@ Package: fbroc
 Type: Package
 Title: Fast Algorithms to Bootstrap Receiver Operating Characteristics Curves
 Version: 0.2.1
-Date: 2015-06-05
+Date: 2015-06-06
 Authors@R: c(person("Erik", "Peter", email = "jerikpeter@googlemail.com", 
              role = c("aut", "cre")))
 Description: Implements a very fast C++ algorithm to quickly bootstrap 

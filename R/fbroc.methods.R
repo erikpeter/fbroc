@@ -86,7 +86,7 @@ plot.fbroc.roc <- function(x, col = "blue", fill = "royalblue1", print.plot = TR
     plot.frame = x$roc
     plot.frame$Segment = 1
   }
-  roc.plot <- ggplot(data = plot.frame, aes(x = FPR, y = TPR, group = Segment)) +               
+  roc.plot <- ggplot(data = plot.frame, aes(x = FPR, y = TPR)) +               
     ggtitle("ROC Curve") + xlab("False Positive Rate") +
     ylab("True Positive Rate") + theme_bw() +
     theme(title = element_text(size = 22),

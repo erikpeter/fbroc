@@ -1,16 +1,13 @@
 ---
 title: "Submission comments"
 author: "Erik Peter"
-date: "Friday, June 05, 2015"
+date: "Friday, June 06, 2015"
 output: html_document
 ---
 
-## Submission history
+## Note
 
-This is the second try to commit this package. I spelled out Receiver Operating Characteristics and
-area under the curve. The note is still there because I still included the abbreviations in 
-brackets. While I agree that the rule makes sense, I was not able to find it in the manual. Would
-be grateful for a pointer, if you have the reference at hand and it is no effort.
+Sorry, for the early resubmit. I was requested to fix a pointer error in the C++ code by Brian Ripley. This has been done.
 
 ## Tested on
 * local 64 bit Windows 7, R 3.2.0
