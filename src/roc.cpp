@@ -66,6 +66,7 @@ NumericVector ROC::get_tpr_at_fpr(NumericVector &tpr_in, NumericVector &fpr_in, 
 {
   int n_steps = steps.size();
   int n_thres = tpr_in.size();
+  Rcout << n_steps;
   NumericVector tpr_vec (n_steps + 1);
   int j = 0;  
   for (int i = 0; i <= n_steps; i++) {

@@ -5,6 +5,12 @@ date: "Sunday, May 03, 2015"
 output: html_document
 ---
 
+## fbroc 0.2.1
+
+### Bugfixes
+
+* fixed a off-by-one pointer error
+
 ## fbroc 0.2.0
 
 ### New features
