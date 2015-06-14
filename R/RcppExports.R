@@ -33,7 +33,3 @@ tpr_at_fpr_cached <- function(tpr, fpr, n_thres, n_steps) {
     .Call('fbroc_tpr_at_fpr_cached', PACKAGE = 'fbroc', tpr, fpr, n_thres, n_steps)
 }
 
-test_sort <- function(input) {
-    .Call('fbroc_test_sort', PACKAGE = 'fbroc', input)
-}
-

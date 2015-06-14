@@ -112,14 +112,3 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
-// test_sort
-NumericVector test_sort(NumericVector input);
-RcppExport SEXP fbroc_test_sort(SEXP inputSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< NumericVector >::type input(inputSEXP);
-    __result = Rcpp::wrap(test_sort(input));
-    return __result;
-END_RCPP
-}

@@ -95,9 +95,6 @@ boot.roc <- function(pred, true.class, stratify = TRUE, n.boot = 1000,
   
   if (!stratify) stop("Non-stratified bootstrapping is not yet supported")
   
-  new.order <- order(pred)
-  pred <- pred[new.order]
-  true.class <- true.class[new.order]
   true.int <- as.integer(true.class)
 
   original.roc <- roc_analysis(pred, true.int)
