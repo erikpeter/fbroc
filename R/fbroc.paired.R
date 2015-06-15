@@ -1,0 +1,107 @@
+#' Bootstrap paired ROC curve
+#'
+#' @inheritParams boot.roc
+#' @examples
+#' y <- rep(c(TRUE, FALSE), each = 500)
+#' x1 <- rnorm(1000) + y
+#' x2 <- 0.5*x1 + 0.5*rnorm(1000) + y
+#' result.boot <- boot.paired.roc(x1, x2, y)
+#' @seealso \url{http://www.epeter-stats.de/roc-curves-and-ties/}, \code{\link{plot.fbroc.roc}}, 
+#' \code{\link{print.fbroc.roc}}
+#' 
+#' @export
+boot.paired.roc <- function(pred1, pred2, true.class, stratify = TRUE, n.boot = 1000,
+                            use.cache = FALSE, tie.strategy = NULL) {
+  # validate input
+  if ((length(pred1) != length(true.class)))
+    stop("Predictions and true classes need to have the same length")
+  if ((length(pred2) != length(true.class)))
+    stop("Predictions and true classes need to have the same length")
+  if (class(pred1) == "integer") {
+    pred1 <- as.numeric(pred1)
+  }
+  if ((class(pred1) != "numeric"))
+    stop("Predictions must be numeric")
+  
+  if (class(pred2) == "integer") {
+    pred2 <- as.numeric(pred2)
+  }
+  if ((class(pred2) != "numeric"))
+    stop("Predictions must be numeric")
+  
+  if ((class(true.class) != "logical"))
+    stop("Classes must be logical")
+  if ((class(stratify) != "logical"))
+    stop("Classes must be logical")
+  
+  index.na <- is.na(pred1) | is.na(pred2) | is.na(true.class)
+  if (any(index.na)) {
+    n <- sum(index.na)
+    warning.msg <- 
+      paste(n, "observations had to be removed due to missing values")
+    warning(warning.msg)
+    true.class <- true.class[!index.na]
+    pred1 <- pred1[!index.na]
+    pred2 <- pred2[!index.na]
+  }
+  if (is.null(tie.strategy)) {
+    if ((length(pred1) == length(unique(pred1))) &
+        (length(pred2) == length(unique(pred2)))) 
+      tie.strategy <- 1 
+    else tie.strategy <- 2
+  }
+  
+  if (!(tie.strategy %in% 1:2)) stop("tie.strategy must be 1 or 2")
+  if (sum(true.class) == 0)
+    stop("No positive observations are included")
+  if (sum(!true.class) == 0)
+    stop("No negative observations are included")
+  
+  n.boot <- as.integer(n.boot)
+  
+  if (length(n.boot) != 1)
+    stop("n.boot must have length 1")
+  
+  if (length(stratify) != 1)
+    stop("stratify must have length 1")
+  
+  if (!stratify) stop("Non-stratified bootstrapping is not yet supported")
+  
+  true.int <- as.integer(true.class)
+  original.rocs <- paired_roc_analysis(pred1, pred2, true.int)
+  
+  roc1 = c.list.to.roc(original.rocs[[1]])
+  roc2 = c.list.to.roc(original.rocs[[2]])
+  
+  auc1 = original.rocs[[1]][[4]]
+  auc2 = original.rocs[[2]][[4]]
+  #if (use.cache) {
+  #  booted.roc <- tpr_fpr_boot2(pred1, true.int, n.boot)
+  #  boot.tpr <- booted.roc[[1]]
+  #  boot.fpr <- booted.roc[[2]]
+  #  rm(booted.roc)
+  #} else {
+  #  boot.tpr <- NULL
+  #  boot.fpr <- NULL
+  #}
+  
+  output <- list(predictions1 = pred1,
+                 predictions2 = pred2,
+                 true.classes = true.class,
+                 n.thresholds1 = nrow(roc1),
+                 n.thresholds2 = nrow(roc2),
+                 n.boot = as.integer(n.boot),
+                 use.cache = use.cache,
+                 tie.strategy = tie.strategy,
+                 n.pos = sum(true.class),
+                 n.neg = sum(!true.class),
+                 roc1 = roc1,
+                 roc2 = roc2,
+                 auc1 = auc1,
+                 auc2 = auc2)
+                 #auc = auc,
+                 #boot.tpr = boot.tpr,
+                 #boot.fpr = boot.fpr)
+  class(output) <- append(class(output), "fbroc.paired.roc")
+  return(output)
+}

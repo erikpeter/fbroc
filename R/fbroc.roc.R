@@ -99,9 +99,7 @@ boot.roc <- function(pred, true.class, stratify = TRUE, n.boot = 1000,
 
   original.roc <- roc_analysis(pred, true.int)
   auc <- original.roc[[4]]
-  original.roc[[4]] <- NULL
-  original.roc <- as.data.frame(original.roc)
-  names(original.roc) <- c("TPR", "FPR", "threshold")
+  original.roc <- c.list.to.roc(original.roc)
   if (use.cache) {
     booted.roc <- tpr_fpr_boot2(pred, true.int, n.boot)
     boot.tpr <- booted.roc[[1]]
