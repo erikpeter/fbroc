@@ -42,6 +42,22 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// get_uncached_perf_paired
+List get_uncached_perf_paired(NumericVector pred1, NumericVector pred2, IntegerVector true_class, NumericVector param, int n_boot, int measure);
+RcppExport SEXP fbroc_get_uncached_perf_paired(SEXP pred1SEXP, SEXP pred2SEXP, SEXP true_classSEXP, SEXP paramSEXP, SEXP n_bootSEXP, SEXP measureSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< NumericVector >::type pred1(pred1SEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type pred2(pred2SEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type true_class(true_classSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type param(paramSEXP);
+    Rcpp::traits::input_parameter< int >::type n_boot(n_bootSEXP);
+    Rcpp::traits::input_parameter< int >::type measure(measureSEXP);
+    __result = Rcpp::wrap(get_uncached_perf_paired(pred1, pred2, true_class, param, n_boot, measure));
+    return __result;
+END_RCPP
+}
 // tpr_fpr_boot2
 List tpr_fpr_boot2(NumericVector pred, IntegerVector true_class, int n_boot);
 RcppExport SEXP fbroc_tpr_fpr_boot2(SEXP predSEXP, SEXP true_classSEXP, SEXP n_bootSEXP) {

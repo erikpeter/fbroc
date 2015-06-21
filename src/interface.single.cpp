@@ -4,8 +4,9 @@ using namespace Rcpp;
 #include "roc.h"
 #include "sampler.h"
 #include "bootstrapper.h"
-#include "performance.h"
 #include "interface.common.h"
+#include "performance.h"
+
 
 // [[Rcpp::export]]
 List tpr_fpr_boot2(NumericVector pred, IntegerVector true_class, int n_boot) {
@@ -22,14 +23,6 @@ List tpr_fpr_boot2(NumericVector pred, IntegerVector true_class, int n_boot) {
   List out(2);
   out[0] = tpr;
   out[1] = fpr;
-  return out;
-}
-
-PerfFun pick_measure(Measure measure) {
-  PerfFun out;
-  if (measure == AUC) out = &get_perf_auc; 
-  if (measure == TPR_AT_FPR) out = &get_tpr_at_fixed_fpr; 
-  if (measure == FPR_AT_TPR) out = &get_fpr_at_fixed_tpr; 
   return out;
 }
 

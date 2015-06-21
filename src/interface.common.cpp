@@ -2,6 +2,7 @@
 using namespace Rcpp;
 
 #include "roc.h"
+#include "interface.common.h"
 #include "performance.h"
 
 // [[Rcpp::export]]
@@ -16,5 +17,13 @@ List roc_analysis(NumericVector pred, IntegerVector true_class) {
   out[2] = thres;
   NumericVector dummy_param (0);
   out[3] = get_perf_auc(original_tpr, original_fpr, dummy_param);
+  return out;
+}
+
+PerfFun pick_measure(Measure measure) {
+  PerfFun out;
+  if (measure == AUC) out = &get_perf_auc; 
+  if (measure == TPR_AT_FPR) out = &get_tpr_at_fixed_fpr; 
+  if (measure == FPR_AT_TPR) out = &get_fpr_at_fixed_tpr; 
   return out;
 }
