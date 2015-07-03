@@ -75,15 +75,18 @@ boot.paired.roc <- function(pred1, pred2, true.class, stratify = TRUE, n.boot = 
   
   auc1 = original.rocs[[1]][[4]]
   auc2 = original.rocs[[2]][[4]]
-  #if (use.cache) {
-  #  booted.roc <- tpr_fpr_boot2(pred1, true.int, n.boot)
-  #  boot.tpr <- booted.roc[[1]]
-  #  boot.fpr <- booted.roc[[2]]
-  #  rm(booted.roc)
-  #} else {
-  #  boot.tpr <- NULL
-  #  boot.fpr <- NULL
-  #}
+  if (use.cache) {
+    stop("Cached mode not enabled yet")
+    booted.roc <- tpr_fpr_boot2(pred1, true.int, n.boot)
+    boot.tpr <- booted.roc[[1]]
+    boot.fpr <- booted.roc[[2]]
+    rm(booted.roc)
+  } else {
+    boot.tpr1 <- NULL
+    boot.fpr1 <- NULL
+    boot.tpr2 <- NULL
+    boot.fpr2 <- NULL
+  }
   
   output <- list(predictions1 = pred1,
                  predictions2 = pred2,
@@ -98,10 +101,12 @@ boot.paired.roc <- function(pred1, pred2, true.class, stratify = TRUE, n.boot = 
                  roc1 = roc1,
                  roc2 = roc2,
                  auc1 = auc1,
-                 auc2 = auc2)
+                 auc2 = auc2,
                  #auc = auc,
-                 #boot.tpr = boot.tpr,
-                 #boot.fpr = boot.fpr)
+                 boot.tpr1 = boot.tpr1,
+                 boot.fpr1 = boot.fpr1,
+                 boot.tpr2 = boot.tpr2,
+                 boot.fpr2 = boot.fpr2)
   class(output) <- append(class(output), "fbroc.paired.roc")
   return(output)
 }
