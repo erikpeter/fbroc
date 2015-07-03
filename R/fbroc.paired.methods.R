@@ -80,42 +80,69 @@ plot.fbroc.paired.roc <- function(x,
           axis.title.y = element_text(size = 18),
           axis.text.x = element_text(size = 16),
           axis.text.y = element_text(size = 16))
-  
+   roc1 <- extract.single.roc(x, 1)
+   roc2 <- extract.single.roc(x, 2)
    if (show.conf) {
-     conf.frame <- conf.roc(extract.single.roc(x, 1), conf.level = conf.level)
+     conf.frame <- conf.roc(roc1, conf.level = conf.level)
      conf.frame$Segment <- 1
      roc.plot <- roc.plot + 
        geom_ribbon(data = conf.frame, fill = fill, alpha = 0.5,
                    aes(y = NULL, ymin = Lower.TPR, ymax = Upper.TPR))
-     conf.frame2 <- conf.roc(extract.single.roc(x, 2), conf.level = conf.level)
+     conf.frame2 <- conf.roc(roc2, conf.level = conf.level)
      conf.frame2$Segment <- 1
      roc.plot <- roc.plot + 
        geom_ribbon(data = conf.frame2, fill = fill2, alpha = 0.5,
                    aes(y = NULL, ymin = Lower.TPR, ymax = Upper.TPR))
    }
-#   if (!is.null(show.metric)) {
-#     perf <- perf.roc(x, metric = show.metric, conf.level = conf.level, ...)
-#     perf.text <- paste(perf$metric ," = " , round(perf$Observed.Performance, 2)," [",
-#                        round(perf$CI.Performance[1], 2), ",",
-#                        round(perf$CI.Performance[2], 2), "]", sep = "")
-#     if (show.metric == "tpr") {
-#       extra.frame <- data.frame(FPR = perf$params, TPR = perf$Observed.Performance, Segment = 1,
-#                                 lower = perf$CI.Performance[1], upper = perf$CI.Performance[2])
-#       roc.plot <- roc.plot + geom_errorbar(data = extra.frame, width = 0.02, size = 1.25,
-#                                            aes(ymin = lower, ymax = upper)) + 
-#         geom_point(data = extra.frame, size = 4)
-#     }
-#     if (show.metric == "fpr") {
-#       extra.frame <- data.frame(TPR = perf$params, FPR = perf$Observed.Performance, Segment = 1,
-#                                 lower = perf$CI.Performance[1], upper = perf$CI.Performance[2])
-#       roc.plot <- roc.plot + geom_errorbarh(data = extra.frame, height = 0.02, size = 1.25,
-#                                             aes(xmin = lower, xmax = upper)) +
-#         geom_point(data = extra.frame, size = 4)
-#     }
-#     text.frame <- data.frame(text.c = perf.text, TPR = 0.5, FPR = 0.68, Segment = 1)
-#     roc.plot <- roc.plot + geom_text(size = 8, aes(label = text.c), data = text.frame)
+   if (!is.null(show.metric)) {
+     perf <- perf.paired.roc(x, metric = show.metric, conf.level = conf.level, ...)
+     #perf <- perf.roc(roc1, metric = show.metric, conf.level = conf.level, ...)
+     perf.text <- paste("Predictor 1 ", perf$metric ," = " , 
+                        round(perf$Observed.Performance.Predictor1, 2)," [",
+                        round(perf$CI.Performance.Predictor1[1], 2), ",",
+                        round(perf$CI.Performance.Predictor1[2], 2), "]", sep = "")
+     perf.text2 <- paste("Predictor 2 ",perf$metric ," = " , 
+                         round(perf$Observed.Performance.Predictor2, 2)," [",
+                         round(perf$CI.Performance.Predictor2[1], 2), ",",
+                         round(perf$CI.Performance.Predictor2[2], 2), "]", sep = "")
+     perf.text3 <- paste("Delta ",perf$metric ," = " , 
+                         round(perf$Observed.Difference, 2)," [",
+                         round(perf$CI.Performance.Difference[1], 2), ",",
+                         round(perf$CI.Performance.Difference[2], 2), "]", sep = "")
+     if (show.metric == "tpr") {
+       extra.frame <- data.frame(FPR = perf$params, 
+                                 TPR = c(perf$Observed.Performance.Predictor1, 
+                                         perf$Observed.Performance.Predictor2),
+                                 Segment = 1,
+                                 lower = c(perf$CI.Performance.Predictor1[1], 
+                                           perf$CI.Performance.Predictor2[1]),
+                                 upper = c(perf$CI.Performance.Predictor1[2],
+                                           perf$CI.Performance.Predictor2[2]))
+       roc.plot <- roc.plot + geom_errorbar(data = extra.frame, width = 0.02, size = 1.25,
+                                            aes(ymin = lower, ymax = upper)) + 
+                              geom_point(data = extra.frame, size = 4)
+     }
+     if (show.metric == "fpr") {
+       extra.frame <- data.frame(TPR = perf$params, 
+                                 FPR = c(perf$Observed.Performance.Predictor1, 
+                                         perf$Observed.Performance.Predictor2),
+                                 Segment = 1,
+                                 lower = c(perf$CI.Performance.Predictor1[1], 
+                                           perf$CI.Performance.Predictor2[1]),
+                                 upper = c(perf$CI.Performance.Predictor1[2],
+                                           perf$CI.Performance.Predictor2[2]))
+       roc.plot <- roc.plot + geom_errorbarh(data = extra.frame, height = 0.02, size = 1.25,
+                                            aes(xmin = lower, xmax = upper)) +
+                              geom_point(data = extra.frame, size = 4)
+     }
+     perf.text.vector <- paste(perf.text, perf.text2, perf.text3, sep ="\n")
+     text.frame <- data.frame(text.c = perf.text.vector, 
+                              TPR = 0.55, 
+                              FPR = 0.68, 
+                              Segment = 1)
+     roc.plot <- roc.plot + geom_text(size = 8, aes(label = text.c), data = text.frame)
 #     
-#   }
+   }
   roc.plot <- roc.plot + geom_path(size = 1.1, col = col)
   roc.plot <- roc.plot + geom_path(data = plot.frame2, col = col2, size = 1.1)
   if (print.plot) print(roc.plot)
