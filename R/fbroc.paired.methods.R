@@ -48,9 +48,9 @@ extract.single.roc <- function(x, index) {
 #' @export
 plot.fbroc.paired.roc <- function(x, 
                                   col = "blue", 
-                                  fill = "royalblue1", 
+                                  fill = "blue1", 
                                   col2 = "red",
-                                  fill2 = "orangered2",
+                                  fill2 = "red1",
                                   print.plot = TRUE,
                                   show.conf = TRUE, conf.level = 0.95, 
                                   show.metric = NULL, ...) {
