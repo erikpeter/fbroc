@@ -5,8 +5,8 @@
 \title{Plots a \code{fbroc.paired.roc} object}
 \usage{
 \method{plot}{fbroc.paired.roc}(x, col = "blue", fill = "royalblue1",
-  col2 = "red", fill2 = "orange", print.plot = TRUE, show.conf = TRUE,
-  conf.level = 0.95, show.metric = NULL, ...)
+  col2 = "red", fill2 = "orangered2", print.plot = TRUE,
+  show.conf = TRUE, conf.level = 0.95, show.metric = NULL, ...)
 }
 \arguments{
 \item{x}{Object of class \code{fbroc.roc}.}

@@ -27,3 +27,10 @@ PerfFun pick_measure(Measure measure) {
   if (measure == FPR_AT_TPR) out = &get_fpr_at_fixed_tpr; 
   return out;
 }
+
+NumericVector get_steps(int n_steps) {
+  double step_size = (1.0 / n_steps);
+  NumericVector steps (n_steps + 1);
+  for (int i = 0; i <= n_steps; i++) steps[i] = 1. - i * step_size;
+  return steps;
+}

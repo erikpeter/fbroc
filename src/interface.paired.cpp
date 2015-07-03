@@ -35,3 +35,20 @@ List get_uncached_perf_paired(NumericVector pred1,
   out[1] = roc_perf2;
   return out;
 }
+
+// [[Rcpp::export]]
+NumericMatrix tpr_at_fpr_delta_uncached(NumericVector pred1, 
+                                        NumericVector pred2, 
+                                        IntegerVector true_class,
+                                        int n_boot,
+                                        int n_steps) {
+  Bootstrapped_paired_ROC boot_roc (pred1, pred2, true_class);
+  NumericVector steps = get_steps(n_steps);
+  NumericMatrix tpr_matrix (n_boot, n_steps + 1);
+  for (int j = 0; j < n_boot; j++) { 
+    boot_roc.bootstrap();
+    tpr_matrix(j, _) = boot_roc.get_roc(0).get_tpr_at_fpr(steps) - 
+                       boot_roc.get_roc(1).get_tpr_at_fpr(steps);
+  }
+  return tpr_matrix;
+}

@@ -17,6 +17,10 @@ get_uncached_perf_paired <- function(pred1, pred2, true_class, param, n_boot, me
     .Call('fbroc_get_uncached_perf_paired', PACKAGE = 'fbroc', pred1, pred2, true_class, param, n_boot, measure)
 }
 
+tpr_at_fpr_delta_uncached <- function(pred1, pred2, true_class, n_boot, n_steps) {
+    .Call('fbroc_tpr_at_fpr_delta_uncached', PACKAGE = 'fbroc', pred1, pred2, true_class, n_boot, n_steps)
+}
+
 tpr_fpr_boot2 <- function(pred, true_class, n_boot) {
     .Call('fbroc_tpr_fpr_boot2', PACKAGE = 'fbroc', pred, true_class, n_boot)
 }

@@ -55,13 +55,6 @@ NumericVector get_cached_perf(NumericMatrix tpr, NumericMatrix fpr, NumericVecto
   return roc_perf;
 }
 
-NumericVector get_steps(int n_steps) {
-  double step_size = (1.0 / n_steps);
-  NumericVector steps (n_steps + 1);
-  for (int i = 0; i <= n_steps; i++) steps[i] = 1. - i * step_size;
-  return steps;
-}
-
 // [[Rcpp::export]]
 NumericMatrix tpr_at_fpr_uncached(NumericVector pred, IntegerVector true_class, int n_boot, int n_steps) {
   Bootstrapped_ROC boot_roc (pred, true_class);
