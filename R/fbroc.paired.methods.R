@@ -196,7 +196,26 @@ plot.fbroc.paired.roc <- function(x,
                               matrix(x$roc1$FPR, nrow = 1),
                               x$n.thresholds1, 
                               100)
-    print(fpr1)
+    fpr2 <- fpr_at_tpr_cached(matrix(x$roc2$TPR, nrow = 1), 
+                              matrix(x$roc2$FPR, nrow = 1),
+                              x$n.thresholds2, 
+                              100)
+    plot.frame <- data.frame(Delta.FPR = as.vector(fpr1 - fpr2), TPR = seq(1, 0, by = -0.01))
+    roc.plot3 <- ggplot(data = plot.frame, aes(x = Delta.FPR, y = TPR))
+    
+    # insert confidence code here
+    
+    roc.plot3 <- roc.plot3 + geom_path(size = 1.1, col = "purple")
+    
+    roc.plot3 <- roc.plot3 +ggtitle("Differential FPR") + xlab("Delta False Positive Rate") +
+      ylab("True Positive Rate") + theme_bw() +
+      theme(title = element_text(size = 22),
+            axis.title.x = element_text(size = 18),
+            axis.title.y = element_text(size = 18),
+            axis.text.x = element_text(size = 16),
+            axis.text.y = element_text(size = 16))
+    
+    if (print.plot) print(roc.plot3)
   }
   
   
