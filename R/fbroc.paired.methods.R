@@ -176,6 +176,7 @@ plot.fbroc.paired.roc <- function(x,
       
     }
     
+  
     roc.plot2 <- roc.plot2 + geom_line(size = 1.1, col = "purple")
     
     roc.plot2 <- roc.plot2 +ggtitle("Differential TPR") + xlab("False Positive Rate") +
@@ -189,6 +190,15 @@ plot.fbroc.paired.roc <- function(x,
     if (print.plot) print(roc.plot2)
 
   }
+  
+  if (3 %in% plots) {
+    fpr1 <- fpr_at_tpr_cached(matrix(x$roc1$TPR, nrow = 1), 
+                              matrix(x$roc1$FPR, nrow = 1),
+                              x$n.thresholds1, 
+                              100)
+    print(fpr1)
+  }
+  
   
   invisible(roc.plot)
 }
