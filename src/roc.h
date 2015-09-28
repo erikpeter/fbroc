@@ -36,8 +36,10 @@ public:
   NumericVector & get_fpr(); // return FPR
   NumericVector & get_thresholds(); // return thresholds
   NumericVector get_tpr_at_fpr(NumericVector &steps) const; // return TPR at FPR
+  NumericVector get_fpr_at_tpr(NumericVector &steps) const; // return FPR at TPR
   // return TPR at FPR if TPR and FPR are pre-cached in a matrix
   static NumericVector get_tpr_at_fpr(NumericVector &tpr_in, NumericVector &fpr_in, NumericVector &steps);
+  static NumericVector get_fpr_at_tpr(NumericVector &tpr_in, NumericVector &fpr_in, NumericVector &steps);
   int get_n_thres() const; // get number of thresholds
 };
 

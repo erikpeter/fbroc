@@ -79,3 +79,17 @@ NumericMatrix tpr_at_fpr_cached(NumericMatrix tpr, NumericMatrix fpr, int n_thre
   }
   return tpr_matrix;
 }
+
+// [[Rcpp::export]]
+NumericMatrix fpr_at_tpr_cached(NumericMatrix tpr, NumericMatrix fpr, int n_thres, int n_steps) {
+  NumericVector steps = get_steps(n_steps);
+  int n_boot = fpr.nrow();
+  NumericMatrix fpr_matrix (n_boot, n_steps + 1);
+  for (int j = 0; j < n_boot; j++) {
+    NumericVector tpr_v = tpr(j, _);
+    NumericVector fpr_v = fpr(j, _);
+    fpr_matrix(j, _) = ROC::get_fpr_at_tpr(tpr_v, fpr_v, steps);
+  }
+  return fpr_matrix;
+}
+

@@ -107,6 +107,42 @@ void ROC::find_thresholds(NumericVector pred, IntegerVector true_class) {
 
 // begin of class ROC
 
+NumericVector ROC::get_fpr_at_tpr(NumericVector &steps) const// return FPR at TPR
+{
+  
+  int n_steps = steps.size();
+  int n_thres = tpr.size();
+  NumericVector fpr_vec (n_steps);
+  int j = n_thres - 1;
+  
+  for (int i = 0; i < n_steps; i++) {
+    while ((j > 0) && (tpr[j] < steps[i])) {
+      j--;
+    }
+    fpr_vec[i] = fpr[j];
+  }
+  
+  return fpr_vec;
+}
+
+NumericVector ROC::get_fpr_at_tpr(NumericVector &tpr_in, NumericVector &fpr_in, NumericVector &steps)
+{
+  
+  int n_steps = steps.size();
+  int n_thres = tpr_in.size();
+  NumericVector fpr_vec (n_steps);
+  int j = n_thres - 1;
+  
+  for (int i = 0; i < n_steps; i++) {
+    while ((j > 0) && (tpr_in[j] < steps[i])) {
+      j--;
+    }
+    fpr_vec[i] = fpr_in[j];
+  }
+  
+  return fpr_vec;
+}
+
 NumericVector ROC::get_tpr_at_fpr(NumericVector &tpr_in, NumericVector &fpr_in, NumericVector &steps)
 {
   int n_steps = steps.size();
