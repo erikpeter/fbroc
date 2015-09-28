@@ -45,3 +45,7 @@ fpr_at_tpr_cached <- function(tpr, fpr, n_thres, n_steps) {
     .Call('fbroc_fpr_at_tpr_cached', PACKAGE = 'fbroc', tpr, fpr, n_thres, n_steps)
 }
 
+fpr_at_tpr_uncached <- function(pred, true_class, n_boot, n_steps) {
+    .Call('fbroc_fpr_at_tpr_uncached', PACKAGE = 'fbroc', pred, true_class, n_boot, n_steps)
+}
+

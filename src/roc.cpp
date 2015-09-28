@@ -115,7 +115,7 @@ NumericVector ROC::get_fpr_at_tpr(NumericVector &steps) const// return FPR at TP
   NumericVector fpr_vec (n_steps);
   int j = n_thres - 1;
   
-  for (int i = 0; i < n_steps; i++) {
+  for (int i = n_steps - 1; i >= 0; i--) {
     while ((j > 0) && (tpr[j] < steps[i])) {
       j--;
     }
@@ -133,7 +133,7 @@ NumericVector ROC::get_fpr_at_tpr(NumericVector &tpr_in, NumericVector &fpr_in, 
   NumericVector fpr_vec (n_steps);
   int j = n_thres - 1;
   
-  for (int i = 0; i < n_steps; i++) {
+  for (int i = n_steps - 1; i >= 0; i--) {
     while ((j > 0) && (tpr_in[j] < steps[i])) {
       j--;
     }

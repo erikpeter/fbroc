@@ -157,3 +157,17 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// fpr_at_tpr_uncached
+NumericMatrix fpr_at_tpr_uncached(NumericVector pred, IntegerVector true_class, int n_boot, int n_steps);
+RcppExport SEXP fbroc_fpr_at_tpr_uncached(SEXP predSEXP, SEXP true_classSEXP, SEXP n_bootSEXP, SEXP n_stepsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< NumericVector >::type pred(predSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type true_class(true_classSEXP);
+    Rcpp::traits::input_parameter< int >::type n_boot(n_bootSEXP);
+    Rcpp::traits::input_parameter< int >::type n_steps(n_stepsSEXP);
+    __result = Rcpp::wrap(fpr_at_tpr_uncached(pred, true_class, n_boot, n_steps));
+    return __result;
+END_RCPP
+}

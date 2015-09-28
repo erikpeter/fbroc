@@ -93,3 +93,16 @@ NumericMatrix fpr_at_tpr_cached(NumericMatrix tpr, NumericMatrix fpr, int n_thre
   return fpr_matrix;
 }
 
+// [[Rcpp::export]]
+NumericMatrix fpr_at_tpr_uncached(NumericVector pred, IntegerVector true_class, int n_boot, int n_steps) {
+  Bootstrapped_ROC boot_roc (pred, true_class);
+  NumericVector steps = get_steps(n_steps);
+  NumericMatrix fpr_matrix (n_boot, n_steps + 1);
+  for (int j = 0; j < n_boot; j++) { 
+    boot_roc.bootstrap();
+    fpr_matrix(j, _) = boot_roc.get_fpr_at_tpr(steps);
+  }
+  
+  return fpr_matrix;
+}
+

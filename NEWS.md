@@ -5,6 +5,16 @@ date: "Sunday, May 03, 2015"
 output: html_document
 ---
 
+## fbroc 0.3.0
+
+### Bugfixes
+
+* Bad defaults caused plotting to fail with a large number of negative samples
+
+### New features
+
+* Allows the comparison of two paired ROC curves
+
 ## fbroc 0.2.1
 
 ### Bugfixes
