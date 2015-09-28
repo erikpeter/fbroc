@@ -13,7 +13,7 @@ conf.roc.paired(roc, conf.level = 0.95, steps = max(roc$n.neg, 100))
 
 \item{steps}{Number of discrete steps for the FPR at which the TPR is
 calculated. TPR confidence intervals are given for all FPRs in
-\code{seq(0, 1, by = (1 / steps))}. Defaults to \code{max(roc$n.neg, 100)}.}
+\code{seq(0, 1, by = (1 / steps))}. Defaults to 250.}
 }
 \value{
 A data.frame containing the FPR steps and the lower and upper bounds

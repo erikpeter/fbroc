@@ -5,7 +5,7 @@
 \title{Plots a \code{fbroc.roc} object}
 \usage{
 \method{plot}{fbroc.roc}(x, col = "blue", fill = "royalblue1",
-  print.plot = TRUE, show.conf = TRUE, conf.level = 0.95,
+  print.plot = TRUE, show.conf = TRUE, steps = 250, conf.level = 0.95,
   show.metric = NULL, ...)
 }
 \arguments{
@@ -19,6 +19,10 @@
 
 \item{show.conf}{Logical specifying whether the confidence region should be
 plotted.}
+
+\item{steps}{Number of discrete steps for the FPR at which the TPR is
+calculated. TPR confidence intervals are given for all FPRs in
+\code{seq(0, 1, by = (1 / steps))}. Defaults to 250.}
 
 \item{conf.level}{Confidence level of the confidence region.}
 
