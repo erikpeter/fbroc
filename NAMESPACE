@@ -2,6 +2,7 @@
 
 S3method(plot,fbroc.paired.roc)
 S3method(plot,fbroc.perf)
+S3method(plot,fbroc.perf.paired)
 S3method(plot,fbroc.roc)
 S3method(print,fbroc.perf)
 S3method(print,fbroc.roc)

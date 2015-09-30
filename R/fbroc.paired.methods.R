@@ -1,3 +1,54 @@
+#' Plots ROC based performance metric as histogram
+#' 
+#' PLACEHOLDER
+#' 
+#' @inheritParams plot.fbroc.perf
+#' @return A ggplot, so that the user can customize the plot further.
+#' @seealso \code{\link{perf.paired.roc}}
+#' @export
+plot.fbroc.perf.paired <- function(x, bins = NULL, col = "white", 
+                            fill = "lightblue", print.plot = TRUE, 
+                            show.conf = TRUE, conf.text = TRUE, ...) {
+  boot.frame <- data.frame(x$boot.results.pred1 - x$boot.results.pred2)
+  names(boot.frame) <- "Metric"
+  if (is.null(bins)) {
+    bins <- floor(x$n.boot/200)
+    bins <- max(bins, 20)
+    bins <- min(bins, 60)
+    bw.min <- 0.99999*min(diff(sort(unique(boot.frame$Metric))))
+    bw = round(diff(range(boot.frame$Metric))/bins, 6)
+    if ((bw < bw.min) | (5*bw.min > bw)) bw <- bw.min
+  }
+  else bw = round(diff(range(x$boot.results))/bins, 6)
+  
+  perf.plot <- ggplot(data = boot.frame, aes(x = Metric)) + 
+    xlab(substitute(paste(Delta, a), list(a = toupper(x$metric)))) + ylab("Density") + 
+    ggtitle("Performance histogram") +
+    geom_histogram(fill = fill, col = col, aes(, y = ..density..), 
+                   binwidth = bw) + theme_bw() +
+    theme(title = element_text(size = 22),
+          axis.title.x = element_text(size = 18),
+          axis.title.y = element_text(size = 18),
+          axis.text.x = element_text(size = 16),
+          axis.text.y = element_text(size = 16))
+  if (show.conf) {
+    conf.frame <- data.frame(Metric = x$CI.Performance.Difference, y.dummy = 0)
+    perf.plot <- perf.plot + geom_line(data = conf.frame, aes(y=y.dummy), 
+                                       col = "black",
+                                       size = 2)
+    if (conf.text) {
+      conf.frame$text.c <- round(conf.frame$Metric,2)
+      perf.plot <- perf.plot + 
+        geom_text(data = conf.frame,
+                  aes(x = Metric, y=y.dummy, label = text.c), 
+                  vjust = 0, hjust = c(1,0), size = 8)
+    }
+  }
+  if (print.plot) print(perf.plot)
+  invisible(perf.plot)
+}
+
+
 #' @export
 extract.single.roc <- function(x, index) {
   if (index != 1 & index != 2) stop("Index must be 1 or 2")
