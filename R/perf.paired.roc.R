@@ -10,7 +10,8 @@
 #' result.boot <- boot.paired.roc(roc.examples$Cont.Pred, roc.examples$Cont.Pred.Outlier,
 #'                                roc.examples$True.Class)
 #' result.perf <- perf.paired.roc(result.boot)                                
-perf.paired.roc <- function(roc, metric = "auc", conf.level = 0.95, tpr = NULL, fpr = NULL) {
+perf.fbroc.paired.roc <- function(roc, metric = "auc", conf.level = 0.95, tpr = NULL, fpr = NULL) {
+#perf.paired.roc <- function(roc, metric = "auc", conf.level = 0.95, tpr = NULL, fpr = NULL) {
   # start with data validation
   if (!is(roc, "fbroc.paired.roc"))
     stop("roc must be of class fbroc.paired.roc")

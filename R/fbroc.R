@@ -64,4 +64,4 @@ NULL
 globalVariables(c("TPR", "FPR", "text.c", "Lower.TPR", "Upper.TPR", "lower", "upper",
                   "Metric", "y.dummy", "..density..", "Segment"))
 
-
+perf <- function(x, ...) UseMethod("perf")
