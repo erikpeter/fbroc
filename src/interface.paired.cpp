@@ -52,3 +52,20 @@ NumericMatrix tpr_at_fpr_delta_uncached(NumericVector pred1,
   }
   return tpr_matrix;
 }
+
+// [[Rcpp::export]]
+NumericMatrix fpr_at_tpr_delta_uncached(NumericVector pred1, 
+                                        NumericVector pred2, 
+                                        IntegerVector true_class,
+                                        int n_boot,
+                                        int n_steps) {
+  Bootstrapped_paired_ROC boot_roc (pred1, pred2, true_class);
+  NumericVector steps = get_steps(n_steps);
+  NumericMatrix fpr_matrix (n_boot, n_steps + 1);
+  for (int j = 0; j < n_boot; j++) { 
+    boot_roc.bootstrap();
+    fpr_matrix(j, _) = boot_roc.get_roc(0).get_fpr_at_tpr(steps) - 
+      boot_roc.get_roc(1).get_fpr_at_tpr(steps);
+  }
+  return fpr_matrix;
+}

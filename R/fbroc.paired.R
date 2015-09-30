@@ -146,7 +146,7 @@ conf.roc.paired <- function(roc, conf.level = 0.95, conf.for = "tpr", steps = 25
       stop("Cached not implemented yet")
       #rel.matrix <- tpr_at_fpr_cached(roc$boot.tpr, roc$boot.fpr, roc$n.thresholds, steps)
     } else {
-      rel.matrix <- fpr_at_fpr_delta_uncached(roc$predictions1,
+      rel.matrix <- fpr_at_tpr_delta_uncached(roc$predictions1,
                                               roc$predictions2,
                                               as.integer(roc$true.classes),
                                               roc$n.boot,

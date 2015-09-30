@@ -73,6 +73,21 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// fpr_at_tpr_delta_uncached
+NumericMatrix fpr_at_tpr_delta_uncached(NumericVector pred1, NumericVector pred2, IntegerVector true_class, int n_boot, int n_steps);
+RcppExport SEXP fbroc_fpr_at_tpr_delta_uncached(SEXP pred1SEXP, SEXP pred2SEXP, SEXP true_classSEXP, SEXP n_bootSEXP, SEXP n_stepsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< NumericVector >::type pred1(pred1SEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type pred2(pred2SEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type true_class(true_classSEXP);
+    Rcpp::traits::input_parameter< int >::type n_boot(n_bootSEXP);
+    Rcpp::traits::input_parameter< int >::type n_steps(n_stepsSEXP);
+    __result = Rcpp::wrap(fpr_at_tpr_delta_uncached(pred1, pred2, true_class, n_boot, n_steps));
+    return __result;
+END_RCPP
+}
 // tpr_fpr_boot2
 List tpr_fpr_boot2(NumericVector pred, IntegerVector true_class, int n_boot);
 RcppExport SEXP fbroc_tpr_fpr_boot2(SEXP predSEXP, SEXP true_classSEXP, SEXP n_bootSEXP) {
