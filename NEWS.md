@@ -11,6 +11,10 @@ output: html_document
 
 * Bad defaults caused plotting to fail with a large number of negative samples
 
+### Other change
+
+* perf.roc is now deprecated. Use the new S3 generic perf instead
+
 ### New features
 
 * Allows the comparison of two paired ROC curves
