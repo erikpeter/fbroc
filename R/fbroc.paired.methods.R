@@ -1,3 +1,46 @@
+#' Prints information about a \code{fbroc.perf.paired} object
+#' 
+#' Prints the information about the bootstrap results for an object of class
+#' \code{fbroc.perf.paired}. This information includes the number of bootstrap
+#' replicates, the metric used and estimates for both the individual classifiers and the
+#' difference in performance including confidence intervals.
+#' @param x Object of class \code{fbroc.perf}.
+#' @param ... further arguments passed to or from other methods.
+#' @return Character containing the text that is also printed.
+#' @seealso \code{\link{perf.paired.roc}}
+#' @export
+print.fbroc.perf.paired <- function(x, ...) {
+  conf.level <- round(100 * x$conf.level, 0)
+  text <- paste("\n", "
+                Bootstrapped ROC performance metric", "\n", "\n",
+                "Metric: ", x$metric, "\n",
+                "Bootstrap replicates: ", x$n.boot, "\n", "\n",
+                "Classifier 1: ", "\n",
+                "Observed:", round(x$Observed.Performance.Predictor1, 3), "\n",
+                "Std. Error: ", round(sd(x$boot.results.pred1), 3), "\n", 
+                conf.level,"% confidence interval:", "\n",
+                round(x$CI.Performance.Predictor1[1], 3)," ",
+                round(x$CI.Performance.Predictor1[2], 3), "\n", "\n", 
+                "Classifier 2: ", "\n",
+                "Observed:", round(x$Observed.Performance.Predictor2, 3), "\n",
+                "Std. Error: ", round(sd(x$boot.results.pred2), 3), "\n", 
+                conf.level,"% confidence interval:", "\n",
+                round(x$CI.Performance.Predictor2[1], 3)," ",
+                round(x$CI.Performance.Predictor2[2], 3), "\n", "\n", 
+                "Delta: ", "\n",
+                "Observed:", round(x$Observed.Difference, 3), "\n",
+                "Std. Error: ", round(sd(x$boot.results.pred1 - x$boot.results.pred2), 3), "\n", 
+                conf.level,"% confidence interval:", "\n",
+                round(x$CI.Performance.Difference[1], 3)," ",
+                round(x$CI.Performance.Difference[2], 3), "\n", "\n",
+                "Correlation: ", round(x$Cor, 2), "\n", "\n",
+                sep = "")
+  cat(text)
+  invisible(text)
+}
+
+
+
 #' Plots ROC based performance metric as histogram
 #' 
 #' PLACEHOLDER
