@@ -4,7 +4,8 @@
 \alias{conf.roc.paired}
 \title{BlaBla}
 \usage{
-conf.roc.paired(roc, conf.level = 0.95, steps = max(roc$n.neg, 100))
+conf.roc.paired(roc, conf.level = 0.95, conf.for = "tpr",
+  steps = max(roc$n.neg, 100))
 }
 \arguments{
 \item{roc}{Object of class \code{fbroc.roc}.}

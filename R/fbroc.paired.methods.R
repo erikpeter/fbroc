@@ -52,12 +52,15 @@ plot.fbroc.paired.roc <- function(x,
                                   col2 = "red",
                                   fill2 = "red1",
                                   print.plot = TRUE,
-                                  show.conf = TRUE, conf.level = 0.95, 
+                                  show.conf = TRUE, 
+                                  conf.level = 0.95, 
+                                  steps = 250,
                                   show.metric = NULL, 
                                   plots = 1:4,
                                   ...) {
 
   if (!all(plots %in% 1:4) | (length(plots) > 4)) stop("Invalid plots argument")
+  
   if (x$tie.strategy == 2) {
     
     expand.roc <- add_roc_points(x$roc1$TPR, x$roc1$FPR)
@@ -74,6 +77,7 @@ plot.fbroc.paired.roc <- function(x,
     plot.frame2 = x$roc2
     plot.frame2$Segment = 1
   }
+  
   if (1 %in% plots) {
     roc.plot <- ggplot(data = plot.frame, aes(x = FPR, y = TPR)) +               
       ggtitle("ROC Curve") + xlab("False Positive Rate") +
@@ -86,7 +90,7 @@ plot.fbroc.paired.roc <- function(x,
     roc1 <- extract.single.roc(x, 1)
     roc2 <- extract.single.roc(x, 2)
     if (show.conf) {
-      conf.frame <- conf.roc(roc1, conf.level = conf.level)
+      conf.frame <- conf.roc(roc1, conf.level = conf.level, steps = steps)
       conf.frame$Segment <- 1
       roc.plot <- roc.plot + 
         geom_ribbon(data = conf.frame, fill = fill, alpha = 0.5,
@@ -167,7 +171,7 @@ plot.fbroc.paired.roc <- function(x,
         stop("Use of cache not yet implemented")
       } else {
         conf.frame <- 
-          conf.roc.paired(x, conf.level = conf.level, steps = 100)
+          conf.roc.paired(x, conf.level = conf.level, conf.for = "tpr", steps = steps)
         
       }
       roc.plot2 <- roc.plot2 + 
@@ -203,7 +207,19 @@ plot.fbroc.paired.roc <- function(x,
     plot.frame <- data.frame(Delta.FPR = as.vector(fpr1 - fpr2), TPR = seq(1, 0, by = -0.01))
     roc.plot3 <- ggplot(data = plot.frame, aes(x = Delta.FPR, y = TPR))
     
-    # insert confidence code here
+    if (show.conf) {
+      if (x$use.cache) {
+        stop("Use of cache not yet implemented")
+      } else {
+        conf.frame <- 
+          conf.roc.paired(x, conf.level = conf.level, conf.for = "fpr", steps = steps)
+        
+      }
+      roc.plot2 <- roc.plot2 + 
+        geom_ribbon(data = conf.frame, fill = "purple1", alpha = 0.5,
+                    aes(y = NULL, ymin = Lower.Delta.TPR, ymax = Upper.Delta.TPR))
+      
+    }
     
     roc.plot3 <- roc.plot3 + geom_path(size = 1.1, col = "purple")
     

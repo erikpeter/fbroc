@@ -6,7 +6,7 @@
 \usage{
 \method{plot}{fbroc.paired.roc}(x, col = "blue", fill = "blue1",
   col2 = "red", fill2 = "red1", print.plot = TRUE, show.conf = TRUE,
-  conf.level = 0.95, show.metric = NULL, plots = 1:4, ...)
+  conf.level = 0.95, steps = 250, show.metric = NULL, plots = 1:4, ...)
 }
 \arguments{
 \item{x}{Object of class \code{fbroc.roc}.}
@@ -21,6 +21,10 @@
 plotted.}
 
 \item{conf.level}{Confidence level of the confidence region.}
+
+\item{steps}{Number of discrete steps for the FPR at which the TPR is
+calculated. TPR confidence intervals are given for all FPRs in
+\code{seq(0, 1, by = (1 / steps))}. Defaults to 250.}
 
 \item{show.metric}{Character specifying which metric to display. See
 \code{\link{perf.roc}} for details. Defaults to \code{NULL}, which means
