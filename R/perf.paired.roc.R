@@ -3,7 +3,7 @@
 #' @param roc An object of class \code{fbroc.roc}.
 #' @param metric A performance metric. Select "auc" for the AUC, "tpr" for the TPR at a fixed
 #' FPR and "fpr" for the FPR at a fixed TPR.
-#' @inheritParams perf.roc
+#' @inheritParams perf.fbroc.roc
 #' @export
 #' @examples
 #' data(roc.examples)

@@ -30,8 +30,8 @@ perf.roc <- function(x, ...) {
 #' y <- rep(c(TRUE, FALSE), each = 500)
 #' x <- rnorm(1000) + y
 #' result.boot <- boot.roc(x, y, n.boot = 100)
-#' perf.roc(result.boot, "auc")
-#' perf.roc(result.boot, "auc", conf.level = 0.99)
+#' perf(result.boot, "auc")
+#' perf(result.boot, "auc", conf.level = 0.99)
 #' @export
 perf.fbroc.roc <- function(roc, metric = "auc", conf.level = 0.95, tpr = NULL, fpr = NULL) {
 

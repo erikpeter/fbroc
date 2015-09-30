@@ -12,12 +12,6 @@
 
 \item{metric}{A performance metric. Select "auc" for the AUC, "tpr" for the TPR at a fixed
 FPR and "fpr" for the FPR at a fixed TPR.}
-
-\item{conf.level}{The confidence level of the confidence interval.}
-
-\item{tpr}{The fixed TPR at which the FPR is to be evaluated when \code{fpr} is selected as metric.}
-
-\item{fpr}{The fixed FPR at which the TPR is to be evaluated when \code{tpr} is selected as metric.}
 }
 \description{
 Calculate performance for paired bootstrapped ROC curves
