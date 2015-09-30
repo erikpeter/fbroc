@@ -55,7 +55,7 @@ plot.fbroc.paired.roc <- function(x,
                                   show.conf = TRUE, 
                                   conf.level = 0.95, 
                                   steps = 250,
-                                  show.metric = NULL, 
+                                  show.metric = "auc", 
                                   plots = 1:4,
                                   ...) {
 
@@ -205,7 +205,7 @@ plot.fbroc.paired.roc <- function(x,
                               x$n.thresholds2, 
                               100)
     plot.frame <- data.frame(Delta.FPR = as.vector(fpr1 - fpr2), TPR = seq(1, 0, by = -0.01))
-    roc.plot3 <- ggplot(data = plot.frame, aes(x = Delta.FPR, y = TPR))
+    roc.plot3 <- ggplot(data = plot.frame, aes(y = Delta.FPR, x = TPR))
     
     if (show.conf) {
       if (x$use.cache) {
@@ -215,25 +215,30 @@ plot.fbroc.paired.roc <- function(x,
           conf.roc.paired(x, conf.level = conf.level, conf.for = "fpr", steps = steps)
         
       }
-      roc.plot2 <- roc.plot2 + 
+      roc.plot3 <- roc.plot3 + 
         geom_ribbon(data = conf.frame, fill = "purple1", alpha = 0.5,
-                    aes(y = NULL, ymin = Lower.Delta.TPR, ymax = Upper.Delta.TPR))
+                    aes(y = NULL, ymin = Lower.Delta.FPR, ymax = Upper.Delta.FPR))
       
     }
     
     roc.plot3 <- roc.plot3 + geom_path(size = 1.1, col = "purple")
     
-    roc.plot3 <- roc.plot3 +ggtitle("Differential FPR") + xlab("Delta False Positive Rate") +
-      ylab("True Positive Rate") + theme_bw() +
-      theme(title = element_text(size = 22),
-            axis.title.x = element_text(size = 18),
-            axis.title.y = element_text(size = 18),
-            axis.text.x = element_text(size = 16),
-            axis.text.y = element_text(size = 16))
+    roc.plot3 <- roc.plot3 + ggtitle("Differential FPR") + coord_flip() + 
+                            ylab("Delta False Positive Rate") +
+                            xlab("True Positive Rate") + 
+                            theme_bw() +
+                            theme(title = element_text(size = 22),
+                                  axis.title.x = element_text(size = 18),
+                                  axis.title.y = element_text(size = 18),
+                                  axis.text.x = element_text(size = 16),
+                                  axis.text.y = element_text(size = 16))
     
     if (print.plot) print(roc.plot3)
   }
-  
+  if (4 %in% plots) {
+    perf <- perf.paired.roc(x, metric = show.metric, conf.level = conf.level, ...)
+    plot(perf)
+  }
   
   invisible(roc.plot)
 }
