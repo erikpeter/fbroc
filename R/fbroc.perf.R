@@ -1,7 +1,7 @@
 #' @export
-perf.roc <- function(x, ...) {
+perf.roc <- function(roc, ...) {
   .Deprecated("perf")
-  perf(x, ...)
+  perf(roc, ...)
 }
 
 #' Calculate performance for bootstrapped ROC curve
@@ -33,7 +33,7 @@ perf.roc <- function(x, ...) {
 #' perf(result.boot, "auc")
 #' perf(result.boot, "auc", conf.level = 0.99)
 #' @export
-perf.fbroc.roc <- function(roc, metric = "auc", conf.level = 0.95, tpr = NULL, fpr = NULL) {
+perf.fbroc.roc <- function(roc, metric = "auc", conf.level = 0.95, tpr = NULL, fpr = NULL, ...) {
 
   # start with data validation
   if (!is(roc, "fbroc.roc"))

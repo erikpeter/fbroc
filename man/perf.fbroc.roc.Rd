@@ -5,7 +5,7 @@
 \title{Calculate performance for bootstrapped ROC curve}
 \usage{
 \method{perf}{fbroc.roc}(roc, metric = "auc", conf.level = 0.95,
-  tpr = NULL, fpr = NULL)
+  tpr = NULL, fpr = NULL, ...)
 }
 \arguments{
 \item{roc}{An object of class \code{fbroc.roc}.}
@@ -38,8 +38,8 @@ are included.
 y <- rep(c(TRUE, FALSE), each = 500)
 x <- rnorm(1000) + y
 result.boot <- boot.roc(x, y, n.boot = 100)
-perf.roc(result.boot, "auc")
-perf.roc(result.boot, "auc", conf.level = 0.99)
+perf(result.boot, "auc")
+perf(result.boot, "auc", conf.level = 0.99)
 }
 \seealso{
 \code{\link{boot.roc}}, \code{\link{print.fbroc.perf}},

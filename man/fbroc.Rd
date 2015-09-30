@@ -19,7 +19,7 @@ the True Positive Rate (TPR) as a function of the False Positive Rate (FPR).
 \describe{
 \item{\code{\link{boot.roc}}}{Use \code{boot.roc} to bootstrap a ROC curve.}
 \item{\code{\link{conf.roc}}}{Calculate a confidence region for the ROC curve.}
-\item{\code{\link{perf.roc}}}{Estimate performance and calculate confidence
+\item{\code{\link{perf}}}{Estimate performance and calculate confidence
 intervals.}
 \item{\code{\link{boot.tpr.at.fpr}}}{Transforms bootstrapped TPR/FPR at
 threshold matrix into a matrix containing bootstrapped TPRs at a range of
@@ -59,9 +59,9 @@ calculation will be added at a later time.
 data(roc.examples)
 result.boot <- boot.roc(roc.examples$Cont.Pred, roc.examples$True.Class, n.boot = 100)
 plot(result.boot)
-perf.roc(result.boot, "auc")
-perf.roc(result.boot, "auc", conf.level = 0.99)
-perf.roc(result.boot, "tpr", conf.level = 0.95, fpr = 0.1)
+perf(result.boot, "auc")
+perf(result.boot, "auc", conf.level = 0.99)
+perf(result.boot, "tpr", conf.level = 0.95, fpr = 0.1)
 }
 \references{
 Efron, B., & Tibshirani, R. (1998). \emph{An introduction to the bootstrap.}
