@@ -127,6 +127,11 @@ boot.roc <- function(pred, true.class, stratify = TRUE, n.boot = 1000,
 }
 
 
+conf.roc <- function(roc, conf.level = 0.95, steps = 250) {
+  .Deprecated("conf")
+  perf(conf, ...)
+}
+
 #' Generates confidence intervals for the TPR for a range of FPRs
 #' 
 #' Calculates confidence intervals for the TPR at different FPR values. 
@@ -142,24 +147,43 @@ boot.roc <- function(pred, true.class, stratify = TRUE, n.boot = 1000,
 #' of the confidence interval for the TPR.
 #' @export
 #' @seealso \code{\link{boot.roc}}
-conf.roc <- function(roc, conf.level = 0.95, steps = 250) {
+conf.fbroc.roc <- function(roc, conf.level = 0.95, conf.for = "TPR", steps = 250, ...) {
+  conf.for <- toupper(conf.for)
+  if (!(conf.for %in% c("TPR", "FPR"))) stop("Invalid rate given for confidence region")
   alpha <- 0.5*(1 - conf.level)
   alpha.levels <- c(alpha, 1 - alpha) 
   steps = as.integer(steps)
-  # translate tpr_fpr at threshold matrix into tpr at fpr matrix
-  if (roc$use.cache) {
-    rel.matrix <- tpr_at_fpr_cached(roc$boot.tpr, roc$boot.fpr, roc$n.thresholds, steps)
+  if (conf.for == "TPR") {
+    # translate tpr_fpr at threshold matrix into tpr at fpr matrix
+    if (roc$use.cache) {
+      rel.matrix <- tpr_at_fpr_cached(roc$boot.tpr, roc$boot.fpr, roc$n.thresholds, steps)
+    } else {
+      rel.matrix <- tpr_at_fpr_uncached(roc$predictions,
+                                        as.integer(roc$true.classes),
+                                        roc$n.boot,
+                                        steps)
+    }
   } else {
-    rel.matrix <- tpr_at_fpr_uncached(roc$predictions,
-                                      as.integer(roc$true.classes),
-                                      roc$n.boot,
-                                      steps)
+    if (roc$use.cache) {
+      rel.matrix <- fpr_at_tpr_cached(roc$boot.tpr, roc$boot.fpr, roc$n.thresholds, steps)
+    } else {
+      rel.matrix <- fpr_at_tpr_uncached(roc$predictions,
+                                        as.integer(roc$true.classes),
+                                        roc$n.boot,
+                                        steps)
+    }
   }
   rm(roc)
   conf.area <- t(apply(rel.matrix, 2, quantile, alpha.levels))
   conf.area <- as.data.frame(conf.area)
-  names(conf.area) <- c("Lower.TPR", "Upper.TPR")
-  conf.area <- cbind(data.frame(FPR = 1 - seq(0, 1, by = (1 / steps))), conf.area)
+  if (conf.for == "TPR") {
+    names(conf.area) <- c("Lower.TPR", "Upper.TPR")
+    conf.area <- cbind(data.frame(FPR = 1 - seq(0, 1, by = (1 / steps))), conf.area)
+  } else {
+    names(conf.area) <- c("Lower.FPR", "Upper.FPR")
+    conf.area <- cbind(data.frame(TPR = 1 - seq(0, 1, by = (1 / steps))), conf.area)
+  }
+
   return(conf.area)
 }
 

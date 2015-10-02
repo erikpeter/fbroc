@@ -114,20 +114,20 @@ boot.paired.roc <- function(pred1, pred2, true.class, stratify = TRUE, n.boot = 
 #' BlaBla
 #' 
 #' Placeholder
-#' @inheritParams conf.roc
+#' @inheritParams conf.fbroc.roc
 #' @return A data.frame containing the FPR steps and the lower and upper bounds
 #' of the confidence interval for the TPR.
 #' @export
 #' @seealso \code{\link{boot.roc}}
-conf.roc.paired <- function(roc, conf.level = 0.95, conf.for = "tpr", steps = 250) {
-  
-  if (!(conf.for %in% c("tpr", "fpr"))) stop("Invalid rate given for confidence region")
+conf.fbroc.paired.roc <- function(roc, conf.level = 0.95, conf.for = "TPR", steps = 250, ...) {
+  conf.for <- toupper(conf.for)
+  if (!(conf.for %in% c("TPR", "FPR"))) stop("Invalid rate given for confidence region")
   
   alpha <- 0.5*(1 - conf.level)
   alpha.levels <- c(alpha, 1 - alpha) 
   steps = as.integer(steps)
   # translate tpr_fpr at threshold matrix into tpr at fpr matrix
-  if (conf.for == "tpr") {
+  if (conf.for == "TPR") {
     if (roc$use.cache) {
       stop("Cached not implemented yet")
       #rel.matrix <- tpr_at_fpr_cached(roc$boot.tpr, roc$boot.fpr, roc$n.thresholds, steps)
@@ -141,7 +141,7 @@ conf.roc.paired <- function(roc, conf.level = 0.95, conf.for = "tpr", steps = 25
   }
   
   # translate tpr_fpr at threshold matrix into tpr at fpr matrix
-  if (conf.for == "fpr") {
+  if (conf.for == "FPR") {
     if (roc$use.cache) {
       stop("Cached not implemented yet")
       #rel.matrix <- tpr_at_fpr_cached(roc$boot.tpr, roc$boot.fpr, roc$n.thresholds, steps)
@@ -157,7 +157,7 @@ conf.roc.paired <- function(roc, conf.level = 0.95, conf.for = "tpr", steps = 25
   rm(roc)
   conf.area <- t(apply(rel.matrix, 2, quantile, alpha.levels))
   conf.area <- as.data.frame(conf.area)
-  if (conf.for == "tpr") {
+  if (conf.for == "TPR") {
     names(conf.area) <- c("Lower.Delta.TPR", "Upper.Delta.TPR")
     conf.area <- cbind(data.frame(FPR = 1 - seq(0, 1, by = (1 / steps))), conf.area)
   } else {

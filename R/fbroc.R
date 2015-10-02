@@ -66,3 +66,6 @@ globalVariables(c("TPR", "FPR", "text.c", "Lower.TPR", "Upper.TPR", "lower", "up
 
 #' @export
 perf <- function(roc, ...) UseMethod("perf")
+
+#' @export
+conf <- function(roc, ...) UseMethod("conf")
