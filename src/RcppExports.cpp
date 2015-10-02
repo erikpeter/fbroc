@@ -29,6 +29,20 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// tpr_fpr_boot_paired
+List tpr_fpr_boot_paired(NumericVector pred1, NumericVector pred2, IntegerVector true_class, int n_boot);
+RcppExport SEXP fbroc_tpr_fpr_boot_paired(SEXP pred1SEXP, SEXP pred2SEXP, SEXP true_classSEXP, SEXP n_bootSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< NumericVector >::type pred1(pred1SEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type pred2(pred2SEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type true_class(true_classSEXP);
+    Rcpp::traits::input_parameter< int >::type n_boot(n_bootSEXP);
+    __result = Rcpp::wrap(tpr_fpr_boot_paired(pred1, pred2, true_class, n_boot));
+    return __result;
+END_RCPP
+}
 // paired_roc_analysis
 List paired_roc_analysis(NumericVector pred1, NumericVector pred2, IntegerVector true_class);
 RcppExport SEXP fbroc_paired_roc_analysis(SEXP pred1SEXP, SEXP pred2SEXP, SEXP true_classSEXP) {

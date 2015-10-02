@@ -9,6 +9,10 @@ roc_analysis <- function(pred, true_class) {
     .Call('fbroc_roc_analysis', PACKAGE = 'fbroc', pred, true_class)
 }
 
+tpr_fpr_boot_paired <- function(pred1, pred2, true_class, n_boot) {
+    .Call('fbroc_tpr_fpr_boot_paired', PACKAGE = 'fbroc', pred1, pred2, true_class, n_boot)
+}
+
 paired_roc_analysis <- function(pred1, pred2, true_class) {
     .Call('fbroc_paired_roc_analysis', PACKAGE = 'fbroc', pred1, pred2, true_class)
 }

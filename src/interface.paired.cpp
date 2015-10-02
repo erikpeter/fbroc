@@ -7,6 +7,36 @@ using namespace Rcpp;
 #include "performance.h"
 #include "interface.common.h"
 
+
+// [[Rcpp::export]]
+List tpr_fpr_boot_paired(NumericVector pred1, 
+                         NumericVector pred2,
+                         IntegerVector true_class, 
+                         int n_boot) {
+  Bootstrapped_paired_ROC boot_roc (pred1, pred2, true_class);
+  int n_thres1 = boot_roc.get_roc(0).get_n_thres();
+  int n_thres2 = boot_roc.get_roc(1).get_n_thres();
+
+  NumericMatrix tpr1 (n_boot, n_thres1);
+  NumericMatrix fpr1 (n_boot, n_thres1);
+  NumericMatrix tpr2 (n_boot, n_thres2);
+  NumericMatrix fpr2 (n_boot, n_thres2);
+  for (int i = 0; i < n_boot; i++) {
+    boot_roc.bootstrap();
+    tpr1(i, _) = boot_roc.get_roc(0).get_tpr();
+    fpr1(i, _) = boot_roc.get_roc(0).get_fpr();
+    tpr2(i, _) = boot_roc.get_roc(1).get_tpr();
+    fpr2(i, _) = boot_roc.get_roc(1).get_fpr();
+  }
+  List out(4);
+  out[0] = tpr1;
+  out[1] = fpr1;
+  out[2] = tpr2;
+  out[3] = fpr2;
+  return out;
+}
+
+
 // [[Rcpp::export]]
 List paired_roc_analysis(NumericVector pred1, NumericVector pred2, IntegerVector true_class) {
   List out(2);  
