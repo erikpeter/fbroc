@@ -9,7 +9,7 @@ using namespace Rcpp;
 
 
 // [[Rcpp::export]]
-List tpr_fpr_boot2(NumericVector pred, IntegerVector true_class, int n_boot) {
+List tpr_fpr_boot(NumericVector pred, IntegerVector true_class, int n_boot) {
 
   Bootstrapped_ROC boot_roc (pred, true_class);
   int n_thres = boot_roc.get_n_thres();

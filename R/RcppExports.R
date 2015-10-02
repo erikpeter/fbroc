@@ -33,8 +33,8 @@ fpr_at_tpr_delta_uncached <- function(pred1, pred2, true_class, n_boot, n_steps)
     .Call('fbroc_fpr_at_tpr_delta_uncached', PACKAGE = 'fbroc', pred1, pred2, true_class, n_boot, n_steps)
 }
 
-tpr_fpr_boot2 <- function(pred, true_class, n_boot) {
-    .Call('fbroc_tpr_fpr_boot2', PACKAGE = 'fbroc', pred, true_class, n_boot)
+tpr_fpr_boot <- function(pred, true_class, n_boot) {
+    .Call('fbroc_tpr_fpr_boot', PACKAGE = 'fbroc', pred, true_class, n_boot)
 }
 
 get_uncached_perf <- function(pred, true_class, param, n_boot, measure) {

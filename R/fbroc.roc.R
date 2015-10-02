@@ -101,7 +101,7 @@ boot.roc <- function(pred, true.class, stratify = TRUE, n.boot = 1000,
   auc <- original.roc[[4]]
   original.roc <- c.list.to.roc(original.roc)
   if (use.cache) {
-    booted.roc <- tpr_fpr_boot2(pred, true.int, n.boot)
+    booted.roc <- tpr_fpr_boot(pred, true.int, n.boot)
     boot.tpr <- booted.roc[[1]]
     boot.fpr <- booted.roc[[2]]
     rm(booted.roc)

@@ -118,16 +118,16 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
-// tpr_fpr_boot2
-List tpr_fpr_boot2(NumericVector pred, IntegerVector true_class, int n_boot);
-RcppExport SEXP fbroc_tpr_fpr_boot2(SEXP predSEXP, SEXP true_classSEXP, SEXP n_bootSEXP) {
+// tpr_fpr_boot
+List tpr_fpr_boot(NumericVector pred, IntegerVector true_class, int n_boot);
+RcppExport SEXP fbroc_tpr_fpr_boot(SEXP predSEXP, SEXP true_classSEXP, SEXP n_bootSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< NumericVector >::type pred(predSEXP);
     Rcpp::traits::input_parameter< IntegerVector >::type true_class(true_classSEXP);
     Rcpp::traits::input_parameter< int >::type n_boot(n_bootSEXP);
-    __result = Rcpp::wrap(tpr_fpr_boot2(pred, true_class, n_boot));
+    __result = Rcpp::wrap(tpr_fpr_boot(pred, true_class, n_boot));
     return __result;
 END_RCPP
 }
