@@ -98,14 +98,14 @@ plot.fbroc.roc <- function(x, col = "blue", fill = "royalblue1", print.plot = TR
           axis.text.y = element_text(size = 16))
   
   if (show.conf) {
-    conf.frame <- conf.roc(x, conf.level = conf.level, steps = steps)
+    conf.frame <- conf(x, conf.level = conf.level, steps = steps)
     conf.frame$Segment <- 1
     roc.plot <- roc.plot + 
       geom_ribbon(data = conf.frame, fill = fill, alpha = 0.5,
                   aes(y = NULL, ymin = Lower.TPR, ymax = Upper.TPR))
   }
   if (!is.null(show.metric)) {
-    perf <- perf.roc(x, metric = show.metric, conf.level = conf.level, ...)
+    perf <- perf(x, metric = show.metric, conf.level = conf.level, ...)
     perf.text <- paste(perf$metric ," = " , round(perf$Observed.Performance, 2)," [",
                        round(perf$CI.Performance[1], 2), ",",
                        round(perf$CI.Performance[2], 2), "]", sep = "")

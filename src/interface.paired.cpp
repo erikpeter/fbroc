@@ -54,6 +54,46 @@ NumericMatrix tpr_at_fpr_delta_uncached(NumericVector pred1,
 }
 
 // [[Rcpp::export]]
+NumericMatrix tpr_at_fpr_delta_cached(NumericMatrix tpr1, 
+                                      NumericMatrix fpr1, 
+                                      NumericMatrix tpr2,
+                                      NumericMatrix fpr2,
+                                      int n_steps) {
+  NumericVector steps = get_steps(n_steps);
+  int n_boot = tpr1.nrow();
+  NumericMatrix tpr_matrix (n_boot, n_steps + 1);
+  for (int j = 0; j < n_boot; j++) {
+    NumericVector tpr_v1 = tpr1(j, _);
+    NumericVector fpr_v1 = fpr1(j, _);
+    NumericVector tpr_v2 = tpr2(j, _);
+    NumericVector fpr_v2 = fpr2(j, _);
+    tpr_matrix(j, _) = ROC::get_tpr_at_fpr(tpr_v1, fpr_v1, steps) - 
+                       ROC::get_tpr_at_fpr(tpr_v2, fpr_v2, steps);
+  }
+  return tpr_matrix;
+}
+
+// [[Rcpp::export]]
+NumericMatrix fpr_at_tpr_delta_cached(NumericMatrix tpr1, 
+                                      NumericMatrix fpr1, 
+                                      NumericMatrix tpr2,
+                                      NumericMatrix fpr2,
+                                      int n_steps) {
+  NumericVector steps = get_steps(n_steps);
+  int n_boot = tpr1.nrow();
+  NumericMatrix fpr_matrix (n_boot, n_steps + 1);
+  for (int j = 0; j < n_boot; j++) {
+    NumericVector tpr_v1 = tpr1(j, _);
+    NumericVector fpr_v1 = fpr1(j, _);
+    NumericVector tpr_v2 = tpr2(j, _);
+    NumericVector fpr_v2 = fpr2(j, _);
+    fpr_matrix(j, _) = ROC::get_fpr_at_tpr(tpr_v1, fpr_v1, steps) - 
+                       ROC::get_fpr_at_tpr(tpr_v2, fpr_v2, steps);
+  }
+  return fpr_matrix;
+}
+
+// [[Rcpp::export]]
 NumericMatrix fpr_at_tpr_delta_uncached(NumericVector pred1, 
                                         NumericVector pred2, 
                                         IntegerVector true_class,

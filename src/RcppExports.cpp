@@ -73,6 +73,36 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// tpr_at_fpr_delta_cached
+NumericMatrix tpr_at_fpr_delta_cached(NumericMatrix tpr1, NumericMatrix fpr1, NumericMatrix tpr2, NumericMatrix fpr2, int n_steps);
+RcppExport SEXP fbroc_tpr_at_fpr_delta_cached(SEXP tpr1SEXP, SEXP fpr1SEXP, SEXP tpr2SEXP, SEXP fpr2SEXP, SEXP n_stepsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< NumericMatrix >::type tpr1(tpr1SEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type fpr1(fpr1SEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type tpr2(tpr2SEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type fpr2(fpr2SEXP);
+    Rcpp::traits::input_parameter< int >::type n_steps(n_stepsSEXP);
+    __result = Rcpp::wrap(tpr_at_fpr_delta_cached(tpr1, fpr1, tpr2, fpr2, n_steps));
+    return __result;
+END_RCPP
+}
+// fpr_at_tpr_delta_cached
+NumericMatrix fpr_at_tpr_delta_cached(NumericMatrix tpr1, NumericMatrix fpr1, NumericMatrix tpr2, NumericMatrix fpr2, int n_steps);
+RcppExport SEXP fbroc_fpr_at_tpr_delta_cached(SEXP tpr1SEXP, SEXP fpr1SEXP, SEXP tpr2SEXP, SEXP fpr2SEXP, SEXP n_stepsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< NumericMatrix >::type tpr1(tpr1SEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type fpr1(fpr1SEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type tpr2(tpr2SEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type fpr2(fpr2SEXP);
+    Rcpp::traits::input_parameter< int >::type n_steps(n_stepsSEXP);
+    __result = Rcpp::wrap(fpr_at_tpr_delta_cached(tpr1, fpr1, tpr2, fpr2, n_steps));
+    return __result;
+END_RCPP
+}
 // fpr_at_tpr_delta_uncached
 NumericMatrix fpr_at_tpr_delta_uncached(NumericVector pred1, NumericVector pred2, IntegerVector true_class, int n_boot, int n_steps);
 RcppExport SEXP fbroc_fpr_at_tpr_delta_uncached(SEXP pred1SEXP, SEXP pred2SEXP, SEXP true_classSEXP, SEXP n_bootSEXP, SEXP n_stepsSEXP) {

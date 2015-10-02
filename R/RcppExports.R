@@ -21,6 +21,14 @@ tpr_at_fpr_delta_uncached <- function(pred1, pred2, true_class, n_boot, n_steps)
     .Call('fbroc_tpr_at_fpr_delta_uncached', PACKAGE = 'fbroc', pred1, pred2, true_class, n_boot, n_steps)
 }
 
+tpr_at_fpr_delta_cached <- function(tpr1, fpr1, tpr2, fpr2, n_steps) {
+    .Call('fbroc_tpr_at_fpr_delta_cached', PACKAGE = 'fbroc', tpr1, fpr1, tpr2, fpr2, n_steps)
+}
+
+fpr_at_tpr_delta_cached <- function(tpr1, fpr1, tpr2, fpr2, n_steps) {
+    .Call('fbroc_fpr_at_tpr_delta_cached', PACKAGE = 'fbroc', tpr1, fpr1, tpr2, fpr2, n_steps)
+}
+
 fpr_at_tpr_delta_uncached <- function(pred1, pred2, true_class, n_boot, n_steps) {
     .Call('fbroc_fpr_at_tpr_delta_uncached', PACKAGE = 'fbroc', pred1, pred2, true_class, n_boot, n_steps)
 }

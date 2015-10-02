@@ -153,37 +153,33 @@ conf.fbroc.roc <- function(roc, conf.level = 0.95, conf.for = "TPR", steps = 250
   alpha <- 0.5*(1 - conf.level)
   alpha.levels <- c(alpha, 1 - alpha) 
   steps = as.integer(steps)
+  
   if (conf.for == "TPR") {
-    # translate tpr_fpr at threshold matrix into tpr at fpr matrix
-    if (roc$use.cache) {
-      rel.matrix <- tpr_at_fpr_cached(roc$boot.tpr, roc$boot.fpr, roc$n.thresholds, steps)
-    } else {
-      rel.matrix <- tpr_at_fpr_uncached(roc$predictions,
-                                        as.integer(roc$true.classes),
-                                        roc$n.boot,
-                                        steps)
-    }
+    cached.fun <- tpr_at_fpr_cached
+    uncached.fun <- tpr_at_fpr_uncached
+    frame.names <- c("FPR", "TPR", "Lower.TPR", "Upper.TPR")
   } else {
-    if (roc$use.cache) {
-      rel.matrix <- fpr_at_tpr_cached(roc$boot.tpr, roc$boot.fpr, roc$n.thresholds, steps)
-    } else {
-      rel.matrix <- fpr_at_tpr_uncached(roc$predictions,
-                                        as.integer(roc$true.classes),
-                                        roc$n.boot,
-                                        steps)
-    }
+    cached.fun <- fpr_at_tpr_cached
+    uncached.fun <- fpr_at_tpr_uncached
+    frame.names <- c("TPR", "FPR", "Lower.FPR", "Upper.FPR")
   }
+  estimate <- cached.fun(matrix(roc$roc$TPR, nrow = 1), 
+                         matrix(roc$roc$FPR, nrow = 1), 
+                         roc$n.thresholds, 
+                         steps)
+  if (roc$use.cache) {
+    rel.matrix <- cached.fun(roc$boot.tpr, roc$boot.fpr, roc$n.thresholds, steps)
+  } else {
+    rel.matrix <- uncached.fun(roc$predictions, roc$true.classes, roc$n.boot, steps)
+  }
+  
   rm(roc)
+  estimate <- data.frame(as.numeric(estimate))
   conf.area <- t(apply(rel.matrix, 2, quantile, alpha.levels))
   conf.area <- as.data.frame(conf.area)
-  if (conf.for == "TPR") {
-    names(conf.area) <- c("Lower.TPR", "Upper.TPR")
-    conf.area <- cbind(data.frame(FPR = 1 - seq(0, 1, by = (1 / steps))), conf.area)
-  } else {
-    names(conf.area) <- c("Lower.FPR", "Upper.FPR")
-    conf.area <- cbind(data.frame(TPR = 1 - seq(0, 1, by = (1 / steps))), conf.area)
-  }
-
+  conf.area <- cbind(estimate, conf.area)
+  conf.area <- cbind(data.frame(1 - seq(0, 1, by = (1 / steps))), conf.area)
+  names(conf.area) <- frame.names
   return(conf.area)
 }
 
