@@ -146,8 +146,11 @@ conf.fbroc.paired.roc <- function(roc, conf.level = 0.95, conf.for = "TPR", step
                          steps)
   
   if (roc$use.cache) {
-    stop("Cached mode not implemented yet")
-    #rel.matrix <- cached.fun(roc$boot.tpr, roc$boot.fpr, roc$n.thresholds, steps)
+    rel.matrix <- cached.fun(roc$boot.tpr1,
+                             roc$boot.fpr1,
+                             roc$boot.tpr2,
+                             roc$boot.fpr2,
+                             steps)
   } else {
     rel.matrix <- uncached.fun(roc$predictions1,
                                roc$predictions2,
