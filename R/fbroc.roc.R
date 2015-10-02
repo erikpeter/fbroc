@@ -165,10 +165,9 @@ conf.fbroc.roc <- function(roc, conf.level = 0.95, conf.for = "TPR", steps = 250
   }
   estimate <- cached.fun(matrix(roc$roc$TPR, nrow = 1), 
                          matrix(roc$roc$FPR, nrow = 1), 
-                         roc$n.thresholds, 
                          steps)
   if (roc$use.cache) {
-    rel.matrix <- cached.fun(roc$boot.tpr, roc$boot.fpr, roc$n.thresholds, steps)
+    rel.matrix <- cached.fun(roc$boot.tpr, roc$boot.fpr, steps)
   } else {
     rel.matrix <- uncached.fun(roc$predictions, roc$true.classes, roc$n.boot, steps)
   }

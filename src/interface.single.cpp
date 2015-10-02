@@ -68,7 +68,7 @@ NumericMatrix tpr_at_fpr_uncached(NumericVector pred, IntegerVector true_class, 
 }
 
 // [[Rcpp::export]]
-NumericMatrix tpr_at_fpr_cached(NumericMatrix tpr, NumericMatrix fpr, int n_thres, int n_steps) {
+NumericMatrix tpr_at_fpr_cached(NumericMatrix tpr, NumericMatrix fpr, int n_steps) {
   NumericVector steps = get_steps(n_steps);
   int n_boot = tpr.nrow();
   NumericMatrix tpr_matrix (n_boot, n_steps + 1);
@@ -81,7 +81,7 @@ NumericMatrix tpr_at_fpr_cached(NumericMatrix tpr, NumericMatrix fpr, int n_thre
 }
 
 // [[Rcpp::export]]
-NumericMatrix fpr_at_tpr_cached(NumericMatrix tpr, NumericMatrix fpr, int n_thres, int n_steps) {
+NumericMatrix fpr_at_tpr_cached(NumericMatrix tpr, NumericMatrix fpr, int n_steps) {
   NumericVector steps = get_steps(n_steps);
   int n_boot = fpr.nrow();
   NumericMatrix fpr_matrix (n_boot, n_steps + 1);
