@@ -76,10 +76,12 @@ boot.paired.roc <- function(pred1, pred2, true.class, stratify = TRUE, n.boot = 
   auc1 = original.rocs[[1]][[4]]
   auc2 = original.rocs[[2]][[4]]
   if (use.cache) {
-    stop("Cached mode not enabled yet")
-    booted.roc <- tpr_fpr_boot2(pred1, true.int, n.boot)
-    boot.tpr <- booted.roc[[1]]
-    boot.fpr <- booted.roc[[2]]
+    
+    booted.roc <- tpr_fpr_boot_paired(pred1, pred2, true.int, n.boot)
+    boot.tpr1 <- booted.roc[[1]]
+    boot.fpr1 <- booted.roc[[2]]
+    boot.tpr2 <- booted.roc[[3]]
+    boot.fpr2 <- booted.roc[[4]]
     rm(booted.roc)
   } else {
     boot.tpr1 <- NULL
