@@ -45,6 +45,32 @@ List paired_roc_analysis(NumericVector pred1, NumericVector pred2, IntegerVector
   return out;
 }
 
+
+// [[Rcpp::export]]
+List get_cached_perf_paired(NumericMatrix tpr1, 
+                            NumericMatrix fpr1,
+                            NumericMatrix tpr2,
+                            NumericMatrix fpr2,
+                            NumericVector param,
+                            int measure) {
+  PerfFun choosen_measure = pick_measure(static_cast <Measure>(measure));                                
+  int n_boot = tpr1.nrow();
+  NumericVector roc_perf1 = NumericVector (n_boot);
+  NumericVector roc_perf2 = NumericVector (n_boot);
+  for (int i = 0; i < n_boot; i++) {
+    NumericVector tpr_vec1 = tpr1(i, _);
+    NumericVector fpr_vec1 = fpr1(i, _);
+    NumericVector tpr_vec2 = tpr2(i, _);
+    NumericVector fpr_vec2 = fpr2(i, _);
+    roc_perf1[i] = choosen_measure(tpr_vec1, fpr_vec1, param);
+    roc_perf2[i] = choosen_measure(tpr_vec2, fpr_vec2, param);
+  }
+  List out(2); 
+  out[0] = roc_perf1;
+  out[1] = roc_perf2;
+  return out;
+}
+
 // [[Rcpp::export]]
 List get_uncached_perf_paired(NumericVector pred1, 
                                        NumericVector pred2,

@@ -17,6 +17,10 @@ paired_roc_analysis <- function(pred1, pred2, true_class) {
     .Call('fbroc_paired_roc_analysis', PACKAGE = 'fbroc', pred1, pred2, true_class)
 }
 
+get_cached_perf_paired <- function(tpr1, fpr1, tpr2, fpr2, param, measure) {
+    .Call('fbroc_get_cached_perf_paired', PACKAGE = 'fbroc', tpr1, fpr1, tpr2, fpr2, param, measure)
+}
+
 get_uncached_perf_paired <- function(pred1, pred2, true_class, param, n_boot, measure) {
     .Call('fbroc_get_uncached_perf_paired', PACKAGE = 'fbroc', pred1, pred2, true_class, param, n_boot, measure)
 }

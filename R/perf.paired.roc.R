@@ -46,8 +46,9 @@ perf.fbroc.paired.roc <- function(roc, metric = "auc", conf.level = 0.95, tpr = 
   observed.perf1 <- get_cached_perf(tpr.m1, fpr.m1, param.vec, metric.number)
   observed.perf2 <- get_cached_perf(tpr.m2, fpr.m2, param.vec, metric.number)
   if (roc$use.cache) {
-    stop("Cached mode not implemented for paired yet")
-    #perf.boot1 <- get_cached_perf(roc$boot.tpr, roc$boot.fpr, param.vec, metric.number)
+    perf.boot.list <- get_cached_perf_paired(roc$boot.tpr1, roc$boot.fpr1, 
+                                             roc$boot.tpr2, roc$boot.fpr2,
+                                             param.vec, metric.number)
   } else {
     perf.boot.list <- get_uncached_perf_paired(roc$predictions1,
                                                roc$predictions2,
