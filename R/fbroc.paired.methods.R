@@ -93,7 +93,7 @@ plot.fbroc.perf.paired <- function(x, bins = NULL, col = "white",
 
 
 #' @export
-extract.single.roc <- function(x, index) {
+extract.roc <- function(x, index) {
   if (index != 1 & index != 2) stop("Index must be 1 or 2")
   output <- vector("list", 12)
   names(output) <- c("predictions", "true.classes", "n.thresholds", "n.boot", "use.cache",
@@ -108,18 +108,19 @@ extract.single.roc <- function(x, index) {
   if (index == 1) {
     output$auc <- x$auc1
     output$predictions = x$predictions1
-    output$roc = output$roc1
+    output$roc = x$roc1
     output$boot.tpr = x$boot.tpr1
     output$boot.fpr = x$boot.fpr1
     output$n.thresholds <- x$n.thresholds1
   } else {
     output$auc <- x$auc2
     output$predictions = x$predictions2
-    output$roc = output$roc2
+    output$roc = x$roc2
     output$boot.tpr = x$boot.tpr2
     output$boot.fpr = x$boot.fpr2
     output$n.thresholds <- x$n.thresholds2
   }
+  class(output) <- append(class(output), "fbroc.roc")
   return(output)
 }
 
@@ -181,22 +182,23 @@ plot.fbroc.paired.roc <- function(x,
             axis.title.y = element_text(size = 18),
             axis.text.x = element_text(size = 16),
             axis.text.y = element_text(size = 16))
-    roc1 <- extract.single.roc(x, 1)
-    roc2 <- extract.single.roc(x, 2)
+    roc1 <- extract.roc(x, 1)
+    roc2 <- extract.roc(x, 2)
     if (show.conf) {
-      conf.frame <- conf.roc(roc1, conf.level = conf.level, steps = steps)
+     
+      conf.frame <- conf(roc1, conf.level = conf.level, steps = steps)
       conf.frame$Segment <- 1
       roc.plot <- roc.plot + 
         geom_ribbon(data = conf.frame, fill = fill, alpha = 0.5,
                     aes(y = NULL, ymin = Lower.TPR, ymax = Upper.TPR))
-      conf.frame2 <- conf.roc(roc2, conf.level = conf.level)
+      conf.frame2 <- conf(roc2, conf.level = conf.level)
       conf.frame2$Segment <- 1
       roc.plot <- roc.plot + 
         geom_ribbon(data = conf.frame2, fill = fill2, alpha = 0.5,
                     aes(y = NULL, ymin = Lower.TPR, ymax = Upper.TPR))
     }
     if (!is.null(show.metric)) {
-      perf <- perf.paired.roc(x, metric = show.metric, conf.level = conf.level, ...)
+      perf <- perf(x, metric = show.metric, conf.level = conf.level, ...)
       #perf <- perf.roc(roc1, metric = show.metric, conf.level = conf.level, ...)
       perf.text <- paste("Predictor 1 ", perf$metric ," = " , 
                          round(perf$Observed.Performance.Predictor1, 2)," [",
@@ -239,9 +241,9 @@ plot.fbroc.paired.roc <- function(x,
       perf.text.vector <- paste(perf.text, perf.text2, perf.text3, sep ="\n")
       text.frame <- data.frame(text.c = perf.text.vector, 
                                TPR = 0.55, 
-                               FPR = 0.68, 
+                               FPR = 0.48, 
                                Segment = 1)
-      roc.plot <- roc.plot + geom_text(size = 8, aes(label = text.c), data = text.frame)
+      roc.plot <- roc.plot + geom_text(size = 8, aes(label = text.c), data = text.frame, hjust = 0)
       #     
     }
     roc.plot <- roc.plot + geom_path(size = 1.1, col = col)
@@ -251,23 +253,17 @@ plot.fbroc.paired.roc <- function(x,
   if (2 %in% plots) {
     tpr1 <- tpr_at_fpr_cached(matrix(x$roc1$TPR, nrow = 1), 
                               matrix(x$roc1$FPR, nrow = 1),
-                              x$n.thresholds1, 
-                              100)
+                              steps)
     tpr2 <- tpr_at_fpr_cached(matrix(x$roc2$TPR, nrow = 1), 
                               matrix(x$roc2$FPR, nrow = 1),
-                              x$n.thresholds2, 
-                              100)
-    plot.frame <- data.frame(Delta.TPR = as.vector(tpr1 - tpr2), FPR = seq(1, 0, by = -0.01))
+                              steps)
+    plot.frame <- data.frame(Delta.TPR = as.vector(tpr1 - tpr2), FPR = seq(1, 0, by = -1/steps))
     roc.plot2 <- ggplot(data = plot.frame, aes(x = FPR, y = Delta.TPR))
     
     if (show.conf) {
-      if (x$use.cache) {
-        stop("Use of cache not yet implemented")
-      } else {
-        conf.frame <- 
-          conf.roc.paired(x, conf.level = conf.level, conf.for = "tpr", steps = steps)
-        
-      }
+      conf.frame <- 
+        conf(x, conf.level = conf.level, conf.for = "tpr", steps = steps)
+      
       roc.plot2 <- roc.plot2 + 
         geom_ribbon(data = conf.frame, fill = "purple1", alpha = 0.5,
                     aes(y = NULL, ymin = Lower.Delta.TPR, ymax = Upper.Delta.TPR))
@@ -292,23 +288,19 @@ plot.fbroc.paired.roc <- function(x,
   if (3 %in% plots) {
     fpr1 <- fpr_at_tpr_cached(matrix(x$roc1$TPR, nrow = 1), 
                               matrix(x$roc1$FPR, nrow = 1),
-                              x$n.thresholds1, 
-                              100)
+                              steps)
     fpr2 <- fpr_at_tpr_cached(matrix(x$roc2$TPR, nrow = 1), 
                               matrix(x$roc2$FPR, nrow = 1),
-                              x$n.thresholds2, 
-                              100)
-    plot.frame <- data.frame(Delta.FPR = as.vector(fpr1 - fpr2), TPR = seq(1, 0, by = -0.01))
+                              steps)
+    plot.frame <- data.frame(Delta.FPR = as.vector(fpr1 - fpr2), TPR = seq(1, 0, by = -1/steps))
     roc.plot3 <- ggplot(data = plot.frame, aes(y = Delta.FPR, x = TPR))
     
     if (show.conf) {
-      if (x$use.cache) {
-        stop("Use of cache not yet implemented")
-      } else {
-        conf.frame <- 
-          conf.roc.paired(x, conf.level = conf.level, conf.for = "fpr", steps = steps)
+      
+      conf.frame <- 
+        conf(x, conf.level = conf.level, conf.for = "fpr", steps = steps)
         
-      }
+      
       roc.plot3 <- roc.plot3 + 
         geom_ribbon(data = conf.frame, fill = "purple1", alpha = 0.5,
                     aes(y = NULL, ymin = Lower.Delta.FPR, ymax = Upper.Delta.FPR))
@@ -330,8 +322,8 @@ plot.fbroc.paired.roc <- function(x,
     if (print.plot) print(roc.plot3)
   }
   if (4 %in% plots) {
-    perf <- perf.paired.roc(x, metric = show.metric, conf.level = conf.level, ...)
-    plot(perf)
+    perf.plot <- perf(x, metric = show.metric, conf.level = conf.level, ...)
+    plot(perf.plot)
   }
   
   invisible(roc.plot)
