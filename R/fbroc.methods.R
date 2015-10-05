@@ -142,6 +142,7 @@ plot.fbroc.perf <- function(x, bins = NULL, col = "white",
   boot.frame <- data.frame(x$boot.results)
   names(boot.frame) <- "Metric"
   if (is.null(bins)) {
+    # Bin number heuristic
     bins <- floor(x$n.boot/200)
     bins <- max(bins, 20)
     bins <- min(bins, 60)
