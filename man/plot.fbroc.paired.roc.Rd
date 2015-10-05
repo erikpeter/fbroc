@@ -4,9 +4,10 @@
 \alias{plot.fbroc.paired.roc}
 \title{Plots a \code{fbroc.paired.roc} object}
 \usage{
-\method{plot}{fbroc.paired.roc}(x, col = "blue", fill = "blue1",
-  col2 = "red", fill2 = "red1", print.plot = TRUE, show.conf = TRUE,
-  conf.level = 0.95, steps = 250, show.metric = "auc", ...)
+\method{plot}{fbroc.paired.roc}(x, col = "blue", fill = "dodgerblue",
+  col2 = "red", fill2 = "goldenrod1", print.plot = TRUE,
+  show.conf = TRUE, conf.level = 0.95, steps = 250, show.metric = "auc",
+  ...)
 }
 \arguments{
 \item{x}{Object of class \code{fbroc.roc}.}

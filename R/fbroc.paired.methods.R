@@ -125,6 +125,7 @@ extract.roc <- function(x, index) {
 }
 
 
+
 #' Plots a \code{fbroc.paired.roc} object
 #' 
 #' PLACEHOLDER Plot a \code{fbroc.roc} object and shows the ROC curve. The confidence
@@ -143,9 +144,9 @@ extract.roc <- function(x, index) {
 #' @export
 plot.fbroc.paired.roc <- function(x, 
                                   col = "blue", 
-                                  fill = "blue1", 
-                                  col2 = "red",
-                                  fill2 = "red1",
+                                  fill = "dodgerblue", 
+                                  col2 = "darkgreen",
+                                  fill2 = "seagreen1",
                                   print.plot = TRUE,
                                   show.conf = TRUE, 
                                   conf.level = 0.95, 
