@@ -6,7 +6,7 @@
 \usage{
 \method{plot}{fbroc.paired.roc}(x, col = "blue", fill = "blue1",
   col2 = "red", fill2 = "red1", print.plot = TRUE, show.conf = TRUE,
-  conf.level = 0.95, steps = 250, show.metric = "auc", plots = 1:4, ...)
+  conf.level = 0.95, steps = 250, show.metric = "auc", ...)
 }
 \arguments{
 \item{x}{Object of class \code{fbroc.roc}.}

@@ -151,11 +151,7 @@ plot.fbroc.paired.roc <- function(x,
                                   conf.level = 0.95, 
                                   steps = 250,
                                   show.metric = "auc", 
-                                  plots = 1:4,
                                   ...) {
-
-  if (!all(plots %in% 1:4) | (length(plots) > 4)) stop("Invalid plots argument")
-  
   if (x$tie.strategy == 2) {
     
     expand.roc <- add_roc_points(x$roc1$TPR, x$roc1$FPR)
@@ -173,158 +169,271 @@ plot.fbroc.paired.roc <- function(x,
     plot.frame2$Segment = 1
   }
   
-  if (1 %in% plots) {
-    roc.plot <- ggplot(data = plot.frame, aes(x = FPR, y = TPR)) +               
-      ggtitle("ROC Curve") + xlab("False Positive Rate") +
-      ylab("True Positive Rate") + theme_bw() +
-      theme(title = element_text(size = 22),
-            axis.title.x = element_text(size = 18),
-            axis.title.y = element_text(size = 18),
-            axis.text.x = element_text(size = 16),
-            axis.text.y = element_text(size = 16))
-    roc1 <- extract.roc(x, 1)
-    roc2 <- extract.roc(x, 2)
-    if (show.conf) {
-     
-      conf.frame <- conf(roc1, conf.level = conf.level, steps = steps)
-      conf.frame$Segment <- 1
-      roc.plot <- roc.plot + 
-        geom_ribbon(data = conf.frame, fill = fill, alpha = 0.5,
-                    aes(y = NULL, ymin = Lower.TPR, ymax = Upper.TPR))
-      conf.frame2 <- conf(roc2, conf.level = conf.level)
-      conf.frame2$Segment <- 1
-      roc.plot <- roc.plot + 
-        geom_ribbon(data = conf.frame2, fill = fill2, alpha = 0.5,
-                    aes(y = NULL, ymin = Lower.TPR, ymax = Upper.TPR))
-    }
-    if (!is.null(show.metric)) {
-      perf <- perf(x, metric = show.metric, conf.level = conf.level, ...)
-      #perf <- perf.roc(roc1, metric = show.metric, conf.level = conf.level, ...)
-      perf.text <- paste("Predictor 1 ", perf$metric ," = " , 
-                         round(perf$Observed.Performance.Predictor1, 2)," [",
-                         round(perf$CI.Performance.Predictor1[1], 2), ",",
-                         round(perf$CI.Performance.Predictor1[2], 2), "]", sep = "")
-      perf.text2 <- paste("Predictor 2 ",perf$metric ," = " , 
-                          round(perf$Observed.Performance.Predictor2, 2)," [",
-                          round(perf$CI.Performance.Predictor2[1], 2), ",",
-                          round(perf$CI.Performance.Predictor2[2], 2), "]", sep = "")
-      perf.text3 <- paste("Delta ",perf$metric ," = " , 
-                          round(perf$Observed.Difference, 2)," [",
-                          round(perf$CI.Performance.Difference[1], 2), ",",
-                          round(perf$CI.Performance.Difference[2], 2), "]", sep = "")
-      if (show.metric == "tpr") {
-        extra.frame <- data.frame(FPR = perf$params, 
-                                  TPR = c(perf$Observed.Performance.Predictor1, 
-                                          perf$Observed.Performance.Predictor2),
-                                  Segment = 1,
-                                  lower = c(perf$CI.Performance.Predictor1[1], 
-                                            perf$CI.Performance.Predictor2[1]),
-                                  upper = c(perf$CI.Performance.Predictor1[2],
-                                            perf$CI.Performance.Predictor2[2]))
-        roc.plot <- roc.plot + geom_errorbar(data = extra.frame, width = 0.02, size = 1.25,
-                                             aes(ymin = lower, ymax = upper)) + 
-          geom_point(data = extra.frame, size = 4)
-      }
-      if (show.metric == "fpr") {
-        extra.frame <- data.frame(TPR = perf$params, 
-                                  FPR = c(perf$Observed.Performance.Predictor1, 
-                                          perf$Observed.Performance.Predictor2),
-                                  Segment = 1,
-                                  lower = c(perf$CI.Performance.Predictor1[1], 
-                                            perf$CI.Performance.Predictor2[1]),
-                                  upper = c(perf$CI.Performance.Predictor1[2],
-                                            perf$CI.Performance.Predictor2[2]))
-        roc.plot <- roc.plot + geom_errorbarh(data = extra.frame, height = 0.02, size = 1.25,
-                                              aes(xmin = lower, xmax = upper)) +
-          geom_point(data = extra.frame, size = 4)
-      }
-      perf.text.vector <- paste(perf.text, perf.text2, perf.text3, sep ="\n")
-      text.frame <- data.frame(text.c = perf.text.vector, 
-                               TPR = 0.55, 
-                               FPR = 0.48, 
-                               Segment = 1)
-      roc.plot <- roc.plot + geom_text(size = 8, aes(label = text.c), data = text.frame, hjust = 0)
-      #     
-    }
-    roc.plot <- roc.plot + geom_path(size = 1.1, col = col)
-    roc.plot <- roc.plot + geom_path(data = plot.frame2, col = col2, size = 1.1)
-    if (print.plot) print(roc.plot)
+  roc.plot <- ggplot(data = plot.frame, aes(x = FPR, y = TPR)) +               
+    ggtitle("ROC Curve") + xlab("False Positive Rate") +
+    ylab("True Positive Rate") + theme_bw() +
+    theme(title = element_text(size = 22),
+          axis.title.x = element_text(size = 18),
+          axis.title.y = element_text(size = 18),
+          axis.text.x = element_text(size = 16),
+          axis.text.y = element_text(size = 16))
+  roc1 <- extract.roc(x, 1)
+  roc2 <- extract.roc(x, 2)
+  if (show.conf) {
+    
+    conf.frame <- conf(roc1, conf.level = conf.level, steps = steps)
+    conf.frame$Segment <- 1
+    roc.plot <- roc.plot + 
+      geom_ribbon(data = conf.frame, fill = fill, alpha = 0.5,
+                  aes(y = NULL, ymin = Lower.TPR, ymax = Upper.TPR))
+    conf.frame2 <- conf(roc2, conf.level = conf.level)
+    conf.frame2$Segment <- 1
+    roc.plot <- roc.plot + 
+      geom_ribbon(data = conf.frame2, fill = fill2, alpha = 0.5,
+                  aes(y = NULL, ymin = Lower.TPR, ymax = Upper.TPR))
   }
-  if (2 %in% plots) {
-    tpr1 <- tpr_at_fpr_cached(matrix(x$roc1$TPR, nrow = 1), 
-                              matrix(x$roc1$FPR, nrow = 1),
-                              steps)
-    tpr2 <- tpr_at_fpr_cached(matrix(x$roc2$TPR, nrow = 1), 
-                              matrix(x$roc2$FPR, nrow = 1),
-                              steps)
-    plot.frame <- data.frame(Delta.TPR = as.vector(tpr1 - tpr2), FPR = seq(1, 0, by = -1/steps))
-    roc.plot2 <- ggplot(data = plot.frame, aes(x = FPR, y = Delta.TPR))
-    
-    if (show.conf) {
-      conf.frame <- 
-        conf(x, conf.level = conf.level, conf.for = "tpr", steps = steps)
-      
-      roc.plot2 <- roc.plot2 + 
-        geom_ribbon(data = conf.frame, fill = "purple1", alpha = 0.5,
-                    aes(y = NULL, ymin = Lower.Delta.TPR, ymax = Upper.Delta.TPR))
-      
+  if (!is.null(show.metric)) {
+    perf <- perf(x, metric = show.metric, conf.level = conf.level, ...)
+    #perf <- perf.roc(roc1, metric = show.metric, conf.level = conf.level, ...)
+    perf.text <- paste("Predictor 1 ", perf$metric ," = " , 
+                       round(perf$Observed.Performance.Predictor1, 2)," [",
+                       round(perf$CI.Performance.Predictor1[1], 2), ",",
+                       round(perf$CI.Performance.Predictor1[2], 2), "]", sep = "")
+    perf.text2 <- paste("Predictor 2 ",perf$metric ," = " , 
+                        round(perf$Observed.Performance.Predictor2, 2)," [",
+                        round(perf$CI.Performance.Predictor2[1], 2), ",",
+                        round(perf$CI.Performance.Predictor2[2], 2), "]", sep = "")
+    perf.text3 <- paste("Delta ",perf$metric ," = " , 
+                        round(perf$Observed.Difference, 2)," [",
+                        round(perf$CI.Performance.Difference[1], 2), ",",
+                        round(perf$CI.Performance.Difference[2], 2), "]", sep = "")
+    if (show.metric == "tpr") {
+      extra.frame <- data.frame(FPR = perf$params, 
+                                TPR = c(perf$Observed.Performance.Predictor1, 
+                                        perf$Observed.Performance.Predictor2),
+                                Segment = 1,
+                                lower = c(perf$CI.Performance.Predictor1[1], 
+                                          perf$CI.Performance.Predictor2[1]),
+                                upper = c(perf$CI.Performance.Predictor1[2],
+                                          perf$CI.Performance.Predictor2[2]))
+      roc.plot <- roc.plot + geom_errorbar(data = extra.frame, width = 0.02, size = 1.25,
+                                           aes(ymin = lower, ymax = upper)) + 
+        geom_point(data = extra.frame, size = 4)
     }
-    
-  
-    roc.plot2 <- roc.plot2 + geom_line(size = 1.1, col = "purple")
-    
-    roc.plot2 <- roc.plot2 +ggtitle("Differential TPR") + xlab("False Positive Rate") +
-      ylab("Delta True Positive Rate") + theme_bw() +
-      theme(title = element_text(size = 22),
-            axis.title.x = element_text(size = 18),
-            axis.title.y = element_text(size = 18),
-            axis.text.x = element_text(size = 16),
-            axis.text.y = element_text(size = 16))
-    
-    if (print.plot) print(roc.plot2)
-
-  }
-  
-  if (3 %in% plots) {
-    fpr1 <- fpr_at_tpr_cached(matrix(x$roc1$TPR, nrow = 1), 
-                              matrix(x$roc1$FPR, nrow = 1),
-                              steps)
-    fpr2 <- fpr_at_tpr_cached(matrix(x$roc2$TPR, nrow = 1), 
-                              matrix(x$roc2$FPR, nrow = 1),
-                              steps)
-    plot.frame <- data.frame(Delta.FPR = as.vector(fpr1 - fpr2), TPR = seq(1, 0, by = -1/steps))
-    roc.plot3 <- ggplot(data = plot.frame, aes(y = Delta.FPR, x = TPR))
-    
-    if (show.conf) {
-      
-      conf.frame <- 
-        conf(x, conf.level = conf.level, conf.for = "fpr", steps = steps)
-        
-      
-      roc.plot3 <- roc.plot3 + 
-        geom_ribbon(data = conf.frame, fill = "purple1", alpha = 0.5,
-                    aes(y = NULL, ymin = Lower.Delta.FPR, ymax = Upper.Delta.FPR))
-      
+    if (show.metric == "fpr") {
+      extra.frame <- data.frame(TPR = perf$params, 
+                                FPR = c(perf$Observed.Performance.Predictor1, 
+                                        perf$Observed.Performance.Predictor2),
+                                Segment = 1,
+                                lower = c(perf$CI.Performance.Predictor1[1], 
+                                          perf$CI.Performance.Predictor2[1]),
+                                upper = c(perf$CI.Performance.Predictor1[2],
+                                          perf$CI.Performance.Predictor2[2]))
+      roc.plot <- roc.plot + geom_errorbarh(data = extra.frame, height = 0.02, size = 1.25,
+                                            aes(xmin = lower, xmax = upper)) +
+        geom_point(data = extra.frame, size = 4)
     }
-    
-    roc.plot3 <- roc.plot3 + geom_path(size = 1.1, col = "purple")
-    
-    roc.plot3 <- roc.plot3 + ggtitle("Differential FPR") + coord_flip() + 
-                            ylab("Delta False Positive Rate") +
-                            xlab("True Positive Rate") + 
-                            theme_bw() +
-                            theme(title = element_text(size = 22),
-                                  axis.title.x = element_text(size = 18),
-                                  axis.title.y = element_text(size = 18),
-                                  axis.text.x = element_text(size = 16),
-                                  axis.text.y = element_text(size = 16))
-    
-    if (print.plot) print(roc.plot3)
+    perf.text.vector <- paste(perf.text, perf.text2, perf.text3, sep ="\n")
+    text.frame <- data.frame(text.c = perf.text.vector, 
+                             TPR = 0.55, 
+                             FPR = 0.48, 
+                             Segment = 1)
+    roc.plot <- roc.plot + geom_text(size = 8, aes(label = text.c), data = text.frame, hjust = 0)
+    #     
   }
-  if (4 %in% plots) {
-    perf.plot <- perf(x, metric = show.metric, conf.level = conf.level, ...)
-    plot(perf.plot)
-  }
+  roc.plot <- roc.plot + geom_path(size = 1.1, col = col)
+  roc.plot <- roc.plot + geom_path(data = plot.frame2, col = col2, size = 1.1)
+  if (print.plot) print(roc.plot)
   
   invisible(roc.plot)
 }
+
+
+
+# plot.fbroc.paired.roc <- function(x, 
+#                                   col = "blue", 
+#                                   fill = "blue1", 
+#                                   col2 = "red",
+#                                   fill2 = "red1",
+#                                   print.plot = TRUE,
+#                                   show.conf = TRUE, 
+#                                   conf.level = 0.95, 
+#                                   steps = 250,
+#                                   show.metric = "auc", 
+#                                   plots = 1:4,
+#                                   ...) {
+#   
+#   if (!all(plots %in% 1:4) | (length(plots) > 4)) stop("Invalid plots argument")
+#   
+#   if (x$tie.strategy == 2) {
+#     
+#     expand.roc <- add_roc_points(x$roc1$TPR, x$roc1$FPR)
+#     plot.frame <- data.frame(TPR = expand.roc[[1]],
+#                              FPR = expand.roc[[2]],
+#                              Segment = expand.roc[[3]])
+#     expand.roc <- add_roc_points(x$roc2$TPR, x$roc2$FPR)
+#     plot.frame2 <- data.frame(TPR = expand.roc[[1]],
+#                               FPR = expand.roc[[2]],
+#                               Segment = expand.roc[[3]])
+#   } else {
+#     plot.frame = x$roc1
+#     plot.frame$Segment = 1
+#     plot.frame2 = x$roc2
+#     plot.frame2$Segment = 1
+#   }
+#   
+#   if (1 %in% plots) {
+#     roc.plot <- ggplot(data = plot.frame, aes(x = FPR, y = TPR)) +               
+#       ggtitle("ROC Curve") + xlab("False Positive Rate") +
+#       ylab("True Positive Rate") + theme_bw() +
+#       theme(title = element_text(size = 22),
+#             axis.title.x = element_text(size = 18),
+#             axis.title.y = element_text(size = 18),
+#             axis.text.x = element_text(size = 16),
+#             axis.text.y = element_text(size = 16))
+#     roc1 <- extract.roc(x, 1)
+#     roc2 <- extract.roc(x, 2)
+#     if (show.conf) {
+#       
+#       conf.frame <- conf(roc1, conf.level = conf.level, steps = steps)
+#       conf.frame$Segment <- 1
+#       roc.plot <- roc.plot + 
+#         geom_ribbon(data = conf.frame, fill = fill, alpha = 0.5,
+#                     aes(y = NULL, ymin = Lower.TPR, ymax = Upper.TPR))
+#       conf.frame2 <- conf(roc2, conf.level = conf.level)
+#       conf.frame2$Segment <- 1
+#       roc.plot <- roc.plot + 
+#         geom_ribbon(data = conf.frame2, fill = fill2, alpha = 0.5,
+#                     aes(y = NULL, ymin = Lower.TPR, ymax = Upper.TPR))
+#     }
+#     if (!is.null(show.metric)) {
+#       perf <- perf(x, metric = show.metric, conf.level = conf.level, ...)
+#       #perf <- perf.roc(roc1, metric = show.metric, conf.level = conf.level, ...)
+#       perf.text <- paste("Predictor 1 ", perf$metric ," = " , 
+#                          round(perf$Observed.Performance.Predictor1, 2)," [",
+#                          round(perf$CI.Performance.Predictor1[1], 2), ",",
+#                          round(perf$CI.Performance.Predictor1[2], 2), "]", sep = "")
+#       perf.text2 <- paste("Predictor 2 ",perf$metric ," = " , 
+#                           round(perf$Observed.Performance.Predictor2, 2)," [",
+#                           round(perf$CI.Performance.Predictor2[1], 2), ",",
+#                           round(perf$CI.Performance.Predictor2[2], 2), "]", sep = "")
+#       perf.text3 <- paste("Delta ",perf$metric ," = " , 
+#                           round(perf$Observed.Difference, 2)," [",
+#                           round(perf$CI.Performance.Difference[1], 2), ",",
+#                           round(perf$CI.Performance.Difference[2], 2), "]", sep = "")
+#       if (show.metric == "tpr") {
+#         extra.frame <- data.frame(FPR = perf$params, 
+#                                   TPR = c(perf$Observed.Performance.Predictor1, 
+#                                           perf$Observed.Performance.Predictor2),
+#                                   Segment = 1,
+#                                   lower = c(perf$CI.Performance.Predictor1[1], 
+#                                             perf$CI.Performance.Predictor2[1]),
+#                                   upper = c(perf$CI.Performance.Predictor1[2],
+#                                             perf$CI.Performance.Predictor2[2]))
+#         roc.plot <- roc.plot + geom_errorbar(data = extra.frame, width = 0.02, size = 1.25,
+#                                              aes(ymin = lower, ymax = upper)) + 
+#           geom_point(data = extra.frame, size = 4)
+#       }
+#       if (show.metric == "fpr") {
+#         extra.frame <- data.frame(TPR = perf$params, 
+#                                   FPR = c(perf$Observed.Performance.Predictor1, 
+#                                           perf$Observed.Performance.Predictor2),
+#                                   Segment = 1,
+#                                   lower = c(perf$CI.Performance.Predictor1[1], 
+#                                             perf$CI.Performance.Predictor2[1]),
+#                                   upper = c(perf$CI.Performance.Predictor1[2],
+#                                             perf$CI.Performance.Predictor2[2]))
+#         roc.plot <- roc.plot + geom_errorbarh(data = extra.frame, height = 0.02, size = 1.25,
+#                                               aes(xmin = lower, xmax = upper)) +
+#           geom_point(data = extra.frame, size = 4)
+#       }
+#       perf.text.vector <- paste(perf.text, perf.text2, perf.text3, sep ="\n")
+#       text.frame <- data.frame(text.c = perf.text.vector, 
+#                                TPR = 0.55, 
+#                                FPR = 0.48, 
+#                                Segment = 1)
+#       roc.plot <- roc.plot + geom_text(size = 8, aes(label = text.c), data = text.frame, hjust = 0)
+#       #     
+#     }
+#     roc.plot <- roc.plot + geom_path(size = 1.1, col = col)
+#     roc.plot <- roc.plot + geom_path(data = plot.frame2, col = col2, size = 1.1)
+#     if (print.plot) print(roc.plot)
+#   }
+#   if (2 %in% plots) {
+#     tpr1 <- tpr_at_fpr_cached(matrix(x$roc1$TPR, nrow = 1), 
+#                               matrix(x$roc1$FPR, nrow = 1),
+#                               steps)
+#     tpr2 <- tpr_at_fpr_cached(matrix(x$roc2$TPR, nrow = 1), 
+#                               matrix(x$roc2$FPR, nrow = 1),
+#                               steps)
+#     plot.frame <- data.frame(Delta.TPR = as.vector(tpr1 - tpr2), FPR = seq(1, 0, by = -1/steps))
+#     roc.plot2 <- ggplot(data = plot.frame, aes(x = FPR, y = Delta.TPR))
+#     
+#     if (show.conf) {
+#       conf.frame <- 
+#         conf(x, conf.level = conf.level, conf.for = "tpr", steps = steps)
+#       
+#       roc.plot2 <- roc.plot2 + 
+#         geom_ribbon(data = conf.frame, fill = "purple1", alpha = 0.5,
+#                     aes(y = NULL, ymin = Lower.Delta.TPR, ymax = Upper.Delta.TPR))
+#       
+#     }
+#     
+#     
+#     roc.plot2 <- roc.plot2 + geom_line(size = 1.1, col = "purple")
+#     
+#     roc.plot2 <- roc.plot2 +ggtitle("Differential TPR") + xlab("False Positive Rate") +
+#       ylab("Delta True Positive Rate") + theme_bw() +
+#       theme(title = element_text(size = 22),
+#             axis.title.x = element_text(size = 18),
+#             axis.title.y = element_text(size = 18),
+#             axis.text.x = element_text(size = 16),
+#             axis.text.y = element_text(size = 16))
+#     
+#     if (print.plot) print(roc.plot2)
+#     
+#   }
+#   
+#   if (3 %in% plots) {
+#     fpr1 <- fpr_at_tpr_cached(matrix(x$roc1$TPR, nrow = 1), 
+#                               matrix(x$roc1$FPR, nrow = 1),
+#                               steps)
+#     fpr2 <- fpr_at_tpr_cached(matrix(x$roc2$TPR, nrow = 1), 
+#                               matrix(x$roc2$FPR, nrow = 1),
+#                               steps)
+#     plot.frame <- data.frame(Delta.FPR = as.vector(fpr1 - fpr2), TPR = seq(1, 0, by = -1/steps))
+#     roc.plot3 <- ggplot(data = plot.frame, aes(y = Delta.FPR, x = TPR))
+#     
+#     if (show.conf) {
+#       
+#       conf.frame <- 
+#         conf(x, conf.level = conf.level, conf.for = "fpr", steps = steps)
+#       
+#       
+#       roc.plot3 <- roc.plot3 + 
+#         geom_ribbon(data = conf.frame, fill = "purple1", alpha = 0.5,
+#                     aes(y = NULL, ymin = Lower.Delta.FPR, ymax = Upper.Delta.FPR))
+#       
+#     }
+#     
+#     roc.plot3 <- roc.plot3 + geom_path(size = 1.1, col = "purple")
+#     
+#     roc.plot3 <- roc.plot3 + ggtitle("Differential FPR") + coord_flip() + 
+#       ylab("Delta False Positive Rate") +
+#       xlab("True Positive Rate") + 
+#       theme_bw() +
+#       theme(title = element_text(size = 22),
+#             axis.title.x = element_text(size = 18),
+#             axis.title.y = element_text(size = 18),
+#             axis.text.x = element_text(size = 16),
+#             axis.text.y = element_text(size = 16))
+#     
+#     if (print.plot) print(roc.plot3)
+#   }
+#   if (4 %in% plots) {
+#     perf.plot <- perf(x, metric = show.metric, conf.level = conf.level, ...)
+#     plot(perf.plot)
+#   }
+#   
+#   invisible(roc.plot)
+# }
