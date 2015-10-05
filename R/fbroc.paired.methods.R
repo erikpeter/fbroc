@@ -212,7 +212,39 @@ plot.fbroc.paired.roc <- function(x,
   invisible(roc.plot)
 }
 
-
+#' @export
+plot.fbroc.conf.paired <- function(x, col = "blue", fill = "royalblue1", print.plot = TRUE,...) {
+  if (names(x)[1] == "FPR") { # tpr over fpr
+    roc.plot <- ggplot(data = x, aes(x = FPR, y = Delta.TPR)) +               
+      ggtitle("ROC Curve") + ylab(substitute(paste(Delta, a), list(a = "True Positive Rate"))) +
+      xlab("False Positive Rate") + theme_bw() +
+      theme(title = element_text(size = 22),
+            axis.title.x = element_text(size = 18),
+            axis.title.y = element_text(size = 18),
+            axis.text.x = element_text(size = 16),
+            axis.text.y = element_text(size = 16))
+    #plot conf
+    roc.plot <- roc.plot + geom_ribbon(data = x, fill = fill, alpha = 0.5,
+                                       aes(y = NULL, ymin = Lower.Delta.TPR, ymax = Upper.Delta.TPR))
+  }
+  else { # Now the same plot for curve fpr over tpr
+    roc.plot <- ggplot(data = x, aes(y = Delta.FPR, x = TPR)) +               
+      ggtitle("ROC Curve") +  ylab(substitute(paste(Delta, a), list(a = "False Positive Rate"))) +
+      xlab("True Positive Rate") + theme_bw() +
+      theme(title = element_text(size = 22),
+            axis.title.x = element_text(size = 18),
+            axis.title.y = element_text(size = 18),
+            axis.text.x = element_text(size = 16),
+            axis.text.y = element_text(size = 16))
+    #plot conf
+    roc.plot <- roc.plot + geom_ribbon(data = x, fill = fill, alpha = 0.5,
+                                       aes(y = NULL, ymin = Lower.Delta.FPR, ymax = Upper.Delta.FPR))
+  }
+  roc.plot <- roc.plot + geom_path(size = 1.1, col = col) # plot estimate
+  
+  if (print.plot) print(roc.plot)
+  invisible(roc.plot)
+}
 
 # plot.fbroc.paired.roc <- function(x, 
 #                                   col = "blue", 

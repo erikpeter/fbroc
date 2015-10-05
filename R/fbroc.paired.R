@@ -166,6 +166,7 @@ conf.fbroc.paired.roc <- function(roc, conf.level = 0.95, conf.for = "TPR", step
   conf.area <- cbind(estimate, conf.area)
   conf.area <- cbind(data.frame(1 - seq(0, 1, by = (1 / steps))), conf.area)
   names(conf.area) <- frame.names
+  class(conf.area) <- c("fbroc.conf.paired", class(conf.area))
   return(conf.area)
 }
 
