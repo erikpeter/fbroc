@@ -194,36 +194,15 @@ plot.fbroc.paired.roc <- function(x,
                         round(perf$Observed.Difference, 2)," [",
                         round(perf$CI.Performance.Difference[1], 2), ",",
                         round(perf$CI.Performance.Difference[2], 2), "]", sep = "")
-    if (show.metric == "tpr") {
-      extra.frame <- data.frame(FPR = perf$params, 
-                                TPR = c(perf$Observed.Performance.Predictor1, 
-                                        perf$Observed.Performance.Predictor2),
-                                Segment = 1,
-                                lower = c(perf$CI.Performance.Predictor1[1], 
-                                          perf$CI.Performance.Predictor2[1]),
-                                upper = c(perf$CI.Performance.Predictor1[2],
-                                          perf$CI.Performance.Predictor2[2]))
-      roc.plot <- roc.plot + geom_errorbar(data = extra.frame, width = 0.02, size = 1.25,
-                                           aes(ymin = lower, ymax = upper)) + 
-        geom_point(data = extra.frame, size = 4)
-    }
-    if (show.metric == "fpr") {
-      extra.frame <- data.frame(TPR = perf$params, 
-                                FPR = c(perf$Observed.Performance.Predictor1, 
-                                        perf$Observed.Performance.Predictor2),
-                                Segment = 1,
-                                lower = c(perf$CI.Performance.Predictor1[1], 
-                                          perf$CI.Performance.Predictor2[1]),
-                                upper = c(perf$CI.Performance.Predictor1[2],
-                                          perf$CI.Performance.Predictor2[2]))
-      roc.plot <- roc.plot + geom_errorbarh(data = extra.frame, height = 0.02, size = 1.25,
-                                            aes(xmin = lower, xmax = upper)) +
-        geom_point(data = extra.frame, size = 4)
-    }
+    
+    roc.plot <- fbroc.plot.add.metric.paired(roc.plot, show.metric, perf, col1, col2)
+    
+    
+    
     perf.text.vector <- paste(perf.text, perf.text2, perf.text3, sep ="\n")
     text.frame <- data.frame(text.c = perf.text.vector, 
                              TPR = 0.55, 
-                             FPR = 0.48, 
+                             FPR = 0.4, 
                              Segment = 1)
     roc.plot <- roc.plot + geom_text(size = 8, aes(label = text.c), data = text.frame, hjust = 0)
     #     

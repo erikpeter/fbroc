@@ -35,3 +35,33 @@ fbroc.plot.add.conf <- function(roc1, conf.level = conf.level, steps = steps, fi
 }
 
 
+fbroc.plot.add.metric.paired <- function(roc.plot,show.metric, perf, col1, col2) {
+  if (show.metric == "tpr") {
+    extra.frame <- data.frame(FPR = perf$params, 
+                              TPR = c(perf$Observed.Performance.Predictor1, 
+                                      perf$Observed.Performance.Predictor2),
+                              Segment = 1,
+                              lower = c(perf$CI.Performance.Predictor1[1], 
+                                        perf$CI.Performance.Predictor2[1]),
+                              upper = c(perf$CI.Performance.Predictor1[2],
+                                        perf$CI.Performance.Predictor2[2]))
+  
+    roc.plot <- roc.plot + geom_errorbar(data = extra.frame, width = 0.02, size = 1.25,
+                              aes(ymin = lower, ymax = upper), col = c(col1, col2), alpha = 0.7) + 
+      geom_point(data = extra.frame, size = 4, col = c(col1, col2))
+  }
+  if (show.metric == "fpr") {
+    extra.frame <- data.frame(TPR = perf$params, 
+                              FPR = c(perf$Observed.Performance.Predictor1, 
+                                      perf$Observed.Performance.Predictor2),
+                              Segment = 1,
+                              lower = c(perf$CI.Performance.Predictor1[1], 
+                                        perf$CI.Performance.Predictor2[1]),
+                              upper = c(perf$CI.Performance.Predictor1[2],
+                                        perf$CI.Performance.Predictor2[2]))
+    roc.plot <- roc.plot + geom_errorbarh(data = extra.frame, height = 0.02, size = 1.25,
+                              aes(xmin = lower, xmax = upper), col = c(col1, col2), alpha = 0.7) +
+      geom_point(data = extra.frame, size = 4)
+  }
+  return(roc.plot)
+}
