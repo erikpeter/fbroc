@@ -1,9 +1,11 @@
+# transforms list to roc data.frame
 c.list.to.roc <- function(input) {
   roc.frame <- as.data.frame(input[1:3])
   names(roc.frame) <- c("TPR", "FPR", "threshold")
   return(roc.frame)
 }
 
+# Check if number is a single numeric between 0 and 1
 validate.single.numeric <- function(number, var.name) {
   if (is.null(number)) stop(paste("Please pass ", var.name, " to perf.roc!", sep = ""))
   if (class(number) != "numeric") stop(paste(var.name, " must be numeric!", sep = ""))
@@ -26,6 +28,7 @@ fbroc.plot.base <- function(plot.frame) {
   return(roc.plot)
 }
 
+# adds confidence region to roc curve plot
 fbroc.plot.add.conf <- function(roc1, conf.level = conf.level, steps = steps, fill = fill) {
   conf.frame <- conf(roc1, conf.level = conf.level, steps = steps)
   conf.frame$Segment <- 1
@@ -34,7 +37,7 @@ fbroc.plot.add.conf <- function(roc1, conf.level = conf.level, steps = steps, fi
               aes(y = NULL, ymin = Lower.TPR, ymax = Upper.TPR))
 }
 
-
+# add performance metric visualization to roc plot (paired roc curve)
 fbroc.plot.add.metric.paired <- function(roc.plot,show.metric, perf, col1, col2) {
   if (show.metric == "tpr") {
     extra.frame <- data.frame(FPR = perf$params, 
@@ -66,6 +69,7 @@ fbroc.plot.add.metric.paired <- function(roc.plot,show.metric, perf, col1, col2)
   return(roc.plot)
 }
 
+# add performance metric visualization to roc plot (roc curve)
 fbroc.plot.add.metric <- function(roc.plot, show.metric, perf, col) {
   if (show.metric == "tpr") {
     extra.frame <- data.frame(FPR = perf$params, TPR = perf$Observed.Performance, Segment = 1,

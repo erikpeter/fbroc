@@ -196,14 +196,12 @@ plot.fbroc.paired.roc <- function(x,
                         round(perf$CI.Performance.Difference[2], 2), "]", sep = "")
     
     roc.plot <- fbroc.plot.add.metric.paired(roc.plot, show.metric, perf, col1, col2)
-    
-    
-    
     perf.text.vector <- paste(perf.text, perf.text2, perf.text3, sep ="\n")
     text.frame <- data.frame(text.c = perf.text.vector, 
                              TPR = 0.55, 
                              FPR = 0.4, 
                              Segment = 1)
+    
     roc.plot <- roc.plot + geom_text(size = 8, aes(label = text.c), data = text.frame, hjust = 0)
     #     
   }
