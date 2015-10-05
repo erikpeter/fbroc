@@ -143,8 +143,8 @@ extract.roc <- function(x, index) {
 #' @seealso \code{\link{boot.roc}}, \code{\link{perf.roc}}
 #' @export
 plot.fbroc.paired.roc <- function(x, 
-                                  col = "blue", 
-                                  fill = "dodgerblue", 
+                                  col1 = "blue", 
+                                  fill1 = "dodgerblue", 
                                   col2 = "darkgreen",
                                   fill2 = "seagreen1",
                                   print.plot = TRUE,
@@ -170,32 +170,18 @@ plot.fbroc.paired.roc <- function(x,
     plot.frame2$Segment = 1
   }
   
-  roc.plot <- ggplot(data = plot.frame, aes(x = FPR, y = TPR)) +               
-    ggtitle("ROC Curve") + xlab("False Positive Rate") +
-    ylab("True Positive Rate") + theme_bw() +
-    theme(title = element_text(size = 22),
-          axis.title.x = element_text(size = 18),
-          axis.title.y = element_text(size = 18),
-          axis.text.x = element_text(size = 16),
-          axis.text.y = element_text(size = 16))
+  roc.plot <- fbroc.plot.base(plot.frame)
+  
   roc1 <- extract.roc(x, 1)
   roc2 <- extract.roc(x, 2)
   if (show.conf) {
-    
-    conf.frame <- conf(roc1, conf.level = conf.level, steps = steps)
-    conf.frame$Segment <- 1
     roc.plot <- roc.plot + 
-      geom_ribbon(data = conf.frame, fill = fill, alpha = 0.5,
-                  aes(y = NULL, ymin = Lower.TPR, ymax = Upper.TPR))
-    conf.frame2 <- conf(roc2, conf.level = conf.level)
-    conf.frame2$Segment <- 1
-    roc.plot <- roc.plot + 
-      geom_ribbon(data = conf.frame2, fill = fill2, alpha = 0.5,
-                  aes(y = NULL, ymin = Lower.TPR, ymax = Upper.TPR))
+                fbroc.plot.add.conf(roc1, conf.level = conf.level, steps = steps, fill = fill1)
+    roc.plot <- roc.plot +
+                fbroc.plot.add.conf(roc2, conf.level = conf.level, steps = steps, fill = fill2)
   }
   if (!is.null(show.metric)) {
     perf <- perf(x, metric = show.metric, conf.level = conf.level, ...)
-    #perf <- perf.roc(roc1, metric = show.metric, conf.level = conf.level, ...)
     perf.text <- paste("Predictor 1 ", perf$metric ," = " , 
                        round(perf$Observed.Performance.Predictor1, 2)," [",
                        round(perf$CI.Performance.Predictor1[1], 2), ",",
@@ -242,7 +228,7 @@ plot.fbroc.paired.roc <- function(x,
     roc.plot <- roc.plot + geom_text(size = 8, aes(label = text.c), data = text.frame, hjust = 0)
     #     
   }
-  roc.plot <- roc.plot + geom_path(size = 1.1, col = col)
+  roc.plot <- roc.plot + geom_path(size = 1.1, col = col1)
   roc.plot <- roc.plot + geom_path(data = plot.frame2, col = col2, size = 1.1)
   if (print.plot) print(roc.plot)
   
