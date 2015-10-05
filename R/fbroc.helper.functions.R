@@ -65,3 +65,22 @@ fbroc.plot.add.metric.paired <- function(roc.plot,show.metric, perf, col1, col2)
   }
   return(roc.plot)
 }
+
+fbroc.plot.add.metric <- function(roc.plot, show.metric, perf, col) {
+  if (show.metric == "tpr") {
+    extra.frame <- data.frame(FPR = perf$params, TPR = perf$Observed.Performance, Segment = 1,
+                              lower = perf$CI.Performance[1], upper = perf$CI.Performance[2])
+    roc.plot <- roc.plot + geom_errorbar(data = extra.frame, width = 0.02, size = 1.25,
+                                         aes(ymin = lower, ymax = upper)) + 
+      geom_point(data = extra.frame, size = 4)
+  }
+  if (show.metric == "fpr") {
+    extra.frame <- data.frame(TPR = perf$params, FPR = perf$Observed.Performance, Segment = 1,
+                              lower = perf$CI.Performance[1], upper = perf$CI.Performance[2])
+    roc.plot <- roc.plot + geom_errorbarh(data = extra.frame, height = 0.02, size = 1.25,
+                                          aes(xmin = lower, xmax = upper)) +
+      geom_point(data = extra.frame, size = 4)
+  }
+  return(roc.plot)
+}
+

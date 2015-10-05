@@ -88,41 +88,19 @@ plot.fbroc.roc <- function(x, col = "blue", fill = "royalblue1", print.plot = TR
     plot.frame = x$roc
     plot.frame$Segment = 1
   }
-  roc.plot <- ggplot(data = plot.frame, aes(x = FPR, y = TPR)) +               
-    ggtitle("ROC Curve") + xlab("False Positive Rate") +
-    ylab("True Positive Rate") + theme_bw() +
-    theme(title = element_text(size = 22),
-          axis.title.x = element_text(size = 18),
-          axis.title.y = element_text(size = 18),
-          axis.text.x = element_text(size = 16),
-          axis.text.y = element_text(size = 16))
+  roc.plot <- fbroc.plot.base(plot.frame)
   
   if (show.conf) {
-    conf.frame <- conf(x, conf.level = conf.level, steps = steps)
-    conf.frame$Segment <- 1
     roc.plot <- roc.plot + 
-      geom_ribbon(data = conf.frame, fill = fill, alpha = 0.5,
-                  aes(y = NULL, ymin = Lower.TPR, ymax = Upper.TPR))
+      fbroc.plot.add.conf(x, conf.level = conf.level, steps = steps, fill = fill)
   }
+  
   if (!is.null(show.metric)) {
     perf <- perf(x, metric = show.metric, conf.level = conf.level, ...)
     perf.text <- paste(perf$metric ," = " , round(perf$Observed.Performance, 2)," [",
                        round(perf$CI.Performance[1], 2), ",",
                        round(perf$CI.Performance[2], 2), "]", sep = "")
-    if (show.metric == "tpr") {
-      extra.frame <- data.frame(FPR = perf$params, TPR = perf$Observed.Performance, Segment = 1,
-                                lower = perf$CI.Performance[1], upper = perf$CI.Performance[2])
-      roc.plot <- roc.plot + geom_errorbar(data = extra.frame, width = 0.02, size = 1.25,
-                                             aes(ymin = lower, ymax = upper)) + 
-                                             geom_point(data = extra.frame, size = 4)
-    }
-    if (show.metric == "fpr") {
-      extra.frame <- data.frame(TPR = perf$params, FPR = perf$Observed.Performance, Segment = 1,
-                                lower = perf$CI.Performance[1], upper = perf$CI.Performance[2])
-      roc.plot <- roc.plot + geom_errorbarh(data = extra.frame, height = 0.02, size = 1.25,
-                                           aes(xmin = lower, xmax = upper)) +
-                                           geom_point(data = extra.frame, size = 4)
-    }
+    roc.plot <- roc.plot + fbroc.plot.add.metric(roc.plot, show.metric, perf, col)
     text.frame <- data.frame(text.c = perf.text, TPR = 0.5, FPR = 0.68, Segment = 1)
     roc.plot <- roc.plot + geom_text(size = 8, aes(label = text.c), data = text.frame)
     

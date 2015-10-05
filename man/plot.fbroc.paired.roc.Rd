@@ -4,17 +4,13 @@
 \alias{plot.fbroc.paired.roc}
 \title{Plots a \code{fbroc.paired.roc} object}
 \usage{
-\method{plot}{fbroc.paired.roc}(x, col = "blue", fill = "dodgerblue",
-  col2 = "red", fill2 = "goldenrod1", print.plot = TRUE,
+\method{plot}{fbroc.paired.roc}(x, col1 = "blue", fill1 = "dodgerblue",
+  col2 = "darkgreen", fill2 = "seagreen1", print.plot = TRUE,
   show.conf = TRUE, conf.level = 0.95, steps = 250, show.metric = "auc",
   ...)
 }
 \arguments{
 \item{x}{Object of class \code{fbroc.roc}.}
-
-\item{col}{Color used for the curve. Defaults to blue.}
-
-\item{fill}{Color used for the confidence region. Defaults to royalblue1.}
 
 \item{print.plot}{Logical specifying whether the plot should be printed.}
 
