@@ -394,10 +394,6 @@ plot.fbroc.paired.roc <- function(x,
 #     
 #     if (print.plot) print(roc.plot3)
 #   }
-#   if (4 %in% plots) {
-#     perf.plot <- perf(x, metric = show.metric, conf.level = conf.level, ...)
-#     plot(perf.plot)
-#   }
-#   
+
 #   invisible(roc.plot)
 # }

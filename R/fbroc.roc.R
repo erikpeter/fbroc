@@ -147,14 +147,13 @@ conf.roc <- function(roc, conf.level = 0.95, steps = 250) {
 #' of the confidence interval for the TPR.
 #' @export
 #' @seealso \code{\link{boot.roc}}
-conf.fbroc.roc <- function(roc, conf.level = 0.95, conf.for = "TPR", steps = 250, ...) {
-  conf.for <- toupper(conf.for)
-  if (!(conf.for %in% c("TPR", "FPR"))) stop("Invalid rate given for confidence region")
+conf.fbroc.roc <- function(roc, conf.level = 0.95, conf.for = "tpr", steps = 250, ...) {
+  if (!(conf.for %in% c("tpr", "fpr"))) stop("Invalid rate given for confidence region")
   alpha <- 0.5*(1 - conf.level)
   alpha.levels <- c(alpha, 1 - alpha) 
   steps = as.integer(steps)
   
-  if (conf.for == "TPR") {
+  if (conf.for == "tpr") {
     cached.fun <- tpr_at_fpr_cached
     uncached.fun <- tpr_at_fpr_uncached
     frame.names <- c("FPR", "TPR", "Lower.TPR", "Upper.TPR")
@@ -179,6 +178,7 @@ conf.fbroc.roc <- function(roc, conf.level = 0.95, conf.for = "TPR", steps = 250
   conf.area <- cbind(estimate, conf.area)
   conf.area <- cbind(data.frame(1 - seq(0, 1, by = (1 / steps))), conf.area)
   names(conf.area) <- frame.names
+  class(conf.area) <- c("fbroc.conf", class(conf.area))
   return(conf.area)
 }
 
