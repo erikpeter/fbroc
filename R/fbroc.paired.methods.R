@@ -8,7 +8,7 @@
 #' @param x Object of class \code{fbroc.perf}.
 #' @param ... further arguments passed to or from other methods.
 #' @return Character containing the text that is also printed.
-#' @seealso \code{\link{perf.paired.roc}}
+#' @seealso \code{\link{perf.fbroc.paired.roc}}
 #' @export
 print.fbroc.perf.paired <- function(x, ...) {
   conf.level <- round(100 * x$conf.level, 0)
@@ -51,6 +51,7 @@ print.fbroc.perf.paired <- function(x, ...) {
 #' default.
 #' 
 #' @inheritParams plot.fbroc.perf
+#' @param x An object of class \code{fbroc.perf.paired}.
 #' @return A ggplot, so that the user can customize the plot further.
 #' @seealso \code{\link{perf.fbroc.paired.roc}}
 #' @examples

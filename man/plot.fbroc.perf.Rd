@@ -9,7 +9,7 @@
   conf.text = TRUE, ...)
 }
 \arguments{
-\item{x}{Object of class \code{perf.roc} to be plotted.}
+\item{x}{Object of class \code{fbroc.perf} to be plotted.}
 
 \item{bins}{Number of bins for histogram. Default value depends on the number of bootstrap
 values and the number of unique bootstrap performance values.}
@@ -32,7 +32,7 @@ should also be displayed as text.}
 A ggplot, so that the user can customize the plot further.
 }
 \description{
-Given an object of class \code{perf.roc} this function plots the results of
+Given an object of class \code{fbroc.perf} this function plots the results of
 the bootstrap as a histogram. The confidence interval is also included by
 default.
 }
@@ -44,6 +44,6 @@ result.perf <- perf(result.boot, "auc")
 plot(result.perf)
 }
 \seealso{
-\code{\link{perf.roc}}
+\code{\link{perf.fbroc.roc}}
 }
 

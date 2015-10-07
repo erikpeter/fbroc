@@ -64,16 +64,16 @@ print.fbroc.roc <- function(x, ...) {
 #' \code{seq(0, 1, by = (1 / steps))}. Defaults to 250.
 #' @param conf.level Confidence level of the confidence region.
 #' @param show.metric Character specifying which metric to display. See 
-#' \code{\link{perf.roc}} for details. Defaults to \code{NULL}, which means
+#' \code{\link{perf.fbroc.roc}} for details. Defaults to \code{NULL}, which means
 #' that no metric is displayed.
-#' @param ... further arguments passed to \code{\link{perf.roc}}.
+#' @param ... further arguments passed to \code{\link{perf.fbroc.roc}}.
 #' @return A ggplot, so that the user can customize the plot further.
 #' @examples
 #' y <- rep(c(TRUE, FALSE), each = 500)
 #' x <- rnorm(1000) + y
 #' result.boot <- boot.roc(x, y, n.boot = 100)
 #' plot(result.boot)
-#' @seealso \code{\link{boot.roc}}, \code{\link{perf.roc}}
+#' @seealso \code{\link{boot.roc}}, \code{\link{perf.fbroc.roc}}
 #' @export
 plot.fbroc.roc <- function(x, col = "blue", fill = "royalblue1", print.plot = TRUE,
                            show.conf = TRUE, steps = 250, conf.level = 0.95, 
@@ -96,7 +96,7 @@ plot.fbroc.roc <- function(x, col = "blue", fill = "royalblue1", print.plot = TR
   }
   
   if (!is.null(show.metric)) {
-    perf <- perf(x, metric = show.metric, conf.level = conf.level, ...)
+    perf <- perf(x, metric = show.metric, conf.level = conf.level)
     perf.text <- paste(perf$metric ," = " , round(perf$Observed.Performance, 2)," [",
                        round(perf$CI.Performance[1], 2), ",",
                        round(perf$CI.Performance[2], 2), "]", sep = "")
@@ -112,11 +112,11 @@ plot.fbroc.roc <- function(x, col = "blue", fill = "royalblue1", print.plot = TR
 
 #' Plots ROC based performance metric as histogram
 #' 
-#' Given an object of class \code{perf.roc} this function plots the results of
+#' Given an object of class \code{fbroc.perf} this function plots the results of
 #' the bootstrap as a histogram. The confidence interval is also included by
 #' default.
 #' 
-#' @param x Object of class \code{perf.roc} to be plotted.
+#' @param x Object of class \code{fbroc.perf} to be plotted.
 #' @param bins Number of bins for histogram. Default value depends on the number of bootstrap
 #' values and the number of unique bootstrap performance values. 
 #' @param col Color of outline of histogram bars. Defaults to white.
@@ -128,7 +128,7 @@ plot.fbroc.roc <- function(x, col = "blue", fill = "royalblue1", print.plot = TR
 #' should also be displayed as text.
 #' @param ... Further arguments passed to or from other methods.
 #' @return A ggplot, so that the user can customize the plot further.
-#' @seealso \code{\link{perf.roc}}
+#' @seealso \code{\link{perf.fbroc.roc}}
 #' @examples
 #' y <- rep(c(TRUE, FALSE), each = 500)
 #' x <- rnorm(1000) + y
@@ -196,9 +196,11 @@ plot.fbroc.perf <- function(x, bins = NULL, col = "white",
 #' @examples
 #' data(roc.examples)
 #' example <- boot.roc(roc.examples$Cont.Pred, roc.examples$True.Class, n.boot = 100)
-#' tpr.conf <- conf(example, conf.for = "tpr", steps = 50) # Confidence regions for TPR at specific FPR values
+#' # Confidence regions for TPR at specific FPR values
+#' tpr.conf <- conf(example, conf.for = "tpr", steps = 50) 
 #' plot(tpr.conf)
-#' fpr.conf <- conf(example, conf.for = "fpr", steps = 50) # Confidence regions for FPR at specific TPR values
+#' # Confidence regions for FPR at specific TPR values
+#' fpr.conf <- conf(example, conf.for = "fpr", steps = 50) 
 #' plot(fpr.conf) 
 #' @export
 plot.fbroc.conf <- function(x, col = "blue", fill = "royalblue1", print.plot = TRUE,...) {

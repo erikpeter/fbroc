@@ -185,7 +185,7 @@ boot.paired.roc <- function(pred1, pred2, true.class, stratify = TRUE, n.boot = 
 #'                            roc.examples$True.Class, n.boot = 100)
 #' conf(example, conf.for = "tpr", steps = 10) # get confidence regions for Delta TPR at FPR
 #' conf(example, conf.for = "fpr", steps = 10) # get confidence regions for Delta FPR at TPR
-#' @seealso \code{\link{boot.paired.roc}}, \code{\link{conf.fbroc}},\code{\link{extract.roc}}
+#' @seealso \code{\link{boot.paired.roc}}, \code{\link{conf.fbroc.roc}},\code{\link{extract.roc}}
 #' @export
 conf.fbroc.paired.roc <- function(roc, conf.level = 0.95, conf.for = "TPR", steps = 250, ...) {
   conf.for <- toupper(conf.for)

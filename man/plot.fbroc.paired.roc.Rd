@@ -32,7 +32,7 @@ calculated. TPR confidence intervals are given for all FPRs in
 \code{seq(0, 1, by = (1 / steps))}. Defaults to 250.}
 
 \item{show.metric}{Character specifying which metric to display. See
-\code{\link{perf.roc}} for details. Defaults to \code{NULL}, which means
+\code{\link{perf.fbroc.roc}} for details. Defaults to \code{NULL}, which means
 that no metric is displayed.}
 
 \item{...}{further arguments passed to \code{\link{perf.fbroc.paired.roc}}.}

@@ -76,7 +76,9 @@ NULL
 
 # hack recommend by Hadley Wickham to make CMD check issue no notes
 globalVariables(c("TPR", "FPR", "text.c", "Lower.TPR", "Upper.TPR", "lower", "upper",
-                  "Metric", "y.dummy", "..density..", "Segment"))
+                  "Metric", "y.dummy", "..density..", "Segment", "Lower.FPR", "Upper.FPR",
+                  "Delta.TPR", "Lower.Delta.TPR", "Upper.Delta.TPR", "Delta.FPR",
+                  "Lower.Delta.FPR", "Upper.Delta.FPR"))
 
 # S3 generic functions
 

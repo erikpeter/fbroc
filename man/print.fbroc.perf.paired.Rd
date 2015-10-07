@@ -22,6 +22,6 @@ difference in performance including confidence intervals. Finally, an estimate f
 correlation between the performance estimates of the two classifiers is also given.
 }
 \seealso{
-\code{\link{perf.paired.roc}}
+\code{\link{perf.fbroc.paired.roc}}
 }
 

@@ -130,7 +130,7 @@ boot.roc <- function(pred, true.class, stratify = TRUE, n.boot = 1000,
 
 conf.roc <- function(roc, conf.level = 0.95, steps = 250) {
   .Deprecated("conf")
-  perf(conf, ...)
+  perf(conf, conf.level = conf.level, steps = steps)
 }
 
 #' Generates confidence intervals for the TPR for a range of FPRs or vice versa
@@ -205,10 +205,9 @@ conf.fbroc.roc <- function(roc, conf.level = 0.95, conf.for = "tpr", steps = 250
 #' @export
 #' @seealso \code{\link{boot.roc}}
 boot.tpr.at.fpr <- function(roc, steps = roc$n.neg) {
-  .Deprecated("conf")
   steps = as.integer(steps)
   if (roc$use.cache) {
-    rel.matrix <- tpr_at_fpr_cached(roc$boot.tpr, roc$boot.fpr, roc$n.thresholds, steps)
+    rel.matrix <- tpr_at_fpr_cached(roc$boot.tpr, roc$boot.fpr, steps)
   } else {
     rel.matrix <- tpr_at_fpr_uncached(roc$predictions,
                                       as.integer(roc$true.classes),

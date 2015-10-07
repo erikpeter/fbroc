@@ -28,9 +28,11 @@ the confidence region of the ROC curve.
 \examples{
 data(roc.examples)
 example <- boot.roc(roc.examples$Cont.Pred, roc.examples$True.Class, n.boot = 100)
-tpr.conf <- conf(example, conf.for = "tpr", steps = 50) # Confidence regions for TPR at specific FPR values
+# Confidence regions for TPR at specific FPR values
+tpr.conf <- conf(example, conf.for = "tpr", steps = 50)
 plot(tpr.conf)
-fpr.conf <- conf(example, conf.for = "fpr", steps = 50) # Confidence regions for FPR at specific TPR values
+# Confidence regions for FPR at specific TPR values
+fpr.conf <- conf(example, conf.for = "fpr", steps = 50)
 plot(fpr.conf)
 }
 \seealso{

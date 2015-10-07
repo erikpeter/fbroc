@@ -43,6 +43,6 @@ conf(example, conf.for = "tpr", steps = 10) # get confidence regions for Delta T
 conf(example, conf.for = "fpr", steps = 10) # get confidence regions for Delta FPR at TPR
 }
 \seealso{
-\code{\link{boot.paired.roc}}, \code{\link{conf.fbroc}},\code{\link{extract.roc}}
+\code{\link{boot.paired.roc}}, \code{\link{conf.fbroc.roc}},\code{\link{extract.roc}}
 }
 

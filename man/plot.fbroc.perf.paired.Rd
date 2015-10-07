@@ -10,7 +10,7 @@ classifier.}
   conf.text = TRUE, ...)
 }
 \arguments{
-\item{x}{Object of class \code{perf.roc} to be plotted.}
+\item{x}{An object of class \code{fbroc.perf.paired}.}
 
 \item{bins}{Number of bins for histogram. Default value depends on the number of bootstrap
 values and the number of unique bootstrap performance values.}
