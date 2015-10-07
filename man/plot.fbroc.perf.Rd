@@ -33,14 +33,14 @@ A ggplot, so that the user can customize the plot further.
 }
 \description{
 Given an object of class \code{perf.roc} this function plots the results of
-the bootstrap as an histogram. The confidence interval is also included by
+the bootstrap as a histogram. The confidence interval is also included by
 default.
 }
 \examples{
 y <- rep(c(TRUE, FALSE), each = 500)
 x <- rnorm(1000) + y
-result.boot <- boot.roc(x, y, n.boot = 10000)
-result.perf <- perf.roc(result.boot, "auc")
+result.boot <- boot.roc(x, y, n.boot = 1000)
+result.perf <- perf(result.boot, "auc")
 plot(result.perf)
 }
 \seealso{

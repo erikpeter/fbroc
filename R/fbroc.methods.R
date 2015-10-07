@@ -6,7 +6,7 @@
 #' @param x Object of class \code{fbroc.perf}.
 #' @param ... further arguments passed to or from other methods.
 #' @return Character containing the text that is also printed.
-#' @seealso \code{\link{perf.roc}}
+#' @seealso \code{\link{perf.fbroc.roc}}
 #' @export
 print.fbroc.perf <- function(x, ...) {
   conf.level <- round(100 * x$conf.level, 0)
@@ -113,7 +113,7 @@ plot.fbroc.roc <- function(x, col = "blue", fill = "royalblue1", print.plot = TR
 #' Plots ROC based performance metric as histogram
 #' 
 #' Given an object of class \code{perf.roc} this function plots the results of
-#' the bootstrap as an histogram. The confidence interval is also included by
+#' the bootstrap as a histogram. The confidence interval is also included by
 #' default.
 #' 
 #' @param x Object of class \code{perf.roc} to be plotted.
@@ -132,8 +132,8 @@ plot.fbroc.roc <- function(x, col = "blue", fill = "royalblue1", print.plot = TR
 #' @examples
 #' y <- rep(c(TRUE, FALSE), each = 500)
 #' x <- rnorm(1000) + y
-#' result.boot <- boot.roc(x, y, n.boot = 10000)
-#' result.perf <- perf.roc(result.boot, "auc")
+#' result.boot <- boot.roc(x, y, n.boot = 1000)
+#' result.perf <- perf(result.boot, "auc")
 #' plot(result.perf)
 #' @export
 plot.fbroc.perf <- function(x, bins = NULL, col = "white", 
@@ -180,6 +180,26 @@ plot.fbroc.perf <- function(x, bins = NULL, col = "white",
   invisible(perf.plot)
 }
 
+
+#' Plots function for object of class{fbroc.conf}
+#' 
+#' Given an object of class \code{fbroc.conf} this function plots the contained estimates for 
+#' the confidence region of the ROC curve.
+#' 
+#' @param x Object of class \code{fbroc.conf} to be plotted.
+#' @param col Color of the curve to be drawn.
+#' @param fill Fill of the confidence region.
+#' @param print.plot Logical specifying whether the plot should be printed.
+#' @param ... Further arguments passed to or from other methods.
+#' @return A ggplot, so that the user can customize the plot further.
+#' @seealso \code{\link{conf.fbroc.roc}}
+#' @examples
+#' data(roc.examples)
+#' example <- boot.roc(roc.examples$Cont.Pred, roc.examples$True.Class, n.boot = 100)
+#' tpr.conf <- conf(example, conf.for = "tpr", steps = 50) # Confidence regions for TPR at specific FPR values
+#' plot(tpr.conf)
+#' fpr.conf <- conf(example, conf.for = "fpr", steps = 50) # Confidence regions for FPR at specific TPR values
+#' plot(fpr.conf) 
 #' @export
 plot.fbroc.conf <- function(x, col = "blue", fill = "royalblue1", print.plot = TRUE,...) {
   if (names(x)[1] == "FPR") { # tpr over fpr

@@ -2,7 +2,8 @@
 % Please edit documentation in R/fbroc.paired.methods.R
 \name{plot.fbroc.perf.paired}
 \alias{plot.fbroc.perf.paired}
-\title{Plots ROC based performance metric as histogram}
+\title{Plots the difference between the bootstrapped performance estimate of the first and the second
+classifier.}
 \usage{
 \method{plot}{fbroc.perf.paired}(x, bins = NULL, col = "white",
   fill = "lightblue", print.plot = TRUE, show.conf = TRUE,
@@ -32,9 +33,19 @@ should also be displayed as text.}
 A ggplot, so that the user can customize the plot further.
 }
 \description{
-PLACEHOLDER
+Given an object of class \code{fbroc.perf.paired} this function plots the difference between the
+bootstrapped performance estimate of the first and the second classifier as a histogram.
+the bootstrap as an histogram. The confidence interval is also shown by
+default.
+}
+\examples{
+data(roc.examples)
+example <- boot.paired.roc(roc.examples$Cont.Pred, roc.examples$Cont.Pred.Outlier,
+                           roc.examples$True.Class, n.boot = 100)
+auc.diff <- perf(example, "auc")
+plot(auc.diff)
 }
 \seealso{
-\code{\link{perf.paired.roc}}
+\code{\link{perf.fbroc.paired.roc}}
 }
 

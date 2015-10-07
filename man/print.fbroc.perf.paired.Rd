@@ -18,7 +18,8 @@ Character containing the text that is also printed.
 Prints the information about the bootstrap results for an object of class
 \code{fbroc.perf.paired}. This information includes the number of bootstrap
 replicates, the metric used and estimates for both the individual classifiers and the
-difference in performance including confidence intervals.
+difference in performance including confidence intervals. Finally, an estimate for the
+correlation between the performance estimates of the two classifiers is also given.
 }
 \seealso{
 \code{\link{perf.paired.roc}}

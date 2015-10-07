@@ -3,7 +3,8 @@
 #' Prints the information about the bootstrap results for an object of class
 #' \code{fbroc.perf.paired}. This information includes the number of bootstrap
 #' replicates, the metric used and estimates for both the individual classifiers and the
-#' difference in performance including confidence intervals.
+#' difference in performance including confidence intervals. Finally, an estimate for the 
+#' correlation between the performance estimates of the two classifiers is also given.
 #' @param x Object of class \code{fbroc.perf}.
 #' @param ... further arguments passed to or from other methods.
 #' @return Character containing the text that is also printed.
@@ -41,13 +42,23 @@ print.fbroc.perf.paired <- function(x, ...) {
 
 
 
-#' Plots ROC based performance metric as histogram
+#' Plots the difference between the bootstrapped performance estimate of the first and the second
+#' classifier. 
 #' 
-#' PLACEHOLDER
+#' Given an object of class \code{fbroc.perf.paired} this function plots the difference between the 
+#' bootstrapped performance estimate of the first and the second classifier as a histogram. 
+#' the bootstrap as an histogram. The confidence interval is also shown by
+#' default.
 #' 
 #' @inheritParams plot.fbroc.perf
 #' @return A ggplot, so that the user can customize the plot further.
-#' @seealso \code{\link{perf.paired.roc}}
+#' @seealso \code{\link{perf.fbroc.paired.roc}}
+#' @examples
+#' data(roc.examples)
+#' example <- boot.paired.roc(roc.examples$Cont.Pred, roc.examples$Cont.Pred.Outlier, 
+#'                            roc.examples$True.Class, n.boot = 100)
+#' auc.diff <- perf(example, "auc")
+#' plot(auc.diff)
 #' @export
 plot.fbroc.perf.paired <- function(x, bins = NULL, col = "white", 
                             fill = "lightblue", print.plot = TRUE, 
@@ -92,7 +103,31 @@ plot.fbroc.perf.paired <- function(x, bins = NULL, col = "white",
   invisible(perf.plot)
 }
 
-
+#' Extracts one from two paired ROC curves from a \code{fbroc.paired.roc} object
+#' 
+#' Given paired ROC curves it can be helpful to look at them in isolation as well. 
+#' This functions allows the extraction of one of the paired ROC
+#' curves as a \code{fbroc.roc} object without recalculating the ROC curve.
+#' @param x Object of class \code{fbroc.paired.roc}.
+#' @param index A number specifying which of the two ROC curves should be returned. Needs to be 1 or 2.
+#' @return An object of class \code{fbroc.roc} containing all data about the requested ROC curve
+#' @section Note:
+#' 
+#' Due to the way the predictions are reordered internally, using use.cache to save the bootstrap
+#' results for paired ROC curves and then extracting one of the two curves will not yield the same
+#' values as when the ROC curve is bootstrapped as a single curve using \code{fbroc.roc}.
+#' @seealso \code{\link{boot.paired.roc}}
+#' @examples
+#' data(roc.examples)
+#' example <- boot.paired.roc(roc.examples$Cont.Pred, roc.examples$Cont.Pred.Outlier, 
+#'                            roc.examples$True.Class, n.boot = 100)
+#' set.seed(123)                           
+#' roc1 <- extract.roc(example, 1)
+#' set.seed(123) # makes the bootstrapping reproducible
+#' roc1.equivalent <- boot.roc(roc.examples$Cont.Pred, roc.examples$True.Class, 
+#'                             n.boot = 100)
+#' print(identical(roc1, roc1.equivalent)) # roc1 and roc1.equivalent will be the same
+#' # This does not hold when use.cache = TRUE. See the note above.
 #' @export
 extract.roc <- function(x, index) {
   if (index != 1 & index != 2) stop("Index must be 1 or 2")
@@ -110,15 +145,19 @@ extract.roc <- function(x, index) {
     output$auc <- x$auc1
     output$predictions = x$predictions1
     output$roc = x$roc1
-    output$boot.tpr = x$boot.tpr1
-    output$boot.fpr = x$boot.fpr1
+    if (x$use.cache) {
+      output$boot.tpr = x$boot.tpr1
+      output$boot.fpr = x$boot.fpr1
+    }
     output$n.thresholds <- x$n.thresholds1
   } else {
     output$auc <- x$auc2
     output$predictions = x$predictions2
     output$roc = x$roc2
-    output$boot.tpr = x$boot.tpr2
-    output$boot.fpr = x$boot.fpr2
+    if (x$use.cache) {
+      output$boot.tpr = x$boot.tpr2
+      output$boot.fpr = x$boot.fpr2
+    }
     output$n.thresholds <- x$n.thresholds2
   }
   class(output) <- append(class(output), "fbroc.roc")
@@ -129,19 +168,26 @@ extract.roc <- function(x, index) {
 
 #' Plots a \code{fbroc.paired.roc} object
 #' 
-#' PLACEHOLDER Plot a \code{fbroc.roc} object and shows the ROC curve. The confidence
-#' region for the ROC curve and the result for a specified performance metric 
+#' Plots a \code{fbroc.paired.roc} object and shows the two paired ROC curves. The confidence
+#' regions for the ROC curves and the results for a specified performance metric 
 #' can also be included in the plot. 
 #' 
-#' @param ... further arguments passed to \code{\link{perf.roc}}.
+#' @param x An object of class  \code{fbroc.paired.roc}.
 #' @inheritParams plot.fbroc.roc
+#' @param col1 Color in which the ROC curve of the first classifier is drawn.
+#' @param fill1 Fill color for the confidence region of the first ROC curve.
+#' @param col2 Color in which the ROC curve of the second classifier is drawn.
+#' @param fill2 Fill color for the confidence region of the second ROC curve.
+#' @param ... further arguments passed to \code{\link{perf.fbroc.paired.roc}}.
 #' @return A ggplot, so that the user can customize the plot further.
 #' @examples
-#' y <- rep(c(TRUE, FALSE), each = 500)
-#' x <- rnorm(1000) + y
-#' result.boot <- boot.roc(x, y, n.boot = 100)
-#' plot(result.boot)
-#' @seealso \code{\link{boot.roc}}, \code{\link{perf.roc}}
+#' data(roc.examples)
+#' example <- boot.paired.roc(roc.examples$Cont.Pred, roc.examples$Cont.Pred.Outlier,
+#'                            roc.examples$True.Class, n.boot = 100)
+#' plot(example) # standard plot, no metric shown
+#' plot(example, show.metric = "auc") # Include information about the AUC
+#' plot(example, show.metric = "tpr", fpr = 0.2) # Highlight TPR at an FPR of 20%                          
+#' @seealso \code{\link{boot.paired.roc}}
 #' @export
 plot.fbroc.paired.roc <- function(x, 
                                   col1 = "blue", 
@@ -152,7 +198,7 @@ plot.fbroc.paired.roc <- function(x,
                                   show.conf = TRUE, 
                                   conf.level = 0.95, 
                                   steps = 250,
-                                  show.metric = "auc", 
+                                  show.metric = NULL, 
                                   ...) {
   if (x$tie.strategy == 2) {
     expand.roc <- add_roc_points(x$roc1$TPR, x$roc1$FPR)
@@ -212,6 +258,25 @@ plot.fbroc.paired.roc <- function(x,
   invisible(roc.plot)
 }
 
+#' Plots function for object of class \code{fbroc.conf.paired}
+#' 
+#' Given an object of class \code{fbroc.conf.paired} this function plots the contained estimates for 
+#' the confidence region of the \emph{difference} between the two individual ROC curves.
+#' 
+#' @param x Object of class \code{fbroc.conf.paired} to be plotted.
+#' @inheritParams plot.fbroc.conf
+#' @return A ggplot, so that the user can customize the plot further.
+#' @seealso \code{\link{conf.fbroc.paired.roc}}
+#' @examples
+#' data(roc.examples)
+#' example <- boot.paired.roc(roc.examples$Cont.Pred, roc.examples$Cont.Pred.Outlier,
+#'                            roc.examples$True.Class, n.boot = 1000)
+#' # Confidence regions for the difference in TPR at specific FPR values                           
+#' tpr.conf <- conf(example, conf.for = "tpr", steps = 50)
+#' plot(tpr.conf)
+#' # Confidence regions for the difference in FPR at specific TPR values 
+#' fpr.conf <- conf(example, conf.for = "fpr", steps = 50)
+#' plot(fpr.conf) 
 #' @export
 plot.fbroc.conf.paired <- function(x, col = "blue", fill = "royalblue1", print.plot = TRUE,...) {
   if (names(x)[1] == "FPR") { # tpr over fpr

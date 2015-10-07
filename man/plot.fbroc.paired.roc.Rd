@@ -6,11 +6,19 @@
 \usage{
 \method{plot}{fbroc.paired.roc}(x, col1 = "blue", fill1 = "dodgerblue",
   col2 = "darkgreen", fill2 = "seagreen1", print.plot = TRUE,
-  show.conf = TRUE, conf.level = 0.95, steps = 250, show.metric = "auc",
+  show.conf = TRUE, conf.level = 0.95, steps = 250, show.metric = NULL,
   ...)
 }
 \arguments{
-\item{x}{Object of class \code{fbroc.roc}.}
+\item{x}{An object of class  \code{fbroc.paired.roc}.}
+
+\item{col1}{Color in which the ROC curve of the first classifier is drawn.}
+
+\item{fill1}{Fill color for the confidence region of the first ROC curve.}
+
+\item{col2}{Color in which the ROC curve of the second classifier is drawn.}
+
+\item{fill2}{Fill color for the confidence region of the second ROC curve.}
 
 \item{print.plot}{Logical specifying whether the plot should be printed.}
 
@@ -27,23 +35,25 @@ calculated. TPR confidence intervals are given for all FPRs in
 \code{\link{perf.roc}} for details. Defaults to \code{NULL}, which means
 that no metric is displayed.}
 
-\item{...}{further arguments passed to \code{\link{perf.roc}}.}
+\item{...}{further arguments passed to \code{\link{perf.fbroc.paired.roc}}.}
 }
 \value{
 A ggplot, so that the user can customize the plot further.
 }
 \description{
-PLACEHOLDER Plot a \code{fbroc.roc} object and shows the ROC curve. The confidence
-region for the ROC curve and the result for a specified performance metric
+Plots a \code{fbroc.paired.roc} object and shows the two paired ROC curves. The confidence
+regions for the ROC curves and the results for a specified performance metric
 can also be included in the plot.
 }
 \examples{
-y <- rep(c(TRUE, FALSE), each = 500)
-x <- rnorm(1000) + y
-result.boot <- boot.roc(x, y, n.boot = 100)
-plot(result.boot)
+data(roc.examples)
+example <- boot.paired.roc(roc.examples$Cont.Pred, roc.examples$Cont.Pred.Outlier,
+                           roc.examples$True.Class, n.boot = 100)
+plot(example) # standard plot, no metric shown
+plot(example, show.metric = "auc") # Include information about the AUC
+plot(example, show.metric = "tpr", fpr = 0.2) # Highlight TPR at an FPR of 20\%
 }
 \seealso{
-\code{\link{boot.roc}}, \code{\link{perf.roc}}
+\code{\link{boot.paired.roc}}
 }
 

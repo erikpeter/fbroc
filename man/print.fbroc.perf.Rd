@@ -20,6 +20,6 @@ Prints the information about the bootstrap results for an object of class
 replicates, the metric used and the estimate with confidence interval.
 }
 \seealso{
-\code{\link{perf.roc}}
+\code{\link{perf.fbroc.roc}}
 }
 
