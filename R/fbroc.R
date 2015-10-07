@@ -66,6 +66,9 @@
 #' @importFrom Rcpp sourceCpp
 #' @docType package
 #' @name fbroc
+#' @importFrom methods is
+#' @importFrom stats cor quantile sd
+#' @importFrom utils object.size
 NULL
 
 
