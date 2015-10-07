@@ -1,15 +1,19 @@
 #' Calculate performance for paired bootstrapped ROC curves
 #' 
-#' @param roc An object of class \code{fbroc.roc}.
+#' For a given metric this calculates the difference in performance between two paired predictors
+#' stored in an object of class \code{fbroc.paired.roc} in addition to their individual performance.
+#' 
+#' @param roc An object of class \code{fbroc.paired.roc}.
+#' @inheritParams perf.fbroc.roc
 #' @param metric A performance metric. Select "auc" for the AUC, "tpr" for the TPR at a fixed
 #' FPR and "fpr" for the FPR at a fixed TPR.
-#' @inheritParams perf.fbroc.roc
 #' @export
 #' @examples
 #' data(roc.examples)
-#' result.boot <- boot.paired.roc(roc.examples$Cont.Pred, roc.examples$Cont.Pred.Outlier,
+#' example <- boot.paired.roc(roc.examples$Cont.Pred, roc.examples$Cont.Pred.Outlier,
 #'                                roc.examples$True.Class)
-#' result.perf <- perf.paired.roc(result.boot)                                
+#' perf(example, metric = "auc")   
+#' perf(example, metric = "tpr", fpr = 0.2) # Get difference in TPR at a FPR of 20%                             
 perf.fbroc.paired.roc <- function(roc, metric = "auc", conf.level = 0.95, tpr = NULL, fpr = NULL, ...) {
 #perf.paired.roc <- function(roc, metric = "auc", conf.level = 0.95, tpr = NULL, fpr = NULL) {
   # start with data validation

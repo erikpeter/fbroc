@@ -8,7 +8,7 @@
   tpr = NULL, fpr = NULL, ...)
 }
 \arguments{
-\item{roc}{An object of class \code{fbroc.roc}.}
+\item{roc}{An object of class \code{fbroc.paired.roc}.}
 
 \item{metric}{A performance metric. Select "auc" for the AUC, "tpr" for the TPR at a fixed
 FPR and "fpr" for the FPR at a fixed TPR.}
@@ -20,12 +20,14 @@ FPR and "fpr" for the FPR at a fixed TPR.}
 \item{fpr}{The fixed FPR at which the TPR is to be evaluated when \code{tpr} is selected as metric.}
 }
 \description{
-Calculate performance for paired bootstrapped ROC curves
+For a given metric this calculates the difference in performance between two paired predictors
+stored in an object of class \code{fbroc.paired.roc} in addition to their individual performance.
 }
 \examples{
 data(roc.examples)
-result.boot <- boot.paired.roc(roc.examples$Cont.Pred, roc.examples$Cont.Pred.Outlier,
+example <- boot.paired.roc(roc.examples$Cont.Pred, roc.examples$Cont.Pred.Outlier,
                                roc.examples$True.Class)
-result.perf <- perf.paired.roc(result.boot)
+perf(example, metric = "auc")
+perf(example, metric = "tpr", fpr = 0.2) # Get difference in TPR at a FPR of 20\%
 }
 
