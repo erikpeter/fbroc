@@ -26,6 +26,7 @@
 #' \item{n.thresholds}{Number of thresholds.}
 #' \item{n.boot}{Number of bootstrap replicates.}
 #' \item{use.cache}{Indicates if cache is used for this ROC object}
+#' \item{tie.strategy}{Used setting how to handle ties in predictors.}
 #' \item{n.pos}{Number of positive observations.}
 #' \item{n.neg}{Number of negative observations.}
 #' \item{auc}{The AUC of the original ROC curve.}
@@ -132,20 +133,26 @@ conf.roc <- function(roc, conf.level = 0.95, steps = 250) {
   perf(conf, ...)
 }
 
-#' Generates confidence intervals for the TPR for a range of FPRs
+#' Generates confidence intervals for the TPR for a range of FPRs or vice versa
 #' 
-#' Calculates confidence intervals for the TPR at different FPR values. 
-#' This function is also used to plot the confidence regions in the
-#' function \code{\link{plot.fbroc.roc}}.
+#' Calculates confidence intervals for the TPR at different FPR values or vice versa. The stepsize
+#' at which the TPR or FPR is calculated can be set as needed.
 #' 
 #' @param roc Object of class \code{fbroc.roc}.
-#' @param conf.level Confidence level to be used for the confidence intervals.
-#' @param steps Number of discrete steps for the FPR at which the TPR is 
-#' calculated. TPR confidence intervals are given for all FPRs in 
-#' \code{seq(0, 1, by = (1 / steps))}. Defaults to 250.
-#' @return A data.frame containing the FPR steps and the lower and upper bounds
-#' of the confidence interval for the TPR.
+#' @param conf.level Confidence level to be used for the confidence intervals. Defaults to 0.95.
+#' @param conf.for Use "tpr" to get confidence regions for the TPR at specific FPRs. Use "fpr"
+#' instead for confidence regions for the FPR at specific TPRs.
+#' @param steps Number of discrete steps at which the requested rate and the confidence region is calculated.
+#' Defaults to 250.
+#' @return A data.frame containing either discrete TPR steps and estimates and confidence bounds for
+#' FPR or vice versa, depending upon \code{conf.for}.
 #' @export
+#' @examples 
+#' data(roc.examples)
+#' example <- boot.roc(roc.examples$Cont.Pred, roc.examples$True.Class,
+#'                     n.boot = 100)
+#' conf(example, conf.for = "tpr", steps = 10) # get confidence regions for TPR at FPR
+#' conf(example, conf.for = "fpr", steps = 10) # get confidence regions for FPR at TPR
 #' @seealso \code{\link{boot.roc}}
 conf.fbroc.roc <- function(roc, conf.level = 0.95, conf.for = "tpr", steps = 250, ...) {
   if (!(conf.for %in% c("tpr", "fpr"))) stop("Invalid rate given for confidence region")
@@ -197,6 +204,7 @@ conf.fbroc.roc <- function(roc, conf.level = 0.95, conf.for = "tpr", steps = 250
 #' @export
 #' @seealso \code{\link{boot.roc}}
 boot.tpr.at.fpr <- function(roc, steps = roc$n.neg) {
+  .Deprecated("conf")
   steps = as.integer(steps)
   if (roc$use.cache) {
     rel.matrix <- tpr_at_fpr_cached(roc$boot.tpr, roc$boot.fpr, roc$n.thresholds, steps)

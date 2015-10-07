@@ -36,6 +36,7 @@ thresholds.}
 \item{n.thresholds}{Number of thresholds.}
 \item{n.boot}{Number of bootstrap replicates.}
 \item{use.cache}{Indicates if cache is used for this ROC object}
+\item{tie.strategy}{Used setting how to handle ties in predictors.}
 \item{n.pos}{Number of positive observations.}
 \item{n.neg}{Number of negative observations.}
 \item{auc}{The AUC of the original ROC curve.}

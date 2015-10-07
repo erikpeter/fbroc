@@ -2,7 +2,7 @@
 % Please edit documentation in R/fbroc.roc.R
 \name{conf.fbroc.roc}
 \alias{conf.fbroc.roc}
-\title{Generates confidence intervals for the TPR for a range of FPRs}
+\title{Generates confidence intervals for the TPR for a range of FPRs or vice versa}
 \usage{
 \method{conf}{fbroc.roc}(roc, conf.level = 0.95, conf.for = "tpr",
   steps = 250, ...)
@@ -10,20 +10,28 @@
 \arguments{
 \item{roc}{Object of class \code{fbroc.roc}.}
 
-\item{conf.level}{Confidence level to be used for the confidence intervals.}
+\item{conf.level}{Confidence level to be used for the confidence intervals. Defaults to 0.95.}
 
-\item{steps}{Number of discrete steps for the FPR at which the TPR is
-calculated. TPR confidence intervals are given for all FPRs in
-\code{seq(0, 1, by = (1 / steps))}. Defaults to 250.}
+\item{conf.for}{Use "tpr" to get confidence regions for the TPR at specific FPRs. Use "fpr"
+instead for confidence regions for the FPR at specific TPRs.}
+
+\item{steps}{Number of discrete steps at which the requested rate and the confidence region is calculated.
+Defaults to 250.}
 }
 \value{
-A data.frame containing the FPR steps and the lower and upper bounds
-of the confidence interval for the TPR.
+A data.frame containing either discrete TPR steps and estimates and confidence bounds for
+FPR or vice versa, depending upon \code{conf.for}.
 }
 \description{
-Calculates confidence intervals for the TPR at different FPR values.
-This function is also used to plot the confidence regions in the
-function \code{\link{plot.fbroc.roc}}.
+Calculates confidence intervals for the TPR at different FPR values or vice versa. The stepsize
+at which the TPR or FPR is calculated can be set as needed.
+}
+\examples{
+data(roc.examples)
+example <- boot.roc(roc.examples$Cont.Pred, roc.examples$True.Class,
+                    n.boot = 100)
+conf(example, conf.for = "tpr", steps = 10) # get confidence regions for TPR at FPR
+conf(example, conf.for = "fpr", steps = 10) # get confidence regions for FPR at TPR
 }
 \seealso{
 \code{\link{boot.roc}}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/fbroc.paired.R
 \name{conf.fbroc.paired.roc}
 \alias{conf.fbroc.paired.roc}
-\title{BlaBla}
+\title{Generates confidence intervals for the difference in TPR between two predictors for a range of FPRs or vice versa}
 \usage{
 \method{conf}{fbroc.paired.roc}(roc, conf.level = 0.95, conf.for = "TPR",
   steps = 250, ...)
@@ -10,20 +10,37 @@
 \arguments{
 \item{roc}{Object of class \code{fbroc.roc}.}
 
-\item{conf.level}{Confidence level to be used for the confidence intervals.}
+\item{conf.level}{Confidence level to be used for the confidence intervals. Defaults to 0.95.}
 
-\item{steps}{Number of discrete steps for the FPR at which the TPR is
-calculated. TPR confidence intervals are given for all FPRs in
-\code{seq(0, 1, by = (1 / steps))}. Defaults to 250.}
+\item{conf.for}{Use "tpr" to get confidence regions for the TPR at specific FPRs. Use "fpr"
+instead for confidence regions for the FPR at specific TPRs.}
+
+\item{steps}{Number of discrete steps at which the requested rate and the confidence region is calculated.
+Defaults to 250.}
 }
 \value{
-A data.frame containing the FPR steps and the lower and upper bounds
-of the confidence interval for the TPR.
+A data.frame containing either discrete TPR steps and estimates and confidence bounds for
+the difference FPR or vice versa, depending upon \code{conf.for}.
 }
 \description{
-Placeholder
+Calculates confidence intervals for the difference in TPR at different FPR values or vice versa. The stepsize
+at which the TPR or FPR is calculated can be set as needed.
+}
+\section{Details}{
+
+This function only gives estimates and confidence for the difference in the requested rate
+(either True Positive Rate or False Positive Rate) between the first and the second classifier.
+The values given are positive iff the first classifier has a higher rate. To get confidence regions
+for either of the two underlying ROC curves use \code{conf} on the result of \code{extract.roc}.
+}
+\examples{
+data(roc.examples)
+example <- boot.paired.roc(roc.examples$Cont.Pred, roc.examples$Cont.Pred.Outlier,
+                           roc.examples$True.Class, n.boot = 100)
+conf(example, conf.for = "tpr", steps = 10) # get confidence regions for Delta TPR at FPR
+conf(example, conf.for = "fpr", steps = 10) # get confidence regions for Delta FPR at TPR
 }
 \seealso{
-\code{\link{boot.roc}}
+\code{\link{boot.paired.roc}}, \code{\link{conf.fbroc}},\code{\link{extract.roc}}
 }
 

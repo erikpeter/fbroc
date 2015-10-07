@@ -1,13 +1,66 @@
-#' Bootstrap paired ROC curve
+#' Bootstrap paired ROC curves
+#'
+#' Given two numerical predictors for the same outcome on the same set of samples, this functions
+#' enables the bootstrapping of the paired ROC curves of the two prediction models. While bootstrapping
+#' the same set of samples are used for both curves in each iteration, preserving the correlation
+#' between the two models.  
 #'
 #' @inheritParams boot.roc
+#' @param pred1 Numerical predictions for the first classifier.
+#' @param pred2 Numerical predictions for the second classifier.
+#' @return A list of class \code{fbroc.paired.roc}, containing the elements:
+#' \item{prediction1}{Input predictions for first model.}
+#' \item{prediction2}{Input predictions for second model.}
+#' \item{true.class}{Input classes.}
+#' \item{n.thresholds1}{Number of thresholds of the first predictor.}
+#' \item{n.thresholds2}{Number of thresholds of the second predictor.}
+#' \item{n.boot}{Number of bootstrap replicates.}
+#' \item{use.cache}{Indicates if cache is used for this ROC object.}
+#' \item{tie.strategy}{Used setting how to handle ties in predictors.}
+#' \item{n.pos}{Number of positive observations.}
+#' \item{n.neg}{Number of negative observations.}
+#' \item{roc1}{A data.frame containing the thresholds of the first ROC curve and the TPR and FPR at these
+#' thresholds.}
+#' \item{roc2}{A data.frame containing the thresholds of the second ROC curve and the TPR and FPR at these
+#' thresholds.}
+#' \item{auc1}{The AUC of the first ROC curve.}
+#' \item{auc2}{The AUC of the second ROC curve.}
+#' \item{boot.tpr1}{If the cache is enabled, a matrix containing the bootstrapped TPR at the thresholds
+#' for the first predictor.}
+#' \item{boot.fpr1}{If the cache is enabled, a matrix containing the bootstrapped FPR at the thresholds
+#' for the first predictor.}
+#' \item{boot.tpr2}{If the cache is enabled, a matrix containing the bootstrapped TPR at the thresholds
+#' for the second predictor.}
+#' \item{boot.fpr2}{If the cache is enabled, a matrix containing the bootstrapped FPR at the thresholds
+#' for the second predictor.}
+#' @section Caching:
+#' If you enable caching, \code{boot.roc} calculates the requested number of bootstrap samples and
+#' saves the TPR and FPR values for each iteration. This can take up a sizable portion of memory,
+#' but it speeds up subsequent operations. This can be useful if you plan to use the ROC curve
+#' multiple \code{fbroc} functions.
+#' @section Ties:
+#' You can set this parameter to either 1 or 2. If your numerical predictor has no ties, both settings
+#' will produce the same results. 
+#' If you set \code{tie.strategy} to 1 the ROC curve is built by connecting the TPR/FPR pairs for
+#' neighboring thresholds. A tie.strategy of 2 indicates that the TPR calculated at a specific FPR
+#' is the best TPR at a FPR smaller than or equal than the FPR specified. Defaults to 2.
 #' @examples
-#' y <- rep(c(TRUE, FALSE), each = 500)
-#' x1 <- rnorm(1000) + y
-#' x2 <- 0.5*x1 + 0.5*rnorm(1000) + y
-#' result.boot <- boot.paired.roc(x1, x2, y)
-#' @seealso \url{http://www.epeter-stats.de/roc-curves-and-ties/}, \code{\link{plot.fbroc.roc}}, 
-#' \code{\link{print.fbroc.roc}}
+#' data(roc.examples)
+#' # Do not use cache
+#' example <- boot.paired.roc(roc.examples$Cont.Pred, roc.examples$Cont.Pred.Outlier,
+#'                           roc.examples$True.Class, n.boot = 500)
+#' perf(example, "auc") # estimate difference in auc
+#' perf(example, "tpr", fpr = 0.5) # estimate difference in TPR at a FPR of 50%
+#' plot(example) # show plot
+#' # Cached mode
+#' example <- boot.paired.roc(roc.examples$Cont.Pred, roc.examples$Cont.Pred.Outlier,
+#'                           roc.examples$True.Class, n.boot = 1000, use.cache = TRUE)
+#' conf(example, conf.for = "tpr", steps = 10) # get confidence regions for TPR at FPR
+#' conf(example, conf.for = "fpr", steps = 10) # get confidence regions for FPR at TPR
+#' perf(example, "fpr", tpr = 0.9) # estimate difference in FPR at a TPR of 90%                     
+#' @seealso \code{\link{boot.roc}}, 
+#'          \code{\link{plot.fbroc.paired.roc}},
+#'          \code{\link{perf.fbroc.paired.roc}} 
 #' 
 #' @export
 boot.paired.roc <- function(pred1, pred2, true.class, stratify = TRUE, n.boot = 1000,
@@ -113,14 +166,27 @@ boot.paired.roc <- function(pred1, pred2, true.class, stratify = TRUE, n.boot = 
   return(output)
 }
 
-#' BlaBla
+#' Generates confidence intervals for the difference in TPR between two predictors for a range of FPRs or vice versa
 #' 
-#' Placeholder
+#' Calculates confidence intervals for the difference in TPR at different FPR values or vice versa. The stepsize
+#' at which the TPR or FPR is calculated can be set as needed.
+#' 
 #' @inheritParams conf.fbroc.roc
-#' @return A data.frame containing the FPR steps and the lower and upper bounds
-#' of the confidence interval for the TPR.
+#' @return A data.frame containing either discrete TPR steps and estimates and confidence bounds for
+#' the difference FPR or vice versa, depending upon \code{conf.for}.
+#' @section Details:
+#' This function only gives estimates and confidence for the difference in the requested rate
+#' (either True Positive Rate or False Positive Rate) between the first and the second classifier.
+#' The values given are positive iff the first classifier has a higher rate. To get confidence regions
+#' for either of the two underlying ROC curves use \code{conf} on the result of \code{extract.roc}.
+#' @examples 
+#' data(roc.examples)
+#' example <- boot.paired.roc(roc.examples$Cont.Pred, roc.examples$Cont.Pred.Outlier,
+#'                            roc.examples$True.Class, n.boot = 100)
+#' conf(example, conf.for = "tpr", steps = 10) # get confidence regions for Delta TPR at FPR
+#' conf(example, conf.for = "fpr", steps = 10) # get confidence regions for Delta FPR at TPR
+#' @seealso \code{\link{boot.paired.roc}}, \code{\link{conf.fbroc}},\code{\link{extract.roc}}
 #' @export
-#' @seealso \code{\link{boot.roc}}
 conf.fbroc.paired.roc <- function(roc, conf.level = 0.95, conf.for = "TPR", steps = 250, ...) {
   conf.for <- toupper(conf.for)
   if (!(conf.for %in% c("TPR", "FPR"))) stop("Invalid rate given for confidence region")
