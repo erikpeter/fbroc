@@ -1,7 +1,7 @@
 ---
 title: "Readme for fbroc"
 author: "Erik Peter"
-date: "2015-06-05"
+date: "2015-10-07"
 output:
   md_document:
     variant: markdown_github
@@ -15,8 +15,8 @@ output:
 ------------------------------------------------
 
 fbroc is intended for the *fast* bootstrapping of ROC curves, so that the
-package can be used for simulation studies and shiny applications. To achieve
-the necessary performance all critical algorithms are implemented in C++.
+package can be used for simulation studies and shiny applications. It allows for the analysis and
+comparison of ROC curves. To achieve the necessary performance all critical algorithms are implemented in C++.
 On my machine fbroc is capable of calculating about 100000 bootstrap replicates 
 for a ROC curves constructed from 500 observations in about one second.
 

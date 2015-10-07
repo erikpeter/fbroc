@@ -7,6 +7,10 @@ output: html_document
 
 ## fbroc 0.3.0
 
+### New features
+
+* Allows the comparison of two paired ROC curves
+
 ### Bugfixes
 
 * Bad defaults caused plotting to fail with a large number of negative samples
@@ -14,10 +18,7 @@ output: html_document
 ### Other change
 
 * perf.roc is now deprecated. Use the new S3 generic perf instead
-
-### New features
-
-* Allows the comparison of two paired ROC curves
+* conf.roc is now deprecated. Use the new S3 generic conf instead
 
 ## fbroc 0.2.1
 
