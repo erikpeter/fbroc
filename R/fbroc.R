@@ -80,25 +80,25 @@ globalVariables(c("TPR", "FPR", "text.c", "Lower.TPR", "Upper.TPR", "lower", "up
 
 # S3 generic functions
 
-#' Generic S3 function to calculate performance estimates based upon ROC curves
+#' Generic S3 function to calculate performance estimates for ROC curves
 #' 
 #' For using this on individual ROC curves as implemented by objects of class \code{fbroc.roc} see 
-#' \link{\code{perf.fbroc.roc}}. For paired ROC curves (class \code{fbroc.paired.roc}) see 
-#' \link{\code{perf.fbroc.paired.roc}}.
+#' \code{\link{perf.fbroc.roc}}. For paired ROC curves (class \code{fbroc.paired.roc}) see 
+#' \code{\link{perf.fbroc.paired.roc}}.
 #' @param roc The object for which to calculate the performance.
 #' @param ... Further arguments to perf.
-#' @seealso \link{\code{perf.fbroc.roc}}, \link{\code{perf.fbroc.paired.roc}}
+#' @seealso \code{\link{perf.fbroc.roc}}, \code{\link{perf.fbroc.paired.roc}}
 #' @export
 perf <- function(roc, ...) UseMethod("perf")
 
 
-#' Generic S3 function to calculate confidence regions based upon ROC curves
+#' Generic S3 function to calculate confidence regions for ROC curves
 #' 
 #' For using this on individual ROC curves as implemented by objects of class \code{fbroc.roc} see 
-#' \link{\code{conf.fbroc.roc}}. For paired ROC curves (class \code{conf.paired.roc}) see 
-#' \link{\code{conf.fbroc.paired.roc}}.
+#' \code{\link{conf.fbroc.roc}}. For paired ROC curves (class \code{conf.paired.roc}) see 
+#' \code{\link{conf.fbroc.paired.roc}}.
 #' @param roc The object for which to calculate the performance.
 #' @param ... Further arguments to perf.
-#' #' @seealso \link{\code{conf.fbroc.roc}}, \link{\code{conf.fbroc.paired.roc}}
+#' @seealso \code{\link{conf.fbroc.roc}}, \code{\link{conf.fbroc.paired.roc}}
 #' @export
 conf <- function(roc, ...) UseMethod("conf")

@@ -2,7 +2,7 @@
 % Please edit documentation in R/fbroc.R
 \name{perf}
 \alias{perf}
-\title{Generic S3 function to calculate performance estimates based upon ROC curves}
+\title{Generic S3 function to calculate performance estimates for ROC curves}
 \usage{
 perf(roc, ...)
 }
@@ -13,10 +13,10 @@ perf(roc, ...)
 }
 \description{
 For using this on individual ROC curves as implemented by objects of class \code{fbroc.roc} see
-\link{\code{perf.fbroc.roc}}. For paired ROC curves (class \code{fbroc.paired.roc}) see
-\link{\code{perf.fbroc.paired.roc}}.
+\code{\link{perf.fbroc.roc}}. For paired ROC curves (class \code{fbroc.paired.roc}) see
+\code{\link{perf.fbroc.paired.roc}}.
 }
 \seealso{
-\link{\code{perf.fbroc.roc}}, \link{\code{perf.fbroc.paired.roc}}
+\code{\link{perf.fbroc.roc}}, \code{\link{perf.fbroc.paired.roc}}
 }
 
