@@ -16,6 +16,7 @@ perf.roc <- function(roc, ...) {
 #' @param conf.level The confidence level of the confidence interval.
 #' @param fpr The fixed FPR at which the TPR is to be evaluated when \code{tpr} is selected as metric.
 #' @param tpr The fixed TPR at which the FPR is to be evaluated when \code{fpr} is selected as metric.
+#' @param ... Further arguments, that are not used at this time.
 #' @return A list of class \code{fbroc.perf}, containing the elements:
 #' \item{Observed.Performance}{The observed performance.}
 #' \item{CI.Performance}{Quantile based confidence interval for the performance.}

@@ -144,6 +144,7 @@ conf.roc <- function(roc, conf.level = 0.95, steps = 250) {
 #' instead for confidence regions for the FPR at specific TPRs.
 #' @param steps Number of discrete steps at which the requested rate and the confidence region is calculated.
 #' Defaults to 250.
+#' @param ... Further arguments, that are not used at this time.
 #' @return A data.frame containing either discrete TPR steps and estimates and confidence bounds for
 #' FPR or vice versa, depending upon \code{conf.for}.
 #' @export

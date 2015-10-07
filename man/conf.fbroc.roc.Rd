@@ -17,6 +17,8 @@ instead for confidence regions for the FPR at specific TPRs.}
 
 \item{steps}{Number of discrete steps at which the requested rate and the confidence region is calculated.
 Defaults to 250.}
+
+\item{...}{Further arguments, that are not used at this time.}
 }
 \value{
 A data.frame containing either discrete TPR steps and estimates and confidence bounds for

@@ -18,6 +18,8 @@ FPR and "fpr" for the FPR at a fixed TPR.}
 \item{tpr}{The fixed TPR at which the FPR is to be evaluated when \code{fpr} is selected as metric.}
 
 \item{fpr}{The fixed FPR at which the TPR is to be evaluated when \code{tpr} is selected as metric.}
+
+\item{...}{Further arguments, that are not used at this time.}
 }
 \value{
 A list of class \code{fbroc.perf}, containing the elements:
