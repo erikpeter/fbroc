@@ -8,7 +8,7 @@
   steps = 250, ...)
 }
 \arguments{
-\item{roc}{Object of class \code{fbroc.roc}.}
+\item{roc}{An object of class \code{fbroc.paired.roc}.}
 
 \item{conf.level}{Confidence level to be used for the confidence intervals. Defaults to 0.95.}
 

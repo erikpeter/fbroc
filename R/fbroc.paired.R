@@ -171,6 +171,7 @@ boot.paired.roc <- function(pred1, pred2, true.class, stratify = TRUE, n.boot = 
 #' Calculates confidence intervals for the difference in TPR at different FPR values or vice versa. The stepsize
 #' at which the TPR or FPR is calculated can be set as needed.
 #' 
+#' @param roc An object of class \code{fbroc.paired.roc}.
 #' @inheritParams conf.fbroc.roc
 #' @return A data.frame containing either discrete TPR steps and estimates and confidence bounds for
 #' the difference FPR or vice versa, depending upon \code{conf.for}.

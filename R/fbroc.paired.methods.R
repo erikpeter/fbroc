@@ -122,9 +122,7 @@ plot.fbroc.perf.paired <- function(x, bins = NULL, col = "white",
 #' data(roc.examples)
 #' example <- boot.paired.roc(roc.examples$Cont.Pred, roc.examples$Cont.Pred.Outlier, 
 #'                            roc.examples$True.Class, n.boot = 100)
-#' set.seed(123)                           
 #' roc1 <- extract.roc(example, 1)
-#' set.seed(123) # makes the bootstrapping reproducible
 #' roc1.equivalent <- boot.roc(roc.examples$Cont.Pred, roc.examples$True.Class, 
 #'                             n.boot = 100)
 #' print(identical(roc1, roc1.equivalent)) # roc1 and roc1.equivalent will be the same
@@ -170,7 +168,7 @@ extract.roc <- function(x, index) {
 #' Plots a \code{fbroc.paired.roc} object
 #' 
 #' Plots a \code{fbroc.paired.roc} object and shows the two paired ROC curves. The confidence
-#' regions for the ROC curves and the results for a specified performance metric 
+#' regions for the ROC curves and the performance estimates and confidence bounds for a specified metric 
 #' can also be included in the plot. 
 #' 
 #' @param x An object of class  \code{fbroc.paired.roc}.

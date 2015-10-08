@@ -42,7 +42,7 @@ A ggplot, so that the user can customize the plot further.
 }
 \description{
 Plots a \code{fbroc.paired.roc} object and shows the two paired ROC curves. The confidence
-regions for the ROC curves and the results for a specified performance metric
+regions for the ROC curves and the performance estimates and confidence bounds for a specified metric
 can also be included in the plot.
 }
 \examples{
