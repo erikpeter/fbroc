@@ -45,6 +45,8 @@ y <- rep(c(TRUE, FALSE), each = 500)
 x <- rnorm(1000) + y
 result.boot <- boot.roc(x, y, n.boot = 100)
 plot(result.boot)
+plot(result.boot, show.metric = "auc")
+plot(result.boot, show.metric = "tpr", fpr = 0.2)
 }
 \seealso{
 \code{\link{boot.roc}}, \code{\link{perf.fbroc.roc}}

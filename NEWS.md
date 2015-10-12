@@ -5,6 +5,12 @@ date: "Sunday, May 03, 2015"
 output: html_document
 ---
 
+## fbroc 0.3.1
+
+### Bugfixed
+
+* Fixed broken plot function for single ROC curves when showing a metric
+
 ## fbroc 0.3.0
 
 ### New features

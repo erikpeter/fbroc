@@ -1,9 +1,16 @@
 ---
 title: "Submission comments"
 author: "Erik Peter"
-date: "Thursday, October 08, 2015"
+date: "Thursday, October 12, 2015"
 output: html_document
 ---
+
+
+## Apology for early resubmit
+
+Sorry for the early resubmit, but I found a serious bug in an important plotting function. I added
+the broken functionality in an example to make certain I detect any reoccurence in the future early
+on.
 
 ## Tested on
 * local 64 bit Windows 7, R 3.2.2

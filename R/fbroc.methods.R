@@ -73,6 +73,8 @@ print.fbroc.roc <- function(x, ...) {
 #' x <- rnorm(1000) + y
 #' result.boot <- boot.roc(x, y, n.boot = 100)
 #' plot(result.boot)
+#' plot(result.boot, show.metric = "auc")
+#' plot(result.boot, show.metric = "tpr", fpr = 0.2)
 #' @seealso \code{\link{boot.roc}}, \code{\link{perf.fbroc.roc}}
 #' @export
 plot.fbroc.roc <- function(x, col = "blue", fill = "royalblue1", print.plot = TRUE,
@@ -96,11 +98,11 @@ plot.fbroc.roc <- function(x, col = "blue", fill = "royalblue1", print.plot = TR
   }
   
   if (!is.null(show.metric)) {
-    perf <- perf(x, metric = show.metric, conf.level = conf.level)
+    perf <- perf(x, metric = show.metric, conf.level = conf.level, ...)
     perf.text <- paste(perf$metric ," = " , round(perf$Observed.Performance, 2)," [",
                        round(perf$CI.Performance[1], 2), ",",
                        round(perf$CI.Performance[2], 2), "]", sep = "")
-    roc.plot <- roc.plot + fbroc.plot.add.metric(roc.plot, show.metric, perf, col)
+    roc.plot <- fbroc.plot.add.metric(roc.plot, show.metric, perf, col)
     text.frame <- data.frame(text.c = perf.text, TPR = 0.5, FPR = 0.68, Segment = 1)
     roc.plot <- roc.plot + geom_text(size = 8, aes(label = text.c), data = text.frame)
     
