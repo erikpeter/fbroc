@@ -61,16 +61,24 @@ perf.fbroc.roc <- function(roc, metric = "auc", conf.level = 0.95, tpr = NULL, f
   }
   if (metric == "partial.auc") {
     if (is.null(tpr) & is.null(fpr)) stop("Either FPR or TPR must be specified")
-    if (is.null(fpr)) stop("Partial AUC over TPR range not supported!")
-    fpr <- sort(fpr)
-    if (length(fpr) != 2) stop("FPR must be given as a vector of length 2")
-    if ((min(fpr) < 0) | (max(fpr) > 1)) stop("FPR must be between 0 and 1")
-    if (fpr[1] == fpr[2]) stop("Interval has width zero!")
-    param.vec <- fpr
-    print(fpr)
-    metric.text <- paste("Partial AUC over FPR range [", round(param.vec[1], 2),
-                         ",", round(param.vec[2], 2), "]", sep = "")
-    metric.number <- as.integer(3)
+    if (is.null(fpr)) {
+      param <- sort(tpr)
+      metric.number <- as.integer(4)
+      metric.text <- paste("Partial AUC over TPR range [", round(param[1], 2),
+                           ",", round(param[2], 2), "]", sep = "")
+    }
+    else {
+      param <- sort(fpr)
+      metric.number <- as.integer(3)
+      metric.text <- paste("Partial AUC over FPR range [", round(param[1], 2),
+                           ",", round(param[2], 2), "]", sep = "")
+    }
+     
+    if (length(param) != 2) stop("Interval must be given as a vector of length 2")
+    if ((min(param) < 0) | (max(param) > 1)) stop("Interval values must be between 0 and 1")
+    if (param[1] == param[2]) stop("Interval has width zero!")
+    param.vec <- param
+   
   }
   
   # call C++ to calculate actual results
@@ -78,6 +86,7 @@ perf.fbroc.roc <- function(roc, metric = "auc", conf.level = 0.95, tpr = NULL, f
   fpr.m <- matrix(roc$roc$FPR, nrow = 1)
   
   observed.perf <- get_cached_perf(tpr.m, fpr.m, param.vec, metric.number)
+  #print(observed.perf)
   if (roc$use.cache) {
     perf.boot <- get_cached_perf(roc$boot.tpr, roc$boot.fpr, param.vec, metric.number)
   } else {

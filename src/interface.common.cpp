@@ -26,6 +26,7 @@ PerfFun pick_measure(Measure measure) {
   if (measure == TPR_AT_FPR) out = &get_tpr_at_fixed_fpr; 
   if (measure == FPR_AT_TPR) out = &get_fpr_at_fixed_tpr; 
   if (measure == P_AUC_OVER_FPR) out = &get_perf_pauc_over_fpr;
+  if (measure == P_AUC_OVER_TPR) out = &get_perf_pauc_over_tpr;
   return out;
 }
 
