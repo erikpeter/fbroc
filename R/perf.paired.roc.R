@@ -22,7 +22,7 @@ perf.fbroc.paired.roc <- function(roc, metric = "auc", conf.level = 0.95, tpr = 
     stop("roc must be of class fbroc.paired.roc")
   if (length(metric) != 1 | class(metric) != "character")
     stop("metric must be character")
-  if (!(metric %in% c("auc", "tpr", "fpr")))
+  if (!(metric %in% c("auc", "tpr", "fpr", "partial.auc")))
     stop(paste(metric,"is not a valid performance metric"))
   
   if (metric == "auc") {
@@ -40,7 +40,26 @@ perf.fbroc.paired.roc <- function(roc, metric = "auc", conf.level = 0.95, tpr = 
     metric.text <- paste("FPR at a fixed TPR of", round(param.vec, 3))
     metric.number <- as.integer(2)
   }
-  
+  if (metric == "partial.auc") {
+    if (is.null(tpr) & is.null(fpr)) stop("Either FPR or TPR must be specified")
+    if (is.null(fpr)) {
+      param <- sort(tpr)
+      metric.number <- as.integer(4)
+      metric.text <- paste("Partial AUC over TPR range [", round(param[1], 2),
+                           ",", round(param[2], 2), "]", sep = "")
+    }
+    else {
+      param <- sort(fpr)
+      metric.number <- as.integer(3)
+      metric.text <- paste("Partial AUC over FPR range [", round(param[1], 2),
+                           ",", round(param[2], 2), "]", sep = "")
+    }
+    
+    if (length(param) != 2) stop("Interval must be given as a vector of length 2")
+    if ((min(param) < 0) | (max(param) > 1)) stop("Interval values must be between 0 and 1")
+    if (param[1] == param[2]) stop("Interval has width zero!")
+    param.vec <- param
+  }
   
   # call C++ to calculate actual results
   tpr.m1 <- matrix(roc$roc1$TPR, nrow = 1)

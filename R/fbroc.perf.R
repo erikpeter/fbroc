@@ -78,7 +78,6 @@ perf.fbroc.roc <- function(roc, metric = "auc", conf.level = 0.95, tpr = NULL, f
     if ((min(param) < 0) | (max(param) > 1)) stop("Interval values must be between 0 and 1")
     if (param[1] == param[2]) stop("Interval has width zero!")
     param.vec <- param
-   
   }
   
   # call C++ to calculate actual results
