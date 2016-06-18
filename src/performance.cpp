@@ -25,7 +25,7 @@ double pauc_fpr_area(double fpr, NumericVector &param)
 
 double pauc_tpr_area(NumericVector &tpr, NumericVector &fpr, NumericVector &param, int index)
 {
-  if (tpr(index - 1) == tpr[index]) return 0;
+  if (tpr(index - 1) == tpr[index]) return 0; // necessary check to avoid division by zero later
   if (tpr[index - 1] < param[0]) return 0;
   if (tpr[index] > param[1]) return 0;
   
@@ -33,10 +33,8 @@ double pauc_tpr_area(NumericVector &tpr, NumericVector &fpr, NumericVector &para
   double right = std::min(tpr[index - 1], param[1]);
   
   double base_val = 1 - fpr[index];
-  double slope = 0;
-  if (tpr[index - 1] != tpr[index])
-    slope = (fpr[index] - fpr[index - 1]) / (tpr[index - 1] - tpr[index]);
-  
+  double slope = (fpr[index] - fpr[index - 1]) / (tpr[index - 1] - tpr[index]);
+
   double value_left = base_val + (left - tpr[index]) * slope;
   double value_right = base_val + (right - tpr[index]) * slope;
   

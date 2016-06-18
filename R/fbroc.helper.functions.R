@@ -1,3 +1,16 @@
+partial.auc.index <- function(partial.auc, area, give.warning) {
+  # case area = FPR, assume TPR = FPR
+  auc.min = 0.5 * (area[2]^2 - area[1]^2)
+  auc.max = area[2] - area[1]
+  partial.auc <- 0.5*(1 + ((partial.auc - auc.min) / (auc.max - auc.min))) #McClish
+  
+  if (any(partial.auc < 0.5)) warning("Partial AUCs under 0.5 generated.")
+  
+  return(partial.auc)
+}
+
+
+
 # transforms list to roc data.frame
 c.list.to.roc <- function(input) {
   roc.frame <- as.data.frame(input[1:3])
