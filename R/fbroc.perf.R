@@ -41,7 +41,7 @@ perf.fbroc.roc <- function(roc, metric = "auc", conf.level = 0.95, tpr = NULL, f
     stop("roc must be of class fbroc.roc")
   if (length(metric) != 1 | class(metric) != "character")
     stop("metric must be character")
-  if (!(metric %in% c("auc", "tpr", "fpr")))
+  if (!(metric %in% c("auc", "tpr", "fpr", "partial.auc")))
     stop(paste(metric,"is not a valid performance metric"))
   
   if (metric == "auc") {
@@ -59,7 +59,19 @@ perf.fbroc.roc <- function(roc, metric = "auc", conf.level = 0.95, tpr = NULL, f
     metric.text <- paste("FPR at a fixed TPR of", round(param.vec, 3))
     metric.number <- as.integer(2)
   }
-  
+  if (metric == "partial.auc") {
+    if (is.null(tpr) & is.null(fpr)) stop("Either FPR or TPR must be specified")
+    if (is.null(fpr)) stop("Partial AUC over TPR range not supported!")
+    fpr <- sort(fpr)
+    if (length(fpr) != 2) stop("FPR must be given as a vector of length 2")
+    if ((min(fpr) < 0) | (max(fpr) > 1)) stop("FPR must be between 0 and 1")
+    if (fpr[1] == fpr[2]) stop("Interval has width zero!")
+    param.vec <- fpr
+    print(fpr)
+    metric.text <- paste("Partial AUC over FPR range [", round(param.vec[1], 2),
+                         ",", round(param.vec[2], 2), "]", sep = "")
+    metric.number <- as.integer(3)
+  }
   
   # call C++ to calculate actual results
   tpr.m <- matrix(roc$roc$TPR, nrow = 1)

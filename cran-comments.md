@@ -18,7 +18,14 @@ on.
 * Ubuntu 14.04.3 LTS 64 bit, R 3.2.2 - including valgrind on examples
 
 ## R CMD Check results
-No ERRORS, WARNINGS or notes.
+No ERRORS, WARNINGS. One Note:
+
+NOTE
+Maintainer: 'Erik Peter <jerikpeter@googlemail.com>'
+
+Days since last update: 4
+
+See apology above. Sorry again.
 
 ## Downstream dependencies
 

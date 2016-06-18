@@ -185,7 +185,8 @@ extract.roc <- function(x, index) {
 #'                            roc.examples$True.Class, n.boot = 100)
 #' plot(example) # standard plot, no metric shown
 #' plot(example, show.metric = "auc") # Include information about the AUC
-#' plot(example, show.metric = "tpr", fpr = 0.2) # Highlight TPR at an FPR of 20%                          
+#' # Highlight TPR at an FPR of 20% 
+#' plot(example, show.metric = "tpr", fpr = 0.2)                          
 #' @seealso \code{\link{boot.paired.roc}}
 #' @export
 plot.fbroc.paired.roc <- function(x, 
@@ -198,6 +199,7 @@ plot.fbroc.paired.roc <- function(x,
                                   conf.level = 0.95, 
                                   steps = 250,
                                   show.metric = NULL, 
+                                  text.size.perf = 6,
                                   ...) {
   if (x$tie.strategy == 2) {
     expand.roc <- add_roc_points(x$roc1$TPR, x$roc1$FPR)
@@ -247,7 +249,7 @@ plot.fbroc.paired.roc <- function(x,
                              FPR = 0.4, 
                              Segment = 1)
     
-    roc.plot <- roc.plot + geom_text(size = 8, aes(label = text.c), data = text.frame, hjust = 0)
+    roc.plot <- roc.plot + geom_text(size = text.size.perf, aes(label = text.c), data = text.frame, hjust = 0)
     #     
   }
   roc.plot <- roc.plot + geom_path(size = 1.1, col = col1)

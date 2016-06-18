@@ -1,9 +1,15 @@
 ---
 title: "NEWS"
 author: "Erik Peter"
-date: "Sunday, May 03, 2015"
+date: "Saturday, 18th June, 2015"
 output: html_document
 ---
+
+## fbroc 0.4.0
+
+### New features
+
+* You can now adjust text size for plots
 
 ## fbroc 0.3.1
 
