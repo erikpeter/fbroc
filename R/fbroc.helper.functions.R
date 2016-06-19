@@ -151,12 +151,10 @@ fbroc.plot.add.metric <- function(x, roc.plot, show.metric, show.area, perf, fil
                               Segment = expand.roc[[3]])
       } 
       rel.roc <- unique(rel.roc[order(rel.roc$FPR, rel.roc$TPR), ])
-      print(rel.roc)
       if (tpr.area) {
         rel.roc$TPR.MIN <- tpr[1]
         rel.roc <- rbind(rel.roc, rel.roc[nrow(rel.roc), ])
         rel.roc[nrow(rel.roc), "FPR"] <- 1
-        print(rel.roc)
         roc.plot <- roc.plot + geom_ribbon(data = rel.roc, fill = fill.col, alpha = 0.5, 
                                            aes(ymin = TPR.MIN, ymax = TPR, y = 0))
       }
