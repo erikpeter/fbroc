@@ -104,7 +104,7 @@ plot.fbroc.roc <- function(x, col = "blue", fill = "royalblue1", print.plot = TR
     perf.text <- paste(perf$metric ," = " , round(perf$Observed.Performance, 2)," [",
                        round(perf$CI.Performance[1], 2), ",",
                        round(perf$CI.Performance[2], 2), "]", sep = "")
-    roc.plot <- fbroc.plot.add.metric(roc.plot, show.metric, perf, col)
+    roc.plot <- fbroc.plot.add.metric(x, roc.plot, show.metric, perf, col)
     text.frame <- data.frame(text.c = perf.text, TPR = 0.5, FPR = 0.68, Segment = 1)
     roc.plot <- roc.plot + geom_text(size = text.size.perf, aes(label = text.c), data = text.frame)
     

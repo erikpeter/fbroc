@@ -89,7 +89,7 @@ fbroc.plot.add.metric.paired <- function(roc.plot,show.metric, perf, col1, col2)
 }
 
 # add performance metric visualization to roc plot (roc curve)
-fbroc.plot.add.metric <- function(roc.plot, show.metric, perf, col) {
+fbroc.plot.add.metric <- function(x, roc.plot, show.metric, perf, col) {
   if (show.metric == "tpr") {
     extra.frame <- data.frame(FPR = perf$params, TPR = perf$Observed.Performance, Segment = 1,
                               lower = perf$CI.Performance[1], upper = perf$CI.Performance[2])
@@ -103,6 +103,29 @@ fbroc.plot.add.metric <- function(roc.plot, show.metric, perf, col) {
     roc.plot <- roc.plot + geom_errorbarh(data = extra.frame, height = 0.02, size = 1.25,
                                           aes(xmin = lower, xmax = upper)) +
       geom_point(data = extra.frame, size = 4)
+  }
+  if (show.metric == "partial.auc") {
+    tpr.area <- grepl("TPR", perf$metric)
+    tpr.m <- matrix(x$roc$TPR, nrow = 1)
+    fpr.m <- matrix(x$roc$FPR, nrow = 1)
+    
+    if (tpr.area) {
+      tpr <- perf$params
+      fpr <- c(get_cached_perf(tpr.m, fpr.m, tpr[1], 2),
+               get_cached_perf(tpr.m, fpr.m, tpr[2], 2))
+      frame.line1 <- data.frame(TPR = tpr[1], FPR = c(1, fpr[1]))
+      frame.line2 <- data.frame(TPR = tpr[2], FPR = c(1, fpr[2]))
+    } else {
+      fpr <- perf$params
+      tpr <- c(get_cached_perf(tpr.m, fpr.m, fpr[1], 1),
+               get_cached_perf(tpr.m, fpr.m, fpr[2], 1))
+      frame.line1 <- data.frame(FPR = fpr[1], TPR = c(0, tpr[1]))
+      frame.line2 <- data.frame(FPR = fpr[2], TPR = c(0, tpr[2]))
+    }
+    roc.plot <- roc.plot + geom_line(data = frame.line1, linetype = 3, size = 1.1) + 
+                           geom_line(data = frame.line2, linetype = 3, size = 1.1)
+    
+    #browser()
   }
   return(roc.plot)
 }
