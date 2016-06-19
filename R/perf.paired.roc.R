@@ -16,7 +16,6 @@
 #' # Get difference in TPR at a FPR of 20%   
 #' perf(example, metric = "tpr", fpr = 0.2)                           
 perf.fbroc.paired.roc <- function(roc, metric = "auc", conf.level = 0.95, tpr = NULL, fpr = NULL, ...) {
-#perf.paired.roc <- function(roc, metric = "auc", conf.level = 0.95, tpr = NULL, fpr = NULL) {
   # start with data validation
   if (!is(roc, "fbroc.paired.roc"))
     stop("roc must be of class fbroc.paired.roc")

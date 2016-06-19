@@ -36,7 +36,7 @@ print.fbroc.perf <- function(x, ...) {
 #' @seealso \code{\link{boot.roc}}
 #' @export
 print.fbroc.roc <- function(x, ...) {
-  x.mem <- round(as.numeric(object.size(x))/(1024*1024),0)
+  x.mem <- round(as.numeric(object.size(x)) / (1024 * 1024), 0)
   adj <- ifelse(x$use.cache, "cached", "uncached")
   time <- ifelse(x$use.cache, "have been", "will be")
   text <- cat(paste("\n",
@@ -160,7 +160,7 @@ plot.fbroc.perf <- function(x, bins = NULL, col = "white",
   perf.plot <- ggplot(data = boot.frame, aes(x = Metric)) + 
                xlab(toupper(x$metric)) + ylab("Density") + 
                ggtitle("Performance histogram") +
-               geom_histogram(fill = fill, col = col, aes(, y = ..density..), 
+               geom_histogram(fill = fill, col = col, aes(y = ..density..), 
                               binwidth = bw) + theme_bw() +
                theme(title = element_text(size = 22),
                      axis.title.x = element_text(size = 18),

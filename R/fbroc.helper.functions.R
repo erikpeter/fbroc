@@ -1,10 +1,16 @@
-partial.auc.index <- function(partial.auc, area, give.warning) {
+partial.auc.index <- function(partial.auc, area, give.warning, tpr.area) {
   # case area = FPR, assume TPR = FPR
-  auc.min = 0.5 * (area[2]^2 - area[1]^2)
-  auc.max = area[2] - area[1]
-  partial.auc <- 0.5*(1 + ((partial.auc - auc.min) / (auc.max - auc.min))) #McClish
+  auc.min <- 0.5 * (area[2]^2 - area[1]^2)
+  auc.max <- area[2] - area[1]
   
-  if (any(partial.auc < 0.5)) warning("Partial AUCs under 0.5 generated.")
+  if (tpr.area) auc.max <- 1 - auc.max
+  
+  # care area = TPR, assume FPR = TPR
+  
+  
+  
+  partial.auc <- 0.5*(1 + ((partial.auc - auc.min) / (auc.max - auc.min))) #McClish
+  if (any(partial.auc < 0.5) & give.warning) warning("Partial AUCs under 0.5 generated.")
   
   return(partial.auc)
 }

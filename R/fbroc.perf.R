@@ -16,6 +16,10 @@ perf.roc <- function(roc, ...) {
 #' @param conf.level The confidence level of the confidence interval.
 #' @param fpr The fixed FPR at which the TPR is to be evaluated when \code{tpr} is selected as metric.
 #' @param tpr The fixed TPR at which the FPR is to be evaluated when \code{fpr} is selected as metric.
+#' @param correct.partial.auc Corrects partial AUC for easier interpretation using McClish correction.
+#' Details are given below. Defaults to TRUE.
+#' @param show.partial.auc.warning Whether to give warnings for partial AUCs below 0.5. Defaults to
+#' true.
 #' @param ... Further arguments, that are not used at this time.
 #' @return A list of class \code{fbroc.perf}, containing the elements:
 #' \item{Observed.Performance}{The observed performance.}
@@ -27,6 +31,7 @@ perf.roc <- function(roc, ...) {
 #' \item{boot.results}{Performance in each bootstrap replicate.}
 #' @seealso \code{\link{boot.roc}}, \code{\link{print.fbroc.perf}}, 
 #'   \code{\link{plot.fbroc.perf}}
+#' @template partial.auc.doc 
 #' @examples
 #' y <- rep(c(TRUE, FALSE), each = 500)
 #' x <- rnorm(1000) + y
@@ -34,7 +39,8 @@ perf.roc <- function(roc, ...) {
 #' perf(result.boot, "auc")
 #' perf(result.boot, "auc", conf.level = 0.99)
 #' @export
-perf.fbroc.roc <- function(roc, metric = "auc", conf.level = 0.95, tpr = NULL, fpr = NULL, ...) {
+perf.fbroc.roc <- function(roc, metric = "auc", conf.level = 0.95, tpr = NULL, fpr = NULL, 
+                           correct.partial.auc = TRUE, show.partial.auc.warning = TRUE, ...) {
 
   # start with data validation
   if (!is(roc, "fbroc.roc"))
@@ -62,18 +68,20 @@ perf.fbroc.roc <- function(roc, metric = "auc", conf.level = 0.95, tpr = NULL, f
   if (metric == "partial.auc") {
     if (is.null(tpr) & is.null(fpr)) stop("Either FPR or TPR must be specified")
     if (is.null(fpr)) {
+      tpr.area = TRUE
       param <- sort(tpr)
       metric.number <- as.integer(4)
       metric.text <- paste("Partial AUC over TPR range [", round(param[1], 2),
                            ",", round(param[2], 2), "]", sep = "")
     }
     else {
+      tpr.area = FALSE
       param <- sort(fpr)
       metric.number <- as.integer(3)
       metric.text <- paste("Partial AUC over FPR range [", round(param[1], 2),
                            ",", round(param[2], 2), "]", sep = "")
     }
-     
+    if (correct.partial.auc) metric.text <- paste("Corrected", metric.text) 
     if (length(param) != 2) stop("Interval must be given as a vector of length 2")
     if ((min(param) < 0) | (max(param) > 1)) stop("Interval values must be between 0 and 1")
     if (param[1] == param[2]) stop("Interval has width zero!")
@@ -95,6 +103,12 @@ perf.fbroc.roc <- function(roc, metric = "auc", conf.level = 0.95, tpr = NULL, f
                                    roc$n.boot,
                                    metric.number)
   }
+  
+  if (correct.partial.auc & metric == "partial.auc") {
+    observed.perf <- partial.auc.index(observed.perf, param.vec, show.partial.auc.warning, tpr.area)
+    perf.boot <- partial.auc.index(perf.boot, param.vec, show.partial.auc.warning, tpr.area)
+  }
+  
   # Quantile based confidence interval
   alpha <- 0.5 * (1 - conf.level)
   alpha.levels <- c(alpha, 1 - alpha) 

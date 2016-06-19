@@ -3,5 +3,7 @@
 ^NEWS\.md$
 ^README\.Rmd$
 ^README-*\.png$
+^todo\.txt$
 ^cran-comments\.md$
+^man-roxygen$
 ^data-raw$

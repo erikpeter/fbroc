@@ -5,7 +5,8 @@
 \title{Calculate performance for bootstrapped ROC curve}
 \usage{
 \method{perf}{fbroc.roc}(roc, metric = "auc", conf.level = 0.95,
-  tpr = NULL, fpr = NULL, ...)
+  tpr = NULL, fpr = NULL, correct.partial.auc = TRUE,
+  show.partial.auc.warning = TRUE, ...)
 }
 \arguments{
 \item{roc}{An object of class \code{fbroc.roc}.}
@@ -18,6 +19,12 @@ FPR and "fpr" for the FPR at a fixed TPR.}
 \item{tpr}{The fixed TPR at which the FPR is to be evaluated when \code{fpr} is selected as metric.}
 
 \item{fpr}{The fixed FPR at which the TPR is to be evaluated when \code{tpr} is selected as metric.}
+
+\item{correct.partial.auc}{Corrects partial AUC for easier interpretation using McClish correction.
+Details are given below. Defaults to TRUE.}
+
+\item{show.partial.auc.warning}{Whether to give warnings for partial AUCs below 0.5. Defaults to
+true.}
 
 \item{...}{Further arguments, that are not used at this time.}
 }
@@ -36,12 +43,37 @@ Calculates different performance metric for ROC curves based on the bootstrap
 results saved in an object of class \code{fbroc.roc}. Confidence intervals
 are included.
 }
+\section{Note on partial AUC correction}{
+
+
+The partial AUC is hard to interpret without keeping in mind the range on which it is calculated.
+For example, if the ROC Curve is integrated over the FPR interval [0, 0.1] a completely random
+and non-discrimate classifier would have a partial AUC of only 0.05. The same classifier over
+the interval [0.9, 1] would have a partial AUC of 0.95 even though both intervals are of the
+same width.
+
+The correction by McClish produces a correct partial AUC given by
+\deqn{\frac{1}{2} \Big(1 + \frac{\textrm{partialAUC} - \textrm{auc.min}}{\textrm{auc.max} 
+- \textrm{auc.min}}\Big)}{0.5 
+(1 + (partialAUC - auc.min) / (auc.max - auc.min))}
+Here auc.min is the AUC achieved by the non-discriminate classifier and auc.max is the AUC
+achieved by a perfect classifier. Thus, a non-discriminative classifier and a perfect one will 
+always have partial AUCs of 0.5 and 1 respectively. 
+Unfortunately, the corrected partial AUC can not be interpreted in a meaningful way if the curve
+in the area of interest is below the non-discriminate classifier. Those partial AUC values can
+be recognized by being below 0.5. For this reason, fbroc will give a warning if bootstrapping
+produces corrected partial AUC values below 0.5.
+}
 \examples{
 y <- rep(c(TRUE, FALSE), each = 500)
 x <- rnorm(1000) + y
 result.boot <- boot.roc(x, y, n.boot = 100)
 perf(result.boot, "auc")
 perf(result.boot, "auc", conf.level = 0.99)
+}
+\references{
+Donna Katzman McClish. (1989). \emph{Analyzing a Portion of the ROC Curve.}
+Medical Decision Making, \url{http://mdm.sagepub.com/content/9/3/190.abstract}.
 }
 \seealso{
 \code{\link{boot.roc}}, \code{\link{print.fbroc.perf}}, 

@@ -61,6 +61,8 @@
 #' conf(result.boot, steps = 10)
 #' @references Efron, B., & Tibshirani, R. (1998). \emph{An introduction to the bootstrap.}
 #' Boca Raton, Fla: Chapman & Hall/CRC. 
+#' @references Donna Katzman McClish. (1989). \emph{Analyzing a Portion of the ROC Curve.}
+#' Medical Decision Making, \url{http://mdm.sagepub.com/content/9/3/190.abstract}. 
 #' @useDynLib fbroc
 #' @import ggplot2
 #' @importFrom Rcpp sourceCpp
