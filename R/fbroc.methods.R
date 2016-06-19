@@ -85,7 +85,6 @@ plot.fbroc.roc <- function(x, col = "blue", fill = "royalblue1", print.plot = TR
                            show.metric = NULL, text.size.perf = 6, 
                            show.area = !show.conf,...) {
   if (x$tie.strategy == 2) {
-
     expand.roc <- add_roc_points(x$roc$TPR, x$roc$FPR)
     plot.frame <- data.frame(TPR = expand.roc[[1]],
                              FPR = expand.roc[[2]],

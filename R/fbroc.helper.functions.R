@@ -143,8 +143,15 @@ fbroc.plot.add.metric <- function(x, roc.plot, show.metric, show.area, perf, fil
       first.row <- data.frame(TPR = tpr[2], FPR = fpr[2], threshold = as.numeric(NA))
       last.row <- data.frame(TPR = tpr[1], FPR = fpr[1], threshold = as.numeric(NA))
       rel.roc <- rbind(first.row, rel.roc, last.row)
-      rel.roc <- rel.roc[nrow(rel.roc):1, ]
-      
+      if (x$tie.strategy == 2) {
+        
+        expand.roc <- add_roc_points(rel.roc$TPR, rel.roc$FPR)
+        rel.roc <- data.frame(TPR = expand.roc[[1]],
+                              FPR = expand.roc[[2]],
+                              Segment = expand.roc[[3]])
+      } 
+      rel.roc <- unique(rel.roc[order(rel.roc$FPR, rel.roc$TPR), ])
+      print(rel.roc)
       if (tpr.area) {
         rel.roc$TPR.MIN <- tpr[1]
         rel.roc <- rbind(rel.roc, rel.roc[nrow(rel.roc), ])
