@@ -5,27 +5,22 @@ date: "Thursday, October 12, 2015"
 output: html_document
 ---
 
-
-## Apology for early resubmit
-
-Sorry for the early resubmit, but I found a serious bug in an important plotting function. I added
-the broken functionality in an example to make certain I detect any reoccurence in the future early
-on.
-
 ## Tested on
 * local 64 bit Windows 7, R 3.2.2
 * win-builder devel and release
-* Ubuntu 14.04.3 LTS 64 bit, R 3.2.2 - including valgrind on examples
+* Ubuntu 16.04 64 bit, R 3.2.2 - including valgrind on examples
 
 ## R CMD Check results
-No ERRORS, WARNINGS. One Note:
+No ERRORS, WARNINGS. One Note (only on win-builder!):
 
-NOTE
 Maintainer: 'Erik Peter <jerikpeter@googlemail.com>'
 
-Days since last update: 4
+Possibly mis-spelled words in DESCRIPTION:
+  AUC (11:41)
+  ROC (10:32)
 
-See apology above. Sorry again.
+Both are spelled out before the abbreviation is given in brackets. Since the abbreviations are
+more commonly used than the spelled out versions, I feel it is of value to give them here as well.
 
 ## Downstream dependencies
 
