@@ -68,7 +68,7 @@ print.fbroc.roc <- function(x, ...) {
 #' that no metric is displayed.
 #' @param text.size.perf Size of the text display when show.metric is set to \code{TRUE}.
 #' Defaults to zero.
-#' @param show.partial.auc Whether to shade the partial AUC area. Defaults to !show.conf.
+#' @param show.area Whether to shade the AUC or partial AUC area. Defaults to !show.conf.
 #' @param ... further arguments passed to \code{\link{perf.fbroc.roc}}.
 #' @return A ggplot, so that the user can customize the plot further.
 #' @examples
@@ -83,7 +83,7 @@ print.fbroc.roc <- function(x, ...) {
 plot.fbroc.roc <- function(x, col = "blue", fill = "royalblue1", print.plot = TRUE,
                            show.conf = TRUE, steps = 250, conf.level = 0.95, 
                            show.metric = NULL, text.size.perf = 6, 
-                           show.partial.auc = !show.conf,...) {
+                           show.area = !show.conf,...) {
   if (x$tie.strategy == 2) {
 
     expand.roc <- add_roc_points(x$roc$TPR, x$roc$FPR)
@@ -106,7 +106,7 @@ plot.fbroc.roc <- function(x, col = "blue", fill = "royalblue1", print.plot = TR
     perf.text <- paste(perf$metric ," = " , round(perf$Observed.Performance, 2)," [",
                        round(perf$CI.Performance[1], 2), ",",
                        round(perf$CI.Performance[2], 2), "]", sep = "")
-    roc.plot <- fbroc.plot.add.metric(x, roc.plot, show.metric, show.partial.auc, perf, fill)
+    roc.plot <- fbroc.plot.add.metric(x, roc.plot, show.metric, show.area, perf, fill)
     text.frame <- data.frame(text.c = perf.text, TPR = 0.25, FPR = 0.6, Segment = 1)
     roc.plot <- roc.plot + geom_text(size = text.size.perf, aes(label = text.c), data = text.frame)
     

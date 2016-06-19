@@ -95,7 +95,8 @@ remove.tpr.shift <- function(roc.data) {
 }
 
 # add performance metric visualization to roc plot (roc curve)
-fbroc.plot.add.metric <- function(x, roc.plot, show.metric, show.partial.auc, perf, fill.col) {
+fbroc.plot.add.metric <- function(x, roc.plot, show.metric, show.area, perf, fill.col) {
+  
   if (show.metric == "tpr") {
     extra.frame <- data.frame(FPR = perf$params, TPR = perf$Observed.Performance, Segment = 1,
                               lower = perf$CI.Performance[1], upper = perf$CI.Performance[2])
@@ -103,6 +104,7 @@ fbroc.plot.add.metric <- function(x, roc.plot, show.metric, show.partial.auc, pe
                                          aes(ymin = lower, ymax = upper)) + 
       geom_point(data = extra.frame, size = 4)
   }
+  
   if (show.metric == "fpr") {
     extra.frame <- data.frame(TPR = perf$params, FPR = perf$Observed.Performance, Segment = 1,
                               lower = perf$CI.Performance[1], upper = perf$CI.Performance[2])
@@ -110,6 +112,13 @@ fbroc.plot.add.metric <- function(x, roc.plot, show.metric, show.partial.auc, pe
                                           aes(xmin = lower, xmax = upper)) +
       geom_point(data = extra.frame, size = 4)
   }
+  
+  if (show.metric == "auc" & show.area) {
+    rel.roc <- x$roc[nrow(x$roc):1, ]
+    roc.plot <- roc.plot + geom_ribbon(data = rel.roc, fill = fill.col, alpha = 0.5, 
+                                       aes(ymin = 0, ymax = TPR, y = 0))
+  }
+  
   if (show.metric == "partial.auc") {
     tpr.area <- grepl("TPR", perf$metric)
     tpr.m <- matrix(x$roc$TPR, nrow = 1)
@@ -130,7 +139,7 @@ fbroc.plot.add.metric <- function(x, roc.plot, show.metric, show.partial.auc, pe
       frame.line2 <- data.frame(FPR = fpr[2], TPR = c(0, tpr[2]))
       rel.roc <- subset(x$roc, (FPR >= fpr[1]) & (FPR <= fpr[2]))
     }
-    if (show.partial.auc) {
+    if (show.area) {
       first.row <- data.frame(TPR = tpr[2], FPR = fpr[2], threshold = as.numeric(NA))
       last.row <- data.frame(TPR = tpr[1], FPR = fpr[1], threshold = as.numeric(NA))
       rel.roc <- rbind(first.row, rel.roc, last.row)
@@ -143,7 +152,6 @@ fbroc.plot.add.metric <- function(x, roc.plot, show.metric, show.partial.auc, pe
         print(rel.roc)
         roc.plot <- roc.plot + geom_ribbon(data = rel.roc, fill = fill.col, alpha = 0.5, 
                                            aes(ymin = TPR.MIN, ymax = TPR, y = 0))
-        
       }
       else {
         roc.plot <- 
