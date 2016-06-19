@@ -3,7 +3,7 @@ partial.auc.index <- function(partial.auc, area, give.warning, tpr.area) {
   auc.min <- 0.5 * (area[2]^2 - area[1]^2)
   auc.max <- area[2] - area[1]
   
-  if (tpr.area) auc.max <- 1 - auc.max
+  if (tpr.area) auc.min <- 1 - auc.min
   
   # care area = TPR, assume FPR = TPR
   
