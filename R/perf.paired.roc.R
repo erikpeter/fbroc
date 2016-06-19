@@ -8,6 +8,7 @@
 #' @param metric A performance metric. Select "auc" for the AUC, "tpr" for the TPR at a fixed
 #' FPR and "fpr" for the FPR at a fixed TPR.
 #' @export
+#' @template partial.auc.doc 
 #' @examples
 #' data(roc.examples)
 #' example <- boot.paired.roc(roc.examples$Cont.Pred, roc.examples$Cont.Pred.Outlier,
@@ -15,7 +16,8 @@
 #' perf(example, metric = "auc")   
 #' # Get difference in TPR at a FPR of 20%   
 #' perf(example, metric = "tpr", fpr = 0.2)                           
-perf.fbroc.paired.roc <- function(roc, metric = "auc", conf.level = 0.95, tpr = NULL, fpr = NULL, ...) {
+perf.fbroc.paired.roc <- function(roc, metric = "auc", conf.level = 0.95, tpr = NULL, fpr = NULL, 
+                                  correct.partial.auc = TRUE, show.partial.auc.warning = TRUE, ...){
   # start with data validation
   if (!is(roc, "fbroc.paired.roc"))
     stop("roc must be of class fbroc.paired.roc")
@@ -43,17 +45,19 @@ perf.fbroc.paired.roc <- function(roc, metric = "auc", conf.level = 0.95, tpr = 
     if (is.null(tpr) & is.null(fpr)) stop("Either FPR or TPR must be specified")
     if (is.null(fpr)) {
       param <- sort(tpr)
+      tpr.area <- TRUE
       metric.number <- as.integer(4)
       metric.text <- paste("Partial AUC over TPR range [", round(param[1], 2),
                            ",", round(param[2], 2), "]", sep = "")
     }
     else {
       param <- sort(fpr)
+      tpr.area <- FALSE
       metric.number <- as.integer(3)
       metric.text <- paste("Partial AUC over FPR range [", round(param[1], 2),
                            ",", round(param[2], 2), "]", sep = "")
     }
-    
+    if (correct.partial.auc) metric.text <- paste("Corrected", metric.text)
     if (length(param) != 2) stop("Interval must be given as a vector of length 2")
     if ((min(param) < 0) | (max(param) > 1)) stop("Interval values must be between 0 and 1")
     if (param[1] == param[2]) stop("Interval has width zero!")
@@ -79,6 +83,17 @@ perf.fbroc.paired.roc <- function(roc, metric = "auc", conf.level = 0.95, tpr = 
                                                param.vec,
                                                roc$n.boot,
                                                metric.number)
+  }
+  
+  if (correct.partial.auc & metric == "partial.auc") {
+    observed.perf1 <- partial.auc.index(observed.perf1, param.vec, show.partial.auc.warning, 
+                                        tpr.area)
+    observed.perf2 <- partial.auc.index(observed.perf2, param.vec, show.partial.auc.warning, 
+                                        tpr.area)
+    perf.boot.list[[1]] <- partial.auc.index(perf.boot.list[[1]], param.vec, 
+                                             show.partial.auc.warning, tpr.area)
+    perf.boot.list[[2]] <- partial.auc.index(perf.boot.list[[2]], param.vec, 
+                                             show.partial.auc.warning, tpr.area)
   }
   
   # Quantile based confidence interval
