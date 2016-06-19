@@ -6,7 +6,7 @@
 \usage{
 \method{plot}{fbroc.roc}(x, col = "blue", fill = "royalblue1",
   print.plot = TRUE, show.conf = TRUE, steps = 250, conf.level = 0.95,
-  show.metric = NULL, text.size.perf = 6, ...)
+  show.metric = NULL, text.size.perf = 6, show.area = !show.conf, ...)
 }
 \arguments{
 \item{x}{Object of class \code{fbroc.roc}.}
@@ -32,6 +32,8 @@ that no metric is displayed.}
 
 \item{text.size.perf}{Size of the text display when show.metric is set to \code{TRUE}.
 Defaults to zero.}
+
+\item{show.area}{Whether to shade the AUC or partial AUC area. Defaults to !show.conf.}
 
 \item{...}{further arguments passed to \code{\link{perf.fbroc.roc}}.}
 }

@@ -83,7 +83,7 @@ NULL
 globalVariables(c("TPR", "FPR", "text.c", "Lower.TPR", "Upper.TPR", "lower", "upper",
                   "Metric", "y.dummy", "..density..", "Segment", "Lower.FPR", "Upper.FPR",
                   "Delta.TPR", "Lower.Delta.TPR", "Upper.Delta.TPR", "Delta.FPR",
-                  "Lower.Delta.FPR", "Upper.Delta.FPR"))
+                  "Lower.Delta.FPR", "Upper.Delta.FPR", "TPR.MIN"))
 
 # S3 generic functions
 
