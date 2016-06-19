@@ -89,7 +89,7 @@ fbroc.plot.add.metric.paired <- function(roc.plot,show.metric, perf, col1, col2)
 }
 
 # add performance metric visualization to roc plot (roc curve)
-fbroc.plot.add.metric <- function(x, roc.plot, show.metric, perf, col) {
+fbroc.plot.add.metric <- function(x, roc.plot, show.metric, show.conf, perf, col) {
   if (show.metric == "tpr") {
     extra.frame <- data.frame(FPR = perf$params, TPR = perf$Observed.Performance, Segment = 1,
                               lower = perf$CI.Performance[1], upper = perf$CI.Performance[2])
