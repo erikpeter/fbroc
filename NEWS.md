@@ -9,8 +9,8 @@ output: html_document
 
 ### New features
 
-* You can now adjust text size for plots
 * Partial AUCs over both TPR and FPR ranges can be calculated
+* You can now adjust text size for plots
 * In the ROC plot the (partial) AUC can now optionally be shown instead of confidence regions
 
 ### Other Changes
