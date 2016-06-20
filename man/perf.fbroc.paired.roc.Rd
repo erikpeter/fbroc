@@ -64,7 +64,8 @@ example <- boot.paired.roc(roc.examples$Cont.Pred, roc.examples$Cont.Pred.Outlie
 perf(example, metric = "auc")   
 # Get difference in TPR at a FPR of 20\%   
 perf(example, metric = "tpr", fpr = 0.2)    
-perf(example, metric = "partial.auc", fpr = c(0, 0.25), show.partial.auc.warning = FALSE)                       
+perf(example, metric = "partial.auc", fpr = c(0, 0.25), 
+     show.partial.auc.warning = FALSE)                       
 }
 \references{
 Donna Katzman McClish. (1989). \emph{Analyzing a Portion of the ROC Curve.}

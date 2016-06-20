@@ -14,7 +14,8 @@
 #' perf(example, metric = "auc")   
 #' # Get difference in TPR at a FPR of 20%   
 #' perf(example, metric = "tpr", fpr = 0.2)    
-#' perf(example, metric = "partial.auc", fpr = c(0, 0.25), show.partial.auc.warning = FALSE)                       
+#' perf(example, metric = "partial.auc", fpr = c(0, 0.25), 
+#'      show.partial.auc.warning = FALSE)                       
 perf.fbroc.paired.roc <- function(roc, metric = "auc", conf.level = 0.95, tpr = NULL, fpr = NULL, 
                                   correct.partial.auc = TRUE, show.partial.auc.warning = TRUE, ...){
   # start with data validation
