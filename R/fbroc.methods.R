@@ -67,7 +67,7 @@ print.fbroc.roc <- function(x, ...) {
 #' \code{\link{perf.fbroc.roc}} for details. Defaults to \code{NULL}, which means
 #' that no metric is displayed.
 #' @param text.size.perf Size of the text display when show.metric is set to \code{TRUE}.
-#' Defaults to zero.
+#' Defaults to 6.
 #' @param show.area Whether to shade the AUC or partial AUC area. Defaults to !show.conf.
 #' @param ... further arguments passed to \code{\link{perf.fbroc.roc}}.
 #' @return A ggplot, so that the user can customize the plot further.

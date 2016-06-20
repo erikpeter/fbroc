@@ -56,6 +56,9 @@ fbroc.plot.add.conf <- function(roc1, conf.level = conf.level, steps = steps, fi
               aes(y = NULL, ymin = Lower.TPR, ymax = Upper.TPR))
 }
 
+
+
+
 # add performance metric visualization to roc plot (paired roc curve)
 fbroc.plot.add.metric.paired <- function(roc.plot,show.metric, perf, col1, col2) {
   if (show.metric == "tpr") {
@@ -94,6 +97,67 @@ remove.tpr.shift <- function(roc.data) {
   return(roc.data)
 }
 
+
+# code to add partial AUC area to ROC plot
+fbroc.plot.add.partial.auc <- function(x, roc.plot, show.metric, show.area, perf, fill.col) {
+  
+  tpr.area <- grepl("TPR", perf$metric)
+  tpr.m <- matrix(x$roc$TPR, nrow = 1)
+  fpr.m <- matrix(x$roc$FPR, nrow = 1)
+  # differentiate between TPR area and FPR area
+  if (tpr.area) {
+    tpr <- perf$params
+    fpr <- c(get_cached_perf(tpr.m, fpr.m, tpr[1], 2),
+             get_cached_perf(tpr.m, fpr.m, tpr[2], 2))
+    frame.line1 <- data.frame(TPR = tpr[1], FPR = c(1, fpr[1]))
+    frame.line2 <- data.frame(TPR = tpr[2], FPR = c(1, fpr[2]))
+    rel.roc <- subset(x$roc, (TPR >= tpr[1]) & (TPR <= tpr[2]))
+  } else {
+    fpr <- perf$params
+    tpr <- c(get_cached_perf(tpr.m, fpr.m, fpr[1], 1),
+             get_cached_perf(tpr.m, fpr.m, fpr[2], 1))
+    frame.line1 <- data.frame(FPR = fpr[1], TPR = c(0, tpr[1]))
+    frame.line2 <- data.frame(FPR = fpr[2], TPR = c(0, tpr[2]))
+    rel.roc <- subset(x$roc, (FPR >= fpr[1]) & (FPR <= fpr[2]))
+  }
+  if (show.area) { # Show partial AUC
+    first.row <- data.frame(TPR = tpr[2], FPR = fpr[2], threshold = as.numeric(NA))
+    last.row <- data.frame(TPR = tpr[1], FPR = fpr[1], threshold = as.numeric(NA))
+    rel.roc <- rbind(first.row, rel.roc, last.row)
+    if (x$tie.strategy == 2) {
+      
+      expand.roc <- add_roc_points(rel.roc$TPR, rel.roc$FPR)
+      rel.roc <- data.frame(TPR = expand.roc[[1]],
+                            FPR = expand.roc[[2]],
+                            Segment = expand.roc[[3]])
+    } 
+    rel.roc <- unique(rel.roc[order(rel.roc$FPR, rel.roc$TPR), ])
+    if (tpr.area) {
+      rel.roc$TPR.MIN <- tpr[1]
+      rel.roc <- rbind(rel.roc, rel.roc[nrow(rel.roc), ])
+      rel.roc[nrow(rel.roc), "FPR"] <- 1
+      roc.plot <- roc.plot + geom_ribbon(data = rel.roc, fill = fill.col, alpha = 0.5, 
+                                         aes(ymin = TPR.MIN, ymax = TPR, y = 0))
+    }
+    else {
+      roc.plot <- 
+        roc.plot + geom_ribbon(data = rel.roc, fill = fill.col, alpha = 0.5, 
+                               aes(ymin = 0, ymax = TPR, y = 0))
+    }
+  }
+  
+  roc.plot <- roc.plot + geom_line(data = frame.line1, linetype = 3, size = 1.1) + 
+    geom_line(data = frame.line2, linetype = 3, size = 1.1)
+  return(roc.plot)
+}
+
+fbroc.plot.add.auc <- function(x, roc.plot, fill.col) {
+  rel.roc <- x$roc[nrow(x$roc):1, ]
+  roc.plot <- roc.plot + geom_ribbon(data = rel.roc, fill = fill.col, alpha = 0.5, 
+                                     aes(ymin = 0, ymax = TPR, y = 0))
+  return(roc.plot)
+}
+
 # add performance metric visualization to roc plot (roc curve)
 fbroc.plot.add.metric <- function(x, roc.plot, show.metric, show.area, perf, fill.col) {
   
@@ -114,61 +178,11 @@ fbroc.plot.add.metric <- function(x, roc.plot, show.metric, show.area, perf, fil
   }
   
   if (show.metric == "auc" & show.area) {
-    rel.roc <- x$roc[nrow(x$roc):1, ]
-    roc.plot <- roc.plot + geom_ribbon(data = rel.roc, fill = fill.col, alpha = 0.5, 
-                                       aes(ymin = 0, ymax = TPR, y = 0))
+    roc.plot <- fbroc.plot.add.auc(x, roc.plot, fill.col)
   }
   
-  if (show.metric == "partial.auc") {
-    tpr.area <- grepl("TPR", perf$metric)
-    tpr.m <- matrix(x$roc$TPR, nrow = 1)
-    fpr.m <- matrix(x$roc$FPR, nrow = 1)
-    
-    if (tpr.area) {
-      tpr <- perf$params
-      fpr <- c(get_cached_perf(tpr.m, fpr.m, tpr[1], 2),
-               get_cached_perf(tpr.m, fpr.m, tpr[2], 2))
-      frame.line1 <- data.frame(TPR = tpr[1], FPR = c(1, fpr[1]))
-      frame.line2 <- data.frame(TPR = tpr[2], FPR = c(1, fpr[2]))
-      rel.roc <- subset(x$roc, (TPR >= tpr[1]) & (TPR <= tpr[2]))
-    } else {
-      fpr <- perf$params
-      tpr <- c(get_cached_perf(tpr.m, fpr.m, fpr[1], 1),
-               get_cached_perf(tpr.m, fpr.m, fpr[2], 1))
-      frame.line1 <- data.frame(FPR = fpr[1], TPR = c(0, tpr[1]))
-      frame.line2 <- data.frame(FPR = fpr[2], TPR = c(0, tpr[2]))
-      rel.roc <- subset(x$roc, (FPR >= fpr[1]) & (FPR <= fpr[2]))
-    }
-    if (show.area) {
-      first.row <- data.frame(TPR = tpr[2], FPR = fpr[2], threshold = as.numeric(NA))
-      last.row <- data.frame(TPR = tpr[1], FPR = fpr[1], threshold = as.numeric(NA))
-      rel.roc <- rbind(first.row, rel.roc, last.row)
-      if (x$tie.strategy == 2) {
-        
-        expand.roc <- add_roc_points(rel.roc$TPR, rel.roc$FPR)
-        rel.roc <- data.frame(TPR = expand.roc[[1]],
-                              FPR = expand.roc[[2]],
-                              Segment = expand.roc[[3]])
-      } 
-      rel.roc <- unique(rel.roc[order(rel.roc$FPR, rel.roc$TPR), ])
-      if (tpr.area) {
-        rel.roc$TPR.MIN <- tpr[1]
-        rel.roc <- rbind(rel.roc, rel.roc[nrow(rel.roc), ])
-        rel.roc[nrow(rel.roc), "FPR"] <- 1
-        roc.plot <- roc.plot + geom_ribbon(data = rel.roc, fill = fill.col, alpha = 0.5, 
-                                           aes(ymin = TPR.MIN, ymax = TPR, y = 0))
-      }
-      else {
-        roc.plot <- 
-          roc.plot + geom_ribbon(data = rel.roc, fill = fill.col, alpha = 0.5, 
-                                 aes(ymin = 0, ymax = TPR, y = 0))
-      }
-    }
-    
-    roc.plot <- roc.plot + geom_line(data = frame.line1, linetype = 3, size = 1.1) + 
-                           geom_line(data = frame.line2, linetype = 3, size = 1.1)
-    
- 
+  if (show.metric == "partial.auc") { # This function does the main work
+    roc.plot <- fbroc.plot.add.partial.auc(x, roc.plot, show.metric, show.area, perf, fill.col)
   }
   return(roc.plot)
 }
