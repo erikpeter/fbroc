@@ -93,6 +93,12 @@ fbroc.plot.add.metric.paired <- function(x, roc.plot,show.metric, show.area, per
     roc.plot <- fbroc.plot.add.auc(extract.roc(x, 1), roc.plot, fill1)
     roc.plot <- fbroc.plot.add.auc(extract.roc(x, 2), roc.plot, fill2)
   }
+  if (show.metric == "partial.auc") { # This function does the main work
+    roc.plot <- fbroc.plot.add.partial.auc(extract.roc(x, 1), roc.plot, show.metric, show.area, 
+                                           perf, fill1)
+    roc.plot <- fbroc.plot.add.partial.auc(extract.roc(x, 2), roc.plot, show.metric, show.area, 
+                                           perf, fill2)
+  }
   
   return(roc.plot)
 }
