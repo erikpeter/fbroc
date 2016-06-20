@@ -11,11 +11,13 @@ perf.roc <- function(roc, ...) {
 #' are included.
 #'
 #' @param roc An object of class \code{fbroc.roc}.
-#' @param metric A performance metric. Select "auc" for the AUC, "tpr" for the TPR at a fixed
-#' FPR and "fpr" for the FPR at a fixed TPR.
+#' @param metric A performance metric. Select "auc" for the AUC, "partial.auc" for the partial AUC, 
+#' "tpr" for the TPR at a fixed FPR and "fpr" for the FPR at a fixed TPR.
 #' @param conf.level The confidence level of the confidence interval.
 #' @param fpr The fixed FPR at which the TPR is to be evaluated when \code{tpr} is selected as metric.
+#' If partial AUC is investigated, then an FPR interval over which the partial area is to be calculated.
 #' @param tpr The fixed TPR at which the FPR is to be evaluated when \code{fpr} is selected as metric.
+#' If partial AUC is investigated, then an TPR interval over which the partial area is to be calculated.
 #' @param correct.partial.auc Corrects partial AUC for easier interpretation using McClish correction.
 #' Details are given below. Defaults to TRUE.
 #' @param show.partial.auc.warning Whether to give warnings for partial AUCs below 0.5. Defaults to
@@ -33,11 +35,12 @@ perf.roc <- function(roc, ...) {
 #'   \code{\link{plot.fbroc.perf}}
 #' @template partial.auc.doc 
 #' @examples
-#' y <- rep(c(TRUE, FALSE), each = 500)
-#' x <- rnorm(1000) + y
+#' y <- rep(c(TRUE, FALSE), each = 100)
+#' x <- rnorm(200) + y
 #' result.boot <- boot.roc(x, y, n.boot = 100)
 #' perf(result.boot, "auc")
 #' perf(result.boot, "auc", conf.level = 0.99)
+#' perf(result.boot, "partial.auc", fpr = c(0, 0.25), show.partial.auc.warning = FALSE)
 #' @export
 perf.fbroc.roc <- function(roc, metric = "auc", conf.level = 0.95, tpr = NULL, fpr = NULL, 
                            correct.partial.auc = TRUE, show.partial.auc.warning = TRUE, ...) {

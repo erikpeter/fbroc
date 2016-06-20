@@ -4,8 +4,9 @@
 #' studies and shiny applications by using a fast
 #' algorithm where the cost of a single bootstrap replicate is \eqn{O(n)}, with 
 #' n denoting the number of observations. The algorithm is implemented in C++ to further
-#' increase the efficiency. Currently 100000 bootstrap iterations for 500
-#' observations take about one second. The ROC curve as used shows
+#' increase the efficiency. On a typical desktop computer the time needed for the calculation of 
+#' 100000 bootstrap replicates given 500 observations requires time on the order of magnitude 
+#' of one second. The ROC curve as used shows
 #' the True Positive Rate (TPR) as a function of the False Positive Rate (FPR). The package also
 #' support the analysis of paired ROC curves, where we compare two predictions given for the same
 #' set of samples. 
@@ -39,7 +40,8 @@
 #' All bootstrap confidence interval are based on the percentile method.
 #' @section Notes:
 #' Package \code{fbroc} is still in an early development stage. Currently it supports bootstrapping
-#' the confidence region of single and paired ROC curves, as well as the AUC, the FPR at a fixed TPR and vice versa.
+#' the confidence region of single and paired ROC curves, as well as the AUC, partial AUC, 
+#' the FPR at a fixed TPR and vice versa.
 #' More sophisticated bootstrap confidence interval 
 #' calculation and improved documentation will be added at a later time.
 #' @examples

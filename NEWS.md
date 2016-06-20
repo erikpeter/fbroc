@@ -10,6 +10,13 @@ output: html_document
 ### New features
 
 * You can now adjust text size for plots
+* Partial AUCs over both TPR and FPR ranges can be calculated
+* In the ROC plot the (partial) AUC can now optionally be shown instead of confidence regions
+
+### Other Changes
+
+* The location of the text showing the performance in the ROC plot has been shifted downwards and
+to the left
 
 ## fbroc 0.3.1
 
@@ -27,7 +34,7 @@ output: html_document
 
 * Bad defaults caused plotting to fail with a large number of negative samples
 
-### Other change
+### Other changes
 
 * perf.roc is now deprecated. Use the new S3 generic perf instead
 * conf.roc is now deprecated. Use the new S3 generic conf instead

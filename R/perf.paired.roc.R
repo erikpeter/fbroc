@@ -5,17 +5,16 @@
 #' 
 #' @param roc An object of class \code{fbroc.paired.roc}.
 #' @inheritParams perf.fbroc.roc
-#' @param metric A performance metric. Select "auc" for the AUC, "tpr" for the TPR at a fixed
-#' FPR and "fpr" for the FPR at a fixed TPR.
 #' @export
 #' @template partial.auc.doc 
 #' @examples
 #' data(roc.examples)
 #' example <- boot.paired.roc(roc.examples$Cont.Pred, roc.examples$Cont.Pred.Outlier,
-#'                                roc.examples$True.Class)
+#'                                roc.examples$True.Class, n.boot = 100)
 #' perf(example, metric = "auc")   
 #' # Get difference in TPR at a FPR of 20%   
-#' perf(example, metric = "tpr", fpr = 0.2)                           
+#' perf(example, metric = "tpr", fpr = 0.2)    
+#' perf(example, metric = "partial.auc", fpr = c(0, 0.25), show.partial.auc.warning = FALSE)                       
 perf.fbroc.paired.roc <- function(roc, metric = "auc", conf.level = 0.95, tpr = NULL, fpr = NULL, 
                                   correct.partial.auc = TRUE, show.partial.auc.warning = TRUE, ...){
   # start with data validation
