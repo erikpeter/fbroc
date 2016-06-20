@@ -60,7 +60,8 @@ fbroc.plot.add.conf <- function(roc1, conf.level = conf.level, steps = steps, fi
 
 
 # add performance metric visualization to roc plot (paired roc curve)
-fbroc.plot.add.metric.paired <- function(roc.plot,show.metric, perf, col1, col2) {
+fbroc.plot.add.metric.paired <- function(x, roc.plot,show.metric, show.area, perf, 
+                                         col1, fill1, col2, fill2) {
   if (show.metric == "tpr") {
     extra.frame <- data.frame(FPR = perf$params, 
                               TPR = c(perf$Observed.Performance.Predictor1, 
@@ -88,6 +89,11 @@ fbroc.plot.add.metric.paired <- function(roc.plot,show.metric, perf, col1, col2)
                               aes(xmin = lower, xmax = upper), col = c(col1, col2), alpha = 0.7) +
       geom_point(data = extra.frame, size = 4)
   }
+  if (show.metric == "auc" & show.area) {
+    roc.plot <- fbroc.plot.add.auc(extract.roc(x, 1), roc.plot, fill1)
+    roc.plot <- fbroc.plot.add.auc(extract.roc(x, 2), roc.plot, fill2)
+  }
+  
   return(roc.plot)
 }
 

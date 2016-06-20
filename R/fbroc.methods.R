@@ -55,7 +55,7 @@ print.fbroc.roc <- function(x, ...) {
 #' can also be included in the plot. 
 #' @param x Object of class \code{fbroc.roc}.
 #' @param col Color used for the curve. Defaults to blue.
-#' @param fill Color used for the confidence region. Defaults to royalblue1.
+#' @param fill Color used for areas (confidence regions, AUCs and partial AUCs).
 #' @param print.plot Logical specifying whether the plot should be printed.
 #' @param show.conf Logical specifying whether the confidence region should be
 #' plotted.

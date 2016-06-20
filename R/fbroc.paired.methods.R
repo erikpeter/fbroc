@@ -174,9 +174,11 @@ extract.roc <- function(x, index) {
 #' @param x An object of class  \code{fbroc.paired.roc}.
 #' @inheritParams plot.fbroc.roc
 #' @param col1 Color in which the ROC curve of the first classifier is drawn.
-#' @param fill1 Fill color for the confidence region of the first ROC curve.
+#' @param fill1 Color used for areas (confidence regions, AUCs and partial AUCs) belonging
+#' to the first ROC curve.
 #' @param col2 Color in which the ROC curve of the second classifier is drawn.
-#' @param fill2 Fill color for the confidence region of the second ROC curve.
+#' @param fill2 Color used for areas (confidence regions, AUCs and partial AUCs) belonging
+#' to the second ROC curve.
 #' @param ... further arguments passed to \code{\link{perf.fbroc.paired.roc}}.
 #' @return A ggplot, so that the user can customize the plot further.
 #' @examples
@@ -198,7 +200,8 @@ plot.fbroc.paired.roc <- function(x,
                                   show.conf = TRUE, 
                                   conf.level = 0.95, 
                                   steps = 250,
-                                  show.metric = NULL, 
+                                  show.metric = NULL,
+                                  show.area = !show.conf,
                                   text.size.perf = 6,
                                   ...) {
   if (x$tie.strategy == 2) {
@@ -242,7 +245,8 @@ plot.fbroc.paired.roc <- function(x,
                         round(perf$CI.Performance.Difference[1], 2), ",",
                         round(perf$CI.Performance.Difference[2], 2), "]", sep = "")
     
-    roc.plot <- fbroc.plot.add.metric.paired(roc.plot, show.metric, perf, col1, col2)
+        roc.plot <- fbroc.plot.add.metric.paired(x, roc.plot, show.metric, show.area, perf, 
+                                             col1, fill1, col2, fill2)
     perf.text.vector <- paste(perf.text, perf.text2, perf.text3, sep ="\n")
     text.frame <- data.frame(text.c = perf.text.vector, 
                              TPR = 0.25, 
