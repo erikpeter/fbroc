@@ -6,12 +6,12 @@ output: html_document
 ---
 
 ## Tested on
-* local 64 bit Windows 7, R 3.2.2
+* local 64 bit Windows 7, R 3.3.1
 * win-builder devel and release
 * Ubuntu 16.04 64 bit, R 3.2.2 - including valgrind on examples
 
 ## R CMD Check results
-No ERRORS, WARNINGS. One Note (only on win-builder!):
+No ERRORS or WARNINGS. Only one note in WinBuilder only:
 
 Maintainer: 'Erik Peter <jerikpeter@googlemail.com>'
 
