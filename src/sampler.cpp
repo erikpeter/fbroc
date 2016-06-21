@@ -9,6 +9,14 @@ IntegerVector Sampler_base::get_shuffled_index(bool which_class) const
   else return shuffled_neg_index;
 }
 
+Sampler_base::~Sampler_base() {
+  // do nothing
+}
+
+Sampler_Stratified::~Sampler_Stratified() {
+  // do nothing
+}
+
 Sampler_Stratified::Sampler_Stratified(IntegerVector true_class)
 {
   n = true_class.size();
