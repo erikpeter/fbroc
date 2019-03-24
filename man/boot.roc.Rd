@@ -65,6 +65,7 @@ If you set \code{tie.strategy} to 1 the ROC curve is built by connecting the TPR
 neighboring thresholds. A tie.strategy of 2 indicates that the TPR calculated at a specific FPR
 is the best TPR at a FPR smaller than or equal than the FPR specified. Defaults to 2.
 }
+
 \examples{
 y <- rep(c(TRUE, FALSE), each = 500)
 x <- rnorm(1000) + y
@@ -74,4 +75,3 @@ result.boot <- boot.roc(x, y)
 \url{http://www.epeter-stats.de/roc-curves-and-ties/}, \code{\link{plot.fbroc.roc}}, 
 \code{\link{print.fbroc.roc}}
 }
-

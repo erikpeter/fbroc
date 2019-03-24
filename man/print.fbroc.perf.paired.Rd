@@ -24,4 +24,3 @@ correlation between the performance estimates of the two classifiers is also giv
 \seealso{
 \code{\link{perf.fbroc.paired.roc}}
 }
-

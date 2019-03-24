@@ -38,4 +38,3 @@ plot(fpr.conf)
 \seealso{
 \code{\link{conf.fbroc.roc}}
 }
-

@@ -22,4 +22,3 @@ replicates, the metric used and the estimate with confidence interval.
 \seealso{
 \code{\link{perf.fbroc.roc}}
 }
-

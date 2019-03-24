@@ -26,6 +26,7 @@ Due to the way the predictions are reordered internally, using use.cache to save
 results for paired ROC curves and then extracting one of the two curves will not yield the same
 values as when the ROC curve is bootstrapped as a single curve using \code{fbroc.roc}.
 }
+
 \examples{
 data(roc.examples)
 example <- boot.paired.roc(roc.examples$Cont.Pred, roc.examples$Cont.Pred.Outlier, 
@@ -39,4 +40,3 @@ print(identical(roc1, roc1.equivalent)) # roc1 and roc1.equivalent will be the s
 \seealso{
 \code{\link{boot.paired.roc}}
 }
-

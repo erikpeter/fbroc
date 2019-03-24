@@ -5,8 +5,9 @@
 \title{Plots a \code{fbroc.roc} object}
 \usage{
 \method{plot}{fbroc.roc}(x, col = "blue", fill = "royalblue1",
-  print.plot = TRUE, show.conf = TRUE, steps = 250, conf.level = 0.95,
-  show.metric = NULL, text.size.perf = 6, show.area = !show.conf, ...)
+  print.plot = TRUE, show.conf = TRUE, steps = 250,
+  conf.level = 0.95, show.metric = NULL, text.size.perf = 6,
+  show.area = !show.conf, ...)
 }
 \arguments{
 \item{x}{Object of class \code{fbroc.roc}.}
@@ -61,4 +62,3 @@ plot(result.boot, show.metric = "partial.auc", fpr = c(0, 0.5), show.conf = FALS
 \seealso{
 \code{\link{boot.roc}}, \code{\link{perf.fbroc.roc}}
 }
-

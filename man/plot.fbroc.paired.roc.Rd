@@ -6,8 +6,9 @@
 \usage{
 \method{plot}{fbroc.paired.roc}(x, col1 = "blue", fill1 = "dodgerblue",
   col2 = "darkgreen", fill2 = "seagreen1", print.plot = TRUE,
-  show.conf = TRUE, conf.level = 0.95, steps = 250, show.metric = NULL,
-  show.area = !show.conf, text.size.perf = 6, ...)
+  show.conf = TRUE, conf.level = 0.95, steps = 250,
+  show.metric = NULL, show.area = !show.conf, text.size.perf = 6,
+  ...)
 }
 \arguments{
 \item{x}{An object of class  \code{fbroc.paired.roc}.}
@@ -67,4 +68,3 @@ plot(example, show.metric = "partial.auc", fpr = c(0.2, 0.4),
 \seealso{
 \code{\link{boot.paired.roc}}
 }
-

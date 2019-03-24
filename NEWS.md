@@ -1,9 +1,15 @@
 ---
 title: "NEWS"
 author: "Erik Peter"
-date: "Saturday, 18th June, 2015"
+date: "Saturday, 24th March, 2019"
 output: html_document
 ---
+
+## fbroc 0.4.1
+
+### Other Changes
+
+Update for compability with newer R Versions like switch to roxygen2.
 
 ## fbroc 0.4.0
 

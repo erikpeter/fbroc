@@ -38,4 +38,3 @@ conf(example, conf.for = "fpr", steps = 10) # get confidence regions for FPR at 
 \seealso{
 \code{\link{boot.roc}}
 }
-

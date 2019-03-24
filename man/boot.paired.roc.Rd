@@ -4,8 +4,8 @@
 \alias{boot.paired.roc}
 \title{Bootstrap paired ROC curves}
 \usage{
-boot.paired.roc(pred1, pred2, true.class, stratify = TRUE, n.boot = 1000,
-  use.cache = FALSE, tie.strategy = NULL)
+boot.paired.roc(pred1, pred2, true.class, stratify = TRUE,
+  n.boot = 1000, use.cache = FALSE, tie.strategy = NULL)
 }
 \arguments{
 \item{pred1}{Numerical predictions for the first classifier.}
@@ -76,6 +76,7 @@ If you set \code{tie.strategy} to 1 the ROC curve is built by connecting the TPR
 neighboring thresholds. A tie.strategy of 2 indicates that the TPR calculated at a specific FPR
 is the best TPR at a FPR smaller than or equal than the FPR specified. Defaults to 2.
 }
+
 \examples{
 data(roc.examples)
 # Do not use cache
@@ -96,4 +97,3 @@ perf(example, "fpr", tpr = 0.9) # estimate difference in FPR at a TPR of 90\%
          \code{\link{plot.fbroc.paired.roc}},
          \code{\link{perf.fbroc.paired.roc}}
 }
-

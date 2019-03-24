@@ -48,4 +48,3 @@ plot(auc.diff)
 \seealso{
 \code{\link{perf.fbroc.paired.roc}}
 }
-

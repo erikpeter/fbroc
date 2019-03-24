@@ -26,4 +26,3 @@ of different values for the FPR.
 \seealso{
 \code{\link{boot.roc}}
 }
-

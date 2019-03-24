@@ -57,6 +57,7 @@ is below the non-discriminate classifier, producing corrected partial AUCs value
 For this reason, fbroc will give a warning if the bootstrap produces corrected 
 partial AUC values below 0.5.
 }
+
 \examples{
 data(roc.examples)
 example <- boot.paired.roc(roc.examples$Cont.Pred, roc.examples$Cont.Pred.Outlier,
@@ -71,4 +72,3 @@ perf(example, metric = "partial.auc", fpr = c(0, 0.25),
 Donna Katzman McClish. (1989). \emph{Analyzing a Portion of the ROC Curve.}
 Medical Decision Making, \url{http://mdm.sagepub.com/content/9/3/190.abstract}.
 }
-

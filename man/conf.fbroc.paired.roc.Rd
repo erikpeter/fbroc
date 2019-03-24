@@ -4,8 +4,8 @@
 \alias{conf.fbroc.paired.roc}
 \title{Generates confidence intervals for the difference in TPR between two predictors for a range of FPRs or vice versa}
 \usage{
-\method{conf}{fbroc.paired.roc}(roc, conf.level = 0.95, conf.for = "TPR",
-  steps = 250, ...)
+\method{conf}{fbroc.paired.roc}(roc, conf.level = 0.95,
+  conf.for = "TPR", steps = 250, ...)
 }
 \arguments{
 \item{roc}{An object of class \code{fbroc.paired.roc}.}
@@ -35,6 +35,7 @@ This function only gives estimates and confidence for the difference in the requ
 The values given are positive iff the first classifier has a higher rate. To get confidence regions
 for either of the two underlying ROC curves use \code{conf} on the result of \code{extract.roc}.
 }
+
 \examples{
 data(roc.examples)
 example <- boot.paired.roc(roc.examples$Cont.Pred, roc.examples$Cont.Pred.Outlier,
@@ -45,4 +46,3 @@ conf(example, conf.for = "fpr", steps = 10) # get confidence regions for Delta F
 \seealso{
 \code{\link{boot.paired.roc}}, \code{\link{conf.fbroc.roc}},\code{\link{extract.roc}}
 }
-

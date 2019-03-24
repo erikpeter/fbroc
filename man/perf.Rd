@@ -19,4 +19,3 @@ For using this on individual ROC curves as implemented by objects of class \code
 \seealso{
 \code{\link{perf.fbroc.roc}}, \code{\link{perf.fbroc.paired.roc}}
 }
-

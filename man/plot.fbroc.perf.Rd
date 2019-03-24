@@ -46,4 +46,3 @@ plot(result.perf)
 \seealso{
 \code{\link{perf.fbroc.roc}}
 }
-

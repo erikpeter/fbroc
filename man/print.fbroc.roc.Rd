@@ -23,4 +23,3 @@ usage of the object.
 \seealso{
 \code{\link{boot.roc}}
 }
-

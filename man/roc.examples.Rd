@@ -24,4 +24,3 @@ and a discrete predictor are included. For both cases there is a version with ou
 without.
 }
 \keyword{datasets}
-

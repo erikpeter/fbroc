@@ -61,6 +61,7 @@ the FPR at a fixed TPR and vice versa.
 More sophisticated bootstrap confidence interval 
 calculation and improved documentation will be added at a later time.
 }
+
 \examples{
 data(roc.examples)
 # work with a single ROC curves
@@ -86,4 +87,3 @@ Boca Raton, Fla: Chapman & Hall/CRC.
 Donna Katzman McClish. (1989). \emph{Analyzing a Portion of the ROC Curve.}
 Medical Decision Making, \url{http://mdm.sagepub.com/content/9/3/190.abstract}.
 }
-

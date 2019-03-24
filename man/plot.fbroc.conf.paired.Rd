@@ -39,4 +39,3 @@ plot(fpr.conf)
 \seealso{
 \code{\link{conf.fbroc.paired.roc}}
 }
-
