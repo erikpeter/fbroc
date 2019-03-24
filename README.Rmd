@@ -1,49 +1,36 @@
 ---
-output: github_document
+title: "Readme for fbroc"
+author: "Erik Peter"
+date: "`r Sys.Date()`"
+output:
+  md_document:
+    variant: markdown_github
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-```{r setup, include = FALSE}
+```{r, echo = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.path = "man/figures/README-",
-  out.width = "100%"
+  fig.path = "README-"
 )
 ```
 # fbroc
 
-The goal of fbroc is to ...
+------------------------------------------------
 
-## Installation
+fbroc is intended for the *fast* bootstrapping of ROC curves, so that the
+package can be used for simulation studies and shiny applications. It allows for the analysis and
+comparison of ROC curves. To achieve the necessary performance all critical algorithms are implemented in C++.
+On a typical desktop computer the time needed for the calculation of 100000 bootstrap replicates 
+given 500 observations requires time on the order of magnitude of one second.
+To try out the package you can visit the [package website](http://www.epeter-stats.de/roc-curve-analysis-with-fbroc/). 
+A shiny interface for this package is hosted there.
 
-You can install the released version of fbroc from [CRAN](https://CRAN.R-project.org) with:
+To install:
 
-``` r
-install.packages("fbroc")
-```
-
-## Example
-
-This is a basic example which shows you how to solve a common problem:
-
-```{r example}
-## basic example code
-```
-
-What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
-
-```{r cars}
-summary(cars)
-```
-
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date.
-
-You can also embed plots, for example:
-
-```{r pressure, echo = FALSE}
-plot(pressure)
-```
-
-In that case, don't forget to commit and push the resulting figure files, so they display on GitHub!
+* latest released version: `install.packages("fbroc")`
+* latest development version: 
+    1. install and load package devtools
+1. `install_github("erikpeter/fbroc")`

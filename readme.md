@@ -11,5 +11,5 @@ To install:
 -   latest released version: `install.packages("fbroc")`
 -   latest development version:
     1.  install and load package devtools
-    2.  `install_github("erikpeter/fbroc")`
 
+1.  `install_github("erikpeter/fbroc")`
