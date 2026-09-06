@@ -73,7 +73,7 @@ fbroc.plot.add.metric.paired <- function(x, roc.plot,show.metric, show.area, per
                               upper = c(perf$CI.Performance.Predictor1[2],
                                         perf$CI.Performance.Predictor2[2]))
   
-    roc.plot <- roc.plot + geom_errorbar(data = extra.frame, width = 0.02, size = 1.25,
+    roc.plot <- roc.plot + geom_errorbar(data = extra.frame, width = 0.02, linewidth = 1.25,
                               aes(ymin = lower, ymax = upper), col = c(col1, col2), alpha = 0.7) + 
       geom_point(data = extra.frame, size = 4, col = c(col1, col2))
   }
@@ -86,7 +86,7 @@ fbroc.plot.add.metric.paired <- function(x, roc.plot,show.metric, show.area, per
                                         perf$CI.Performance.Predictor2[1]),
                               upper = c(perf$CI.Performance.Predictor1[2],
                                         perf$CI.Performance.Predictor2[2]))
-    roc.plot <- roc.plot + geom_errorbarh(data = extra.frame, height = 0.02, size = 1.25,
+    roc.plot <- roc.plot + geom_errorbarh(data = extra.frame, height = 0.02, linewidth = 1.25,
                               aes(xmin = lower, xmax = upper), col = c(col1, col2), alpha = 0.7) +
       geom_point(data = extra.frame, size = 4)
   }
@@ -177,7 +177,7 @@ fbroc.plot.add.metric <- function(x, roc.plot, show.metric, show.area, perf, fil
   if (show.metric == "tpr") {
     extra.frame <- data.frame(FPR = perf$params, TPR = perf$Observed.Performance, Segment = 1,
                               lower = perf$CI.Performance[1], upper = perf$CI.Performance[2])
-    roc.plot <- roc.plot + geom_errorbar(data = extra.frame, width = 0.02, size = 1.25,
+    roc.plot <- roc.plot + geom_errorbar(data = extra.frame, width = 0.02, linewidth = 1.25,
                                          aes(ymin = lower, ymax = upper)) + 
       geom_point(data = extra.frame, size = 4)
   }
@@ -185,7 +185,7 @@ fbroc.plot.add.metric <- function(x, roc.plot, show.metric, show.area, perf, fil
   if (show.metric == "fpr") {
     extra.frame <- data.frame(TPR = perf$params, FPR = perf$Observed.Performance, Segment = 1,
                               lower = perf$CI.Performance[1], upper = perf$CI.Performance[2])
-    roc.plot <- roc.plot + geom_errorbarh(data = extra.frame, height = 0.02, size = 1.25,
+    roc.plot <- roc.plot + geom_errorbarh(data = extra.frame, height = 0.02, linewidth = 1.25,
                                           aes(xmin = lower, xmax = upper)) +
       geom_point(data = extra.frame, size = 4)
   }

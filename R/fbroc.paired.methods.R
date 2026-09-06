@@ -259,8 +259,8 @@ plot.fbroc.paired.roc <- function(x,
     roc.plot <- roc.plot + geom_text(size = text.size.perf, aes(label = text.c), data = text.frame, hjust = 0)
     #     
   }
-  roc.plot <- roc.plot + geom_path(size = 1.1, col = col1)
-  roc.plot <- roc.plot + geom_path(data = plot.frame2, col = col2, size = 1.1)
+  roc.plot <- roc.plot + geom_path(linewidth = 1.1, col = col1)
+  roc.plot <- roc.plot + geom_path(data = plot.frame2, col = col2, linewidth = 1.1)
   if (print.plot) print(roc.plot)
   
   invisible(roc.plot)

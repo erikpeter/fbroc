@@ -240,7 +240,7 @@ plot.fbroc.conf <- function(x, col = "blue", fill = "royalblue1", print.plot = T
     roc.plot <- roc.plot + geom_ribbon(data = x, fill = fill, alpha = 0.5,
                                        aes(y = NULL, ymin = Lower.FPR, ymax = Upper.FPR))
   }
-  roc.plot <- roc.plot + geom_path(size = 1.1, col = col) # plot estimate
+  roc.plot <- roc.plot + geom_path(linewidth = 1.1, col = col) # plot estimate
   
   if (print.plot) print(roc.plot)
   invisible(roc.plot)
