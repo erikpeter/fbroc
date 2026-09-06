@@ -1,5 +1,3 @@
-# fbroc 0.5.0
-
 ---
 title: "NEWS"
 author: "Erik Peter"
@@ -7,7 +5,7 @@ date: "Sunday, 6th September, 2026"
 output: html_document
 ---
 
-## fbroc 0.4.2
+## fbroc 0.5.0
 
 ### Other Changes
 

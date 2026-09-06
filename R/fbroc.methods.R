@@ -166,7 +166,7 @@ plot.fbroc.perf <- function(x, bins = NULL, col = "white",
   perf.plot <- ggplot(data = boot.frame, aes(x = Metric)) + 
                xlab(toupper(x$metric)) + ylab("Density") + 
                ggtitle("Performance histogram") +
-               geom_histogram(fill = fill, col = col, aes(y = ..density..), 
+               geom_histogram(fill = fill, col = col, aes(y = after_stat(.data[["density"]])), 
                               binwidth = bw) + theme_bw() +
                theme(title = element_text(size = 22),
                      axis.title.x = element_text(size = 18),
@@ -177,7 +177,7 @@ plot.fbroc.perf <- function(x, bins = NULL, col = "white",
     conf.frame <- data.frame(Metric = x$CI.Performance, y.dummy = 0)
     perf.plot <- perf.plot + geom_line(data = conf.frame, aes(y=y.dummy), 
                                        col = "black",
-                                       size = 2)
+                                       linewidth = 2)
     if (conf.text) {
       conf.frame$text.c <- round(conf.frame$Metric,2)
       perf.plot <- perf.plot + 

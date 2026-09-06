@@ -159,8 +159,8 @@ fbroc.plot.add.partial.auc <- function(x, roc.plot, show.metric, show.area, perf
     }
   }
   
-  roc.plot <- roc.plot + geom_line(data = frame.line1, linetype = 3, size = 1.1) + 
-    geom_line(data = frame.line2, linetype = 3, size = 1.1)
+  roc.plot <- roc.plot + geom_line(data = frame.line1, linetype = 3, linewidth = 1.1) + 
+    geom_line(data = frame.line2, linetype = 3, linewidth = 1.1)
   return(roc.plot)
 }
 
