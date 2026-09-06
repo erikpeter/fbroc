@@ -115,7 +115,7 @@ plot.fbroc.roc <- function(x, col = "blue", fill = "royalblue1", print.plot = TR
     roc.plot <- roc.plot + geom_text(size = text.size.perf, aes(label = text.c), data = text.frame)
     
   }
-  roc.plot <- roc.plot + geom_path(size = 1.1, col = col)
+  roc.plot <- roc.plot + geom_path(linewidth = 1.1, col = col)
   if (print.plot) print(roc.plot)
   invisible(roc.plot)
 }
