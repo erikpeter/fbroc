@@ -4,8 +4,7 @@
 \alias{conf.fbroc.roc}
 \title{Generates confidence intervals for the TPR for a range of FPRs or vice versa}
 \usage{
-\method{conf}{fbroc.roc}(roc, conf.level = 0.95, conf.for = "tpr",
-  steps = 250, ...)
+\method{conf}{fbroc.roc}(roc, conf.level = 0.95, conf.for = "tpr", steps = 250, ...)
 }
 \arguments{
 \item{roc}{Object of class \code{fbroc.roc}.}

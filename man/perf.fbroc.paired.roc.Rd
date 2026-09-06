@@ -4,9 +4,16 @@
 \alias{perf.fbroc.paired.roc}
 \title{Calculate performance for paired bootstrapped ROC curves}
 \usage{
-\method{perf}{fbroc.paired.roc}(roc, metric = "auc", conf.level = 0.95,
-  tpr = NULL, fpr = NULL, correct.partial.auc = TRUE,
-  show.partial.auc.warning = TRUE, ...)
+\method{perf}{fbroc.paired.roc}(
+  roc,
+  metric = "auc",
+  conf.level = 0.95,
+  tpr = NULL,
+  fpr = NULL,
+  correct.partial.auc = TRUE,
+  show.partial.auc.warning = TRUE,
+  ...
+)
 }
 \arguments{
 \item{roc}{An object of class \code{fbroc.paired.roc}.}

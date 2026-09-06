@@ -2,10 +2,9 @@
 % Please edit documentation in R/fbroc.methods.R
 \name{plot.fbroc.conf}
 \alias{plot.fbroc.conf}
-\title{Plots function for object of class{fbroc.conf}}
+\title{Plots function for object of \code{fbroc.conf}}
 \usage{
-\method{plot}{fbroc.conf}(x, col = "blue", fill = "royalblue1",
-  print.plot = TRUE, ...)
+\method{plot}{fbroc.conf}(x, col = "blue", fill = "royalblue1", print.plot = TRUE, ...)
 }
 \arguments{
 \item{x}{Object of class \code{fbroc.conf} to be plotted.}

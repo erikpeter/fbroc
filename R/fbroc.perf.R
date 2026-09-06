@@ -48,7 +48,7 @@ perf.fbroc.roc <- function(roc, metric = "auc", conf.level = 0.95, tpr = NULL, f
   # start with data validation
   if (!is(roc, "fbroc.roc"))
     stop("roc must be of class fbroc.roc")
-  if (length(metric) != 1 | class(metric) != "character")
+  if (length(metric) != 1 | !is.character(metric))
     stop("metric must be character")
   if (!(metric %in% c("auc", "tpr", "fpr", "partial.auc")))
     stop(paste(metric,"is not a valid performance metric"))

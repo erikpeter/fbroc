@@ -4,8 +4,7 @@
 \alias{plot.fbroc.conf.paired}
 \title{Plots function for object of class \code{fbroc.conf.paired}}
 \usage{
-\method{plot}{fbroc.conf.paired}(x, col = "blue", fill = "royalblue1",
-  print.plot = TRUE, ...)
+\method{plot}{fbroc.conf.paired}(x, col = "blue", fill = "royalblue1", print.plot = TRUE, ...)
 }
 \arguments{
 \item{x}{Object of class \code{fbroc.conf.paired} to be plotted.}

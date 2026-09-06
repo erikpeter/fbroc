@@ -4,8 +4,7 @@
 \alias{conf.fbroc.paired.roc}
 \title{Generates confidence intervals for the difference in TPR between two predictors for a range of FPRs or vice versa}
 \usage{
-\method{conf}{fbroc.paired.roc}(roc, conf.level = 0.95,
-  conf.for = "TPR", steps = 250, ...)
+\method{conf}{fbroc.paired.roc}(roc, conf.level = 0.95, conf.for = "TPR", steps = 250, ...)
 }
 \arguments{
 \item{roc}{An object of class \code{fbroc.paired.roc}.}

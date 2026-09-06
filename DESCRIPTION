@@ -1,8 +1,8 @@
 Package: fbroc
 Type: Package
 Title: Fast Algorithms to Bootstrap Receiver Operating Characteristics Curves
-Version: 0.4.1
-Date: 2019-03-24
+Version: 0.4.2
+Date: 2026-09-06
 Authors@R: c(person("Erik", "Peter", email = "jerikpeter@googlemail.com", 
              role = c("aut", "cre")))
 Description: Implements a very fast C++ algorithm to quickly bootstrap receiver
@@ -14,10 +14,10 @@ Description: Implements a very fast C++ algorithm to quickly bootstrap receiver
     the calculation of 100000 bootstrap replicates given 500 observations requires time on the
     order of magnitude of one second.
 License: GPL-2
-URL: http://www.epeter-stats.de/roc-curve-analysis-with-fbroc/
-BugReports: http://github.com/erikpeter/fbroc/issues
+URL: https://github.com/erikpeter/fbroc
+BugReports: https://github.com/erikpeter/fbroc/issues
 Depends:
-    R (>= 3.2.0),
+    R (>= 4.2.0),
     ggplot2,
     methods,
     stats,
@@ -26,5 +26,5 @@ Imports:
     Rcpp
 LinkingTo: Rcpp
 LazyData: true
-RoxygenNote: 6.1.1
 Encoding: UTF-8
+Config/roxygen2/version: 8.0.0

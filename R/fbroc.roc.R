@@ -56,14 +56,14 @@ boot.roc <- function(pred, true.class, stratify = TRUE, n.boot = 1000,
   # validate input
   if ((length(pred) != length(true.class)))
     stop("Predictions and true classes need to have the same length")
-  if (class(pred) == "integer") {
+  if (is.integer(pred)) {
     pred <- as.numeric(pred)
   }
-  if ((class(pred) != "numeric"))
+  if (!is.numeric(pred))
     stop("Predictions must be numeric")
-  if ((class(true.class) != "logical"))
+  if (!is.logical(true.class))
     stop("Classes must be logical")
-  if ((class(stratify) != "logical"))
+  if (!is.logical(stratify))
     stop("Classes must be logical")
   
   index.na <- is.na(pred) | is.na(true.class)
@@ -127,11 +127,6 @@ boot.roc <- function(pred, true.class, stratify = TRUE, n.boot = 1000,
   return(output)
 }
 
-
-conf.roc <- function(roc, conf.level = 0.95, steps = 250) {
-  .Deprecated("conf")
-  perf(conf, conf.level = conf.level, steps = steps)
-}
 
 #' Generates confidence intervals for the TPR for a range of FPRs or vice versa
 #' 

@@ -4,9 +4,16 @@
 \alias{perf.fbroc.roc}
 \title{Calculate performance for bootstrapped ROC curve}
 \usage{
-\method{perf}{fbroc.roc}(roc, metric = "auc", conf.level = 0.95,
-  tpr = NULL, fpr = NULL, correct.partial.auc = TRUE,
-  show.partial.auc.warning = TRUE, ...)
+\method{perf}{fbroc.roc}(
+  roc,
+  metric = "auc",
+  conf.level = 0.95,
+  tpr = NULL,
+  fpr = NULL,
+  correct.partial.auc = TRUE,
+  show.partial.auc.warning = TRUE,
+  ...
+)
 }
 \arguments{
 \item{roc}{An object of class \code{fbroc.roc}.}

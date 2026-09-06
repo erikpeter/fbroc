@@ -70,21 +70,21 @@ boot.paired.roc <- function(pred1, pred2, true.class, stratify = TRUE, n.boot = 
     stop("Predictions and true classes need to have the same length")
   if ((length(pred2) != length(true.class)))
     stop("Predictions and true classes need to have the same length")
-  if (class(pred1) == "integer") {
+  if (is.integer(pred1)) {
     pred1 <- as.numeric(pred1)
   }
-  if ((class(pred1) != "numeric"))
-    stop("Predictions must be numeric")
   
-  if (class(pred2) == "integer") {
+  if (!is.numeric(pred1))
+    stop("Predictions must be numeric")
+  if (is.integer(pred1)) {
     pred2 <- as.numeric(pred2)
   }
-  if ((class(pred2) != "numeric"))
+  if (!is.numeric(pred2))
     stop("Predictions must be numeric")
   
-  if ((class(true.class) != "logical"))
+  if (!is.logical(true.class))
     stop("Classes must be logical")
-  if ((class(stratify) != "logical"))
+  if (!is.logical(stratify))
     stop("Classes must be logical")
   
   index.na <- is.na(pred1) | is.na(pred2) | is.na(true.class)

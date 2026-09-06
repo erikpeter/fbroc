@@ -1,14 +1,17 @@
 ---
 title: "Submission comments"
 author: "Erik Peter"
-date: "Saturday, 24th March 2019"
+date: "Sunday, 6th September 2026"
 output: html_document
 ---
+
+## Submission Note
+
+This is a minor update to resolve build notes on CRAN.
 
 ## Tested on
 * local 64 bit Windows 7, R 3.5.3
 * win-builder devel and release
-* Ubuntu 16.04 64 bit, R 3.5.3 - including valgrind on examples
 
 ## R CMD Check results
 No notes, errors or warnings.

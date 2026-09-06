@@ -5,9 +5,16 @@
 \title{Plots the difference between the bootstrapped performance estimate of the first and the second
 classifier.}
 \usage{
-\method{plot}{fbroc.perf.paired}(x, bins = NULL, col = "white",
-  fill = "lightblue", print.plot = TRUE, show.conf = TRUE,
-  conf.text = TRUE, ...)
+\method{plot}{fbroc.perf.paired}(
+  x,
+  bins = NULL,
+  col = "white",
+  fill = "lightblue",
+  print.plot = TRUE,
+  show.conf = TRUE,
+  conf.text = TRUE,
+  ...
+)
 }
 \arguments{
 \item{x}{An object of class \code{fbroc.perf.paired}.}

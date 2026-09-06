@@ -4,9 +4,16 @@
 \alias{plot.fbroc.perf}
 \title{Plots ROC based performance metric as histogram}
 \usage{
-\method{plot}{fbroc.perf}(x, bins = NULL, col = "white",
-  fill = "lightblue", print.plot = TRUE, show.conf = TRUE,
-  conf.text = TRUE, ...)
+\method{plot}{fbroc.perf}(
+  x,
+  bins = NULL,
+  col = "white",
+  fill = "lightblue",
+  print.plot = TRUE,
+  show.conf = TRUE,
+  conf.text = TRUE,
+  ...
+)
 }
 \arguments{
 \item{x}{Object of class \code{fbroc.perf} to be plotted.}

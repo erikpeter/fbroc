@@ -1,9 +1,15 @@
 ---
 title: "NEWS"
 author: "Erik Peter"
-date: "Saturday, 24th March, 2019"
+date: "Sunday, 6th September, 2026"
 output: html_document
 ---
+
+## fbroc 0.4.2
+
+### Other Changes
+
+Minor updates to resolve CRAN notes due to update policies.
 
 ## fbroc 0.4.1
 

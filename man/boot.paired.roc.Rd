@@ -4,8 +4,15 @@
 \alias{boot.paired.roc}
 \title{Bootstrap paired ROC curves}
 \usage{
-boot.paired.roc(pred1, pred2, true.class, stratify = TRUE,
-  n.boot = 1000, use.cache = FALSE, tie.strategy = NULL)
+boot.paired.roc(
+  pred1,
+  pred2,
+  true.class,
+  stratify = TRUE,
+  n.boot = 1000,
+  use.cache = FALSE,
+  tie.strategy = NULL
+)
 }
 \arguments{
 \item{pred1}{Numerical predictions for the first classifier.}

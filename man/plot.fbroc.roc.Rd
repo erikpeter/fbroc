@@ -4,10 +4,19 @@
 \alias{plot.fbroc.roc}
 \title{Plots a \code{fbroc.roc} object}
 \usage{
-\method{plot}{fbroc.roc}(x, col = "blue", fill = "royalblue1",
-  print.plot = TRUE, show.conf = TRUE, steps = 250,
-  conf.level = 0.95, show.metric = NULL, text.size.perf = 6,
-  show.area = !show.conf, ...)
+\method{plot}{fbroc.roc}(
+  x,
+  col = "blue",
+  fill = "royalblue1",
+  print.plot = TRUE,
+  show.conf = TRUE,
+  steps = 250,
+  conf.level = 0.95,
+  show.metric = NULL,
+  text.size.perf = 6,
+  show.area = !show.conf,
+  ...
+)
 }
 \arguments{
 \item{x}{Object of class \code{fbroc.roc}.}

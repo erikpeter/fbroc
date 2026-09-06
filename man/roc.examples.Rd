@@ -4,7 +4,8 @@
 \name{roc.examples}
 \alias{roc.examples}
 \title{Examples of predictions for ROC curve construction}
-\format{A data.frame with 160 rows and 5 variables:
+\format{
+A data.frame with 160 rows and 5 variables:
 \describe{
   \item{True.Class}{True class label of the observation}
   \item{Cont.Pred}{Predictions for which the binormal model for ROC curves holds. Predictions for
@@ -14,7 +15,8 @@
   \item{Disc.Pred}{Example of a discrete predictor. Predictions for the negative class are integer 
   values between 1 and 8, positive samples have integer predictions between 7 and 14.}
   \item{Disc.Pred.Outlier}{Same as above, with some extreme outliers in the negative class.}
-}}
+}
+}
 \usage{
 roc.examples
 }

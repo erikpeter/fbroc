@@ -1,3 +1,6 @@
+#' @keywords internal 
+"_PACKAGE"
+
 #' fbroc: A package for fast bootstrap analysis and comparison of ROC curves
 #' 
 #' Fbroc enables the fast bootstrap analysis and comparison of ROC curves for simulation
@@ -68,7 +71,6 @@
 #' @useDynLib fbroc
 #' @import ggplot2
 #' @importFrom Rcpp sourceCpp
-#' @docType package
 #' @name fbroc
 #' @importFrom methods is
 #' @importFrom stats cor quantile sd

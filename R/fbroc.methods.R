@@ -191,7 +191,7 @@ plot.fbroc.perf <- function(x, bins = NULL, col = "white",
 }
 
 
-#' Plots function for object of class{fbroc.conf}
+#' Plots function for object of \code{fbroc.conf}
 #' 
 #' Given an object of class \code{fbroc.conf} this function plots the contained estimates for 
 #' the confidence region of the ROC curve.
